@@ -17,6 +17,12 @@ COLON  : ":"
 EQUALS : "="
 COMMA  : ","
 
+binop      : bit_binop | arit_binop | comp_binop | log_binop
+log_binop  : "is" "not" | "is" | "not" "in" | "in" | "and" | "or" | "xor"
+comp_binop : "!=" | "==" | "<=" | ">=" | ">" | "<"
+arit_binop :  "//" | "**" | "+" | "-" | "*" | "/" | "%"  
+bit_binop  : "&" | "|" | "^" | "~" | "<<" | ">>"
+
 VARNAME: /[a-zA-Z_][a-zA-Z_0-9]*/
 
 // SECTION grammar def
@@ -56,10 +62,11 @@ stmt_block: COLON NEWLINE INDENT stmt+ DEDENT | COLON stmt
 func_block: COLON NEWLINE INDENT (funcdef | pass_stmt)+ DEDENT | COLON pass_stmt
 
 
-expr: literal | name | call_expr | cmpnd_expr |
+expr: literal | name | call_expr | cmpnd_expr | binop_expr
 call_expr: name LPAREN params RPAREN
 cmpnd_expr: expr DOT call_expr | expr DOT name
 paren_expr: LPAREN expr RPAREN
+binop_expr: expr binop expr
 
 name: VARNAME | VARNAME (DOT VARNAME)+
 

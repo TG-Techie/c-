@@ -89,12 +89,10 @@ def translate(tree):
                 print('stmt')
 
 
-
 def test():
-    with open('./examples/emptyfunc.c-') as file:
+    with open('./examples/calltest.c-') as file:
         tree = parse(file.read())
         print(tree.pretty())
-    print(translate(tree))
     return tree
 
 if __name__ == '__main__':
