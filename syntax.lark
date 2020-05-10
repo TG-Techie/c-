@@ -17,12 +17,15 @@ COLON  : ":"
 EQUALS : "="
 COMMA  : ","
 
-VARNAME: /[a-zA-Z_][a-zA-Z_0-9]*/
+
+//builtintype: "int" | "bool" | "str" | "float" | "arr" | "list" | "NoneType"
+TYPENAME: /_*[A-Z][a-zA-Z_0-9]*/
+VARNAME: /[a-z_][a-zA-Z_0-9]*/
 
 // SECTION grammar def
 
 funcdef: "def" name LPAREN typelist RPAREN ("returns" VARNAME)? stmt_block
-classdef: "class" name ("contains" LPAREN typelist RPAREN)? func_block
+classdef: "class" TYPENAME ("contains" LPAREN typelist RPAREN)? func_block
 
 typelist:  (name name (comma name name)*)?
 arglist: (name (comma name)*)? comma?
@@ -56,14 +59,16 @@ stmt_block: COLON NEWLINE INDENT stmt+ DEDENT | COLON stmt
 func_block: COLON NEWLINE INDENT (funcdef | pass_stmt)+ DEDENT | COLON pass_stmt
 
 
-expr: literal | name | call_expr | cmpnd_expr |
+expr: literal | name | call_expr | cmpnd_expr
+//builtincast_expr: builtintype LPAREN expr RPAREN
 call_expr: name LPAREN params RPAREN
 cmpnd_expr: expr DOT call_expr | expr DOT name
 paren_expr: LPAREN expr RPAREN
 
+
 name: VARNAME | VARNAME (DOT VARNAME)+
 
-literal: number | string | array
+literal: number | string | array | bool | none
 
 // emptylist: LPAREN RPAREN
 //typelist: LPAREN (name name (comma name name)*)? RPAREN
@@ -77,7 +82,10 @@ number: integer | float
 integer: DEC_NUMBER | HEX_NUMBER | BIN_NUMBER | OCT_NUMBER | QUAD_NUMBER
 float: FLOAT_NUMBER
 string: STRING | LONG_STRING
+bool: "True" | "False"
+none: "None"
 array: "<" expr (COMMA expr)* COMMA? ">"
+list: "[" expr (COMMA expr)* COMMA? "]"
 
 // Tokens
 

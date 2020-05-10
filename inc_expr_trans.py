@@ -131,7 +131,8 @@ class Function (Scope):
 
 class Stmt():
     
-    def __init__(self, header)
+    def __init__(self, lines):
+        self.lines = lines
 
 class Type():
 
@@ -230,7 +231,7 @@ def trans_module(foo):
             lines += trans_stmt(scope, foo.children[0])
         else:
             raise NotImplementedError(f"unsupported sentence '{foo.data}'")
-    return lines
+    return Stmt(lines)
 
 if __name__ == '__main__':
     with open('./sentences/assign_int_lit.c-') as file:
