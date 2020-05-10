@@ -1,0 +1,11 @@
+def main(int a) returns int:
+    if a:
+        return actiona()
+    elif a:
+        if nestedvar:
+            return actionb()
+        else:
+            return 0
+    else:
+        return panic()
+    

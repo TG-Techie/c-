@@ -1,0 +1,20 @@
+
+def main(): # no return, is a void fn
+    x = 100
+    y = 9999
+    # z = x + y
+    z = x._add(y)
+    print("x + y = "._add(z._tostr()))
+
+    z = 5;
+    print("new z is: "._add(z._tostr()))
+
+    #print("\(x) plus \(y) is \(z)")
+    #print(x._tostr()+"plus"+y._tostr()+"is"+z._tostr())
+    #print(x._tostr()._add(" plus "._add(y._tostr()._add(" is "._add(z._tostr())))))
+
+    #strout = x._tostr()
+    #trout = strout._add(" plus ")
+    #strout = strout._add(y._tostr())
+    #strout = strout._add(" is ")
+    #print(strout._add(z._tostr()))

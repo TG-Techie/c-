@@ -1,0 +1,10 @@
+
+def main():
+    a = ""
+    a = "it's not pining"
+    b = "it's passed on!"
+    c = a._add(b)
+    print(c)
+    #maybe: syntax / implementation unknown:
+    #for string in <a, b, c>:
+    #   free(str)

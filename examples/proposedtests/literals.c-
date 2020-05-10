@@ -1,0 +1,10 @@
+5
+0.8
+"single line string"
+"""
+multi 
+line
+str
+"""
+
+foo(5, 7)

@@ -1,0 +1,10 @@
+
+def combsints(int a, int b) returns int:
+    c = 5# making local variables to assist in testing
+    out = a._add(b)._add(c)
+    return out
+
+def main():
+    a = 100
+    c = combsints(a, 9999)
+    print(c._tostr())

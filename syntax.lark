@@ -1,0 +1,104 @@
+// SECTION lark entry point
+//start: (funcdef | classdef | assign_stmt | NEWLINE)*
+start: (funcdef | classdef | stmt | NEWLINE)*
+
+// SECTION Token defs (exclude indent and dedent)
+
+//symbols
+LPAREN : "("
+RPAREN : ")"
+LBRACK : "["
+RBRACK : "]"
+LBRACE : "{"
+RBRACE : "}"
+
+DOT    : "."
+COLON  : ":"
+EQUALS : "="
+COMMA  : ","
+
+VARNAME: /[a-zA-Z_][a-zA-Z_0-9]*/
+
+// SECTION grammar def
+
+funcdef: "def" name LPAREN typelist RPAREN ("returns" VARNAME)? stmt_block
+classdef: "class" name ("contains" LPAREN typelist RPAREN)? func_block
+
+typelist:  (name name (comma name name)*)?
+arglist: (name (comma name)*)? comma?
+params: (expr (comma expr)*)? comma?
+comma: COMMA NEWLINE?
+
+//stmts: stmt | stmts stmt
+stmt: pass_stmt | del_stmt | if_stmt | while_stmt | count_stmt | return_stmt | assign_stmt | expr_stmt
+
+pass_stmt: "pass" NEWLINE
+expr_stmt: expr NEWLINE
+
+if_stmt: "if" expr stmt_block ("elif" expr stmt_block)* ("else" stmt_block)?
+
+del_stmt: "del" name (comma name)* NEWLINE
+
+while_stmt: "while" expr stmt_block
+
+count_stmt: "count" (to_cntpair|from_cntpair|by_cntpair|as_cntpair)* stmt_block
+to_cntpair: "to" expr
+from_cntpair: "from" expr
+by_cntpair: "by" expr
+as_cntpair: "as" name
+
+//for_stmt: "for" name "in" expr stmt_block
+
+assign_stmt: name EQUALS expr NEWLINE
+return_stmt: "return" expr NEWLINE | "return" NEWLINE
+
+stmt_block: COLON NEWLINE INDENT stmt+ DEDENT | COLON stmt
+func_block: COLON NEWLINE INDENT (funcdef | pass_stmt)+ DEDENT | COLON pass_stmt
+
+
+expr: literal | name | call_expr | cmpnd_expr |
+call_expr: name LPAREN params RPAREN
+cmpnd_expr: expr DOT call_expr | expr DOT name
+paren_expr: LPAREN expr RPAREN
+
+name: VARNAME | VARNAME (DOT VARNAME)+
+
+literal: number | string | array
+
+// emptylist: LPAREN RPAREN
+//typelist: LPAREN (name name (comma name name)*)? RPAREN
+//arglist: LPAREN (name (comma name)*)? RPAREN
+
+
+
+
+// SECTION postlex declares and ignores
+number: integer | float
+integer: DEC_NUMBER | HEX_NUMBER | BIN_NUMBER | OCT_NUMBER | QUAD_NUMBER
+float: FLOAT_NUMBER
+string: STRING | LONG_STRING
+array: "<" expr (COMMA expr)* COMMA? ">"
+
+// Tokens
+
+
+COMMENT: /###[^#]*###/ | /#[^\n]*/
+NEWLINE: ( /\r?\n[\t ]*/ | COMMENT )+
+// mine NEWLINE: /[\r\n]+[\t ]*/
+
+STRING : /[ubf]?r?("(?!"").*?(?<!\\)(\\\\)*?"|'(?!'').*?(?<!\\)(\\\\)*?')/i
+LONG_STRING: /[ubf]?r?(""".*?(?<!\\)(\\\\)*?"""|'''.*?(?<!\\)(\\\\)*?''')/is
+
+DEC_NUMBER: /0|[1-9]\d*/i
+HEX_NUMBER: /0x[\da-f]*/i
+OCT_NUMBER: /0o[0-7]*/i
+QUAD_NUMBER: /0q[0-3]*/i
+BIN_NUMBER: /0b[0-1]*/i
+FLOAT_NUMBER: /((\d+\.\d*|\.\d+)(e[-+]?\d+)?|\d+(e[-+]?\d+))/i
+//IMAG_NUMBER: /\d+j/i | FLOAT_NUMBER "j"i
+
+%ignore /[\t \f]+/  // WS
+//%ignore /\\[\t \f]*\r?\n/   // LINE_CONT
+%ignore COMMENT
+
+%declare INDENT DEDENT

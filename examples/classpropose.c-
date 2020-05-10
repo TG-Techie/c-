@@ -1,0 +1,32 @@
+
+class coord contains(
+        int x,
+        int y
+    ):
+
+    def _add(coord self, coord other) returns coord:
+        x = self.x._add(other.x)
+        y = self.y._add(other.y)
+        return coord(x, y)
+
+    def _tostr(coord self) returns str:
+        #return "(\(self.x),\(self.y))"
+        #return "("+str(self.x)+", "+str(self.y)+")"
+        #return "("+self.x._tostr()+", "+y._tostr()+")"
+        return "("._add(self.x)._add(", ")._add(self.y)._add(')')
+
+def main():
+    x = 0
+    y = 0
+    asside = coord(x, y)
+
+    target = coord(5, 5)
+
+    combo = target._add(asside) #target + asside
+
+    print(combo._tostr())
+    #eventually print may auto force input into strings w/ default if ducktypeing added
+
+    combo.x = 5
+
+    print(combo._tostr())
