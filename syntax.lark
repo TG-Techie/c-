@@ -82,7 +82,7 @@ literal: number | string | array
 
 // SECTION postlex declares and ignores
 number: integer | float
-integer: DEC_NUMBER | HEX_NUMBER | BIN_NUMBER | OCT_NUMBER | QUAD_NUMBER
+integer: HEX_NUMBER | BIN_NUMBER | OCT_NUMBER | QUAD_NUMBER | DEC_NUMBER
 float: FLOAT_NUMBER
 string: STRING | LONG_STRING
 array: "<" expr (COMMA expr)* COMMA? ">"
@@ -97,7 +97,7 @@ NEWLINE: ( /\r?\n[\t ]*/ | COMMENT )+
 STRING : /[ubf]?r?("(?!"").*?(?<!\\)(\\\\)*?"|'(?!'').*?(?<!\\)(\\\\)*?')/i
 LONG_STRING: /[ubf]?r?(""".*?(?<!\\)(\\\\)*?"""|'''.*?(?<!\\)(\\\\)*?''')/is
 
-DEC_NUMBER: /0|[1-9]\d*/i
+DEC_NUMBER: /[0-9]\d*/i
 HEX_NUMBER: /0x[\da-f]*/i
 OCT_NUMBER: /0o[0-7]*/i
 QUAD_NUMBER: /0q[0-3]*/i
