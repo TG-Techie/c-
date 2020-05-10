@@ -17,10 +17,17 @@ COLON  : ":"
 EQUALS : "="
 COMMA  : ","
 
+// x = <1,2,3>; g = x@1
+binop      : bit_binop | arit_binop | comp_binop | log_binop
+log_binop  : "is" "not" | "is" | "not" "in" | "in" | "and" | "or" | "xor"
+comp_binop : "!=" | "==" | "<=" | ">=" | ">" | "<"
+arit_binop :  "//" | "**" | "+" | "-" | "*" | "/" | "%"
+bit_binop  : "&" | "|" | "^" | "~" | "<<" | ">>"
 
 //builtintype: "int" | "bool" | "str" | "float" | "arr" | "list" | "NoneType"
 TYPENAME: /_*[A-Z][a-zA-Z_0-9]*/
 VARNAME: /[a-z_][a-zA-Z_0-9]*/
+
 
 // SECTION grammar def
 
@@ -59,11 +66,14 @@ stmt_block: COLON NEWLINE INDENT stmt+ DEDENT | COLON stmt
 func_block: COLON NEWLINE INDENT (funcdef | pass_stmt)+ DEDENT | COLON pass_stmt
 
 
+expr: literal | name | call_expr | cmpnd_expr | binop_expr
 expr: literal | name | call_expr | cmpnd_expr
 //builtincast_expr: builtintype LPAREN expr RPAREN
+
 call_expr: name LPAREN params RPAREN
 cmpnd_expr: expr DOT call_expr | expr DOT name
 paren_expr: LPAREN expr RPAREN
+binop_expr: expr binop expr
 
 
 name: VARNAME | VARNAME (DOT VARNAME)+
@@ -79,7 +89,7 @@ literal: number | string | array | bool | none
 
 // SECTION postlex declares and ignores
 number: integer | float
-integer: DEC_NUMBER | HEX_NUMBER | BIN_NUMBER | OCT_NUMBER | QUAD_NUMBER
+integer: HEX_NUMBER | BIN_NUMBER | OCT_NUMBER | QUAD_NUMBER | DEC_NUMBER
 float: FLOAT_NUMBER
 string: STRING | LONG_STRING
 bool: "True" | "False"
@@ -97,7 +107,7 @@ NEWLINE: ( /\r?\n[\t ]*/ | COMMENT )+
 STRING : /[ubf]?r?("(?!"").*?(?<!\\)(\\\\)*?"|'(?!'').*?(?<!\\)(\\\\)*?')/i
 LONG_STRING: /[ubf]?r?(""".*?(?<!\\)(\\\\)*?"""|'''.*?(?<!\\)(\\\\)*?''')/is
 
-DEC_NUMBER: /0|[1-9]\d*/i
+DEC_NUMBER: /[0-9]\d*/i
 HEX_NUMBER: /0x[\da-f]*/i
 OCT_NUMBER: /0o[0-7]*/i
 QUAD_NUMBER: /0q[0-3]*/i

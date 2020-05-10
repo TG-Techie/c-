@@ -24,5 +24,5 @@ def parse(sourcestr):
     return _cmns_parser.parse(sourcestr)
 
 if __name__ == '__main__':
-    with open('./examples/classpropose.c-') as file:
+    with open('./examples/binoptest.c-') as file:
         print(parse(file.read()).pretty())
