@@ -1,6 +1,10 @@
 enable_comments = True
 static_typing = False
 
+_binop_methodnames = {
+    'add':'__add__',
+}
+
 class CMNSCompileTimeError(Exception):
     pass
 
@@ -131,9 +135,10 @@ class Expr():
 
 class Function ():
 
-    def __init__(self, name, type, argpairs):
+    def __init__(self, name, outname, type, argpairs):
         super().__init__()
         self.name = name
+        self.outname = outname
         self.type = type
         self.args = tuple(argpairs)
 
@@ -163,7 +168,7 @@ class Type():
 
     def addmethod(self, name, type, args):
         if name not in self.methods:
-            self.methods[name] = Function(f"{self.name}_{name}fn", type, args)
+            self.methods[name] = Function(name, f"{self.name}_{name}fn", type, args)
         else:
             raise ValueError(f"function '{name}' already defined in type {self.name}")
 
