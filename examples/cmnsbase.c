@@ -47,7 +47,7 @@ void _cmns_free(anytype inst){
     //printf("freeing: %d\n", inst);
     _cmns_alloced_vars[inst->base->_var_index] = NULL;
     inst->base->refs = 0;
-    (inst->base->free)(inst);
+    (inst->base->type->free)(inst);
 }
 
 
@@ -129,7 +129,11 @@ void freeany(anytype self){
     free(self);
 }
 
-cmnsclass anyclass = &(struct {&freeany});
+//cmnsclass anyclass = &(cmns_struct_class){.free=&freeany};
+//cmns_struct_class _anyclass_struct;
+//_anyclass_struct = {.free=&freeany};
+//cmnsclass anyclass;
+cmnsclass anyclass = &((cmnsclass){&freeany});
 
 void any_constructfn(anytype self){
 }
@@ -156,7 +160,7 @@ void freeint(inttype self){
     freeany(self);
 }
 
-cmnsclass intclass = &(struct {&freeint});
+cmnsclass intclass = &((cmnsclass){&freeint});
 
 void int_constructfn(inttype self, int value){
     self->value = value;
@@ -187,7 +191,7 @@ void freestr(strtype self){
     return;
 }
 
-cmnsclass strclass = &(struct {&freestr});
+cmnsclass strclass = &((cmnsclass){&freestr});
 
 void str_constructfn(strtype self, char* contents){
     self->value = malloc(strlen(contents)+1);
