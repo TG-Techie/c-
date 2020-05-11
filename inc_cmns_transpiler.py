@@ -99,7 +99,6 @@ def trans_module(foo):
             lines += trans_stmt(scope, foo.children[0]).lines
         else:
             raise NotImplementedError(f"unsupported sentence '{foo.data}'")
-    print(Stmt(lines))
     return Stmt(lines)
 
 if __name__ == '__main__':
@@ -109,7 +108,5 @@ if __name__ == '__main__':
     for path in paths:
         with open(path) as file:
             tree = parse(file.read())
-            #print(tree.pretty())
-            for line in trans_module(tree).lines:
-                print(line)
+            print(tree.pretty())
             [print(line) for line in trans_module(tree).lines]
