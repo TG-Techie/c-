@@ -29,7 +29,7 @@ def trans_literal(litrl):
         raise CMNSCompileTimeError(f"{litrl.pretty()} invalid literal")
 
 def trans_func_call(var, funcname, args):
-    if 
+
 
 def trans_expr(scope, expr):
     expr = expr.children[0] # all 'expr's only contain one child
@@ -92,7 +92,7 @@ def trans_module(foo):
 
 if __name__ == '__main__':
     paths =    ('./sentences/assign_int_lit.c-',
-                './sentences/ifstmt.c-',
+                './sentences/binop_add.c-',
                 )
     for path in paths:
         with open(path) as file:
