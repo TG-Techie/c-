@@ -59,7 +59,6 @@ def trans_stmt(scope, stmt):
     stmtmdl = Stmt(scope=scope)
     scope = stmtmdl.scope
     if stmt.data == 'assign_stmt':
-        print('assign_stmt')
         nametree, equals, expr, newline = stmt.children
 
         expr = trans_expr(scope, expr)
@@ -89,7 +88,6 @@ def trans_stmt(scope, stmt):
     else:
         print(stmt)
         raise NotImplementedError("unsupported stmt found")
-    print(stmtmdl.lines)
     return stmtmdl
 
 def trans_module(foo):
@@ -100,7 +98,7 @@ def trans_module(foo):
             lines += trans_stmt(scope, foo.children[0]).lines
         else:
             raise NotImplementedError(f"unsupported sentence '{foo.data}'")
-    return Stmt(lines)
+    return lines
 
 if __name__ == '__main__':
     paths =    ('./sentences/assign_int_lit.c-',
@@ -110,4 +108,4 @@ if __name__ == '__main__':
         with open(path) as file:
             tree = parse(file.read())
             print(tree.pretty())
-            [print(line) for line in trans_module(tree).lines]
+            [print(line) for line in trans_module(tree)]
