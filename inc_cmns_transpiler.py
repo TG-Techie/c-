@@ -44,8 +44,7 @@ def trans_expr(scope, expr):
         a = trans_expr(scope, expr.children[0])
         b = trans_expr(scope, expr.children[2])
         op = expr.children[1].children[0].data
-        print(op)
-        raise 3
+
 
 def comment(cmnt):
     if enable_comments:
