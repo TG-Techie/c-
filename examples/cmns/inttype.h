@@ -6,7 +6,7 @@ typedef struct int_struct_type{
     int value;
 }* inttype;
 
-void freeint(inttype self)
+void freeint(inttype self);
 
 cmnsclass intclass = &((cmnsclass){&freeint});
 
