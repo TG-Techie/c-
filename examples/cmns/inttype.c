@@ -4,7 +4,7 @@ void freeint(inttype self){
     freeany(self);
 }
 
-void constructint(inttype self, int value){
+void int_constructfn(inttype self, int value){
     self->value = value;
 }
 

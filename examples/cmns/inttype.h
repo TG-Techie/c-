@@ -10,7 +10,7 @@ void freeint(inttype self);
 
 cmnsclass intclass = &((cmnsclass){&freeint});
 
-void constructint(inttype self, int value);
+void int_constructfn(inttype self, int value);
 
 #define intlitrl newint
 inttype newint(int value);
