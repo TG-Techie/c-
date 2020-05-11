@@ -31,7 +31,7 @@ def trans_literal(litrl):
 def trans_method_call(scope, expr, funcname, args):
     if funcname in expr.type.methods:
         outargs = ''.join([f', {argexpr.outstr}' for argexpr in args])
-        return Expr(scope, expr.type.methods[funcname].type, f"{expr.type.methods[funcname].outname}({expr.outstr}, {outargs})")
+        return Expr(scope, expr.type.methods[funcname].type, f"{expr.type.methods[funcname].outname}({expr.outstr}{outargs})")
     else:
         raise CMNSCompileTimeError(f"line #lineno not implemented#: expr '{expr.outstr}' of type '{expr.type.name}' has no method '{funcname}'")
 
@@ -44,8 +44,8 @@ def trans_expr(scope, expr):
         a = trans_expr(scope, expr.children[0])
         b = trans_expr(scope, expr.children[2])
         op = expr.children[1].children[0].data
-        if op in _binop_methodnames:
-            return trans_method_call(scope, a, _binop_methodnames[op], (b,))
+        if op in binop_methodnames:
+            return trans_method_call(scope, a, binop_methodnames[op], (b,))
         else:
             SHIT
 

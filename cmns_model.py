@@ -1,7 +1,7 @@
 enable_comments = True
 static_typing = False
 
-_binop_methodnames = {
+binop_methodnames = {
     'add':'__add__',
 }
 
