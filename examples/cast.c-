@@ -1,0 +1,4 @@
+def main():
+    x = sum(5)
+    y = int("5")
+    z = str(addints(x, y)) * "teststr"

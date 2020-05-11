@@ -37,7 +37,7 @@ anytype _cmns_referenceto(anytype inst){
     inst->base->refs += 1;
     return inst;
 }
-                                                                                                                                                                                            
+
 #define refto(varname) _cmns_referenceto(varname)
 
 void _cmns_free(anytype inst){
@@ -119,9 +119,7 @@ void dereference_no_gc(anytype inst){
 #define refreturn(varname) dereference_no_gc(varname); return varname
 
 
-
-
-// TYPE IMPLEMENTATION 
+// TYPE IMPLEMENTATION
 
 void freeany(anytype self){
     free(self->base);

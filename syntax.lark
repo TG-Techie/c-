@@ -18,15 +18,14 @@ EQUALS : "="
 COMMA  : ","
 
 // x = <1,2,3>; g = x@1
-binop      : bit_binop | arit_binop | comp_binop | log_binop
-log_binop  : "is" "not" | "is" | "not" "in" | "in" | "and" | "or" | "xor"
-comp_binop : "!=" | "==" | "<=" | ">=" | ">" | "<"
-arit_binop :  "//" | "**" | "+" | "-" | "*" | "/" | "%"
-bit_binop  : "&" | "|" | "^" | "~" | "<<" | ">>"
 
-//builtintype: "int" | "bool" | "str" | "float" | "arr" | "list" | "NoneType"
-TYPENAME: /_*[A-Z][a-zA-Z_0-9]*/
-VARNAME: /[a-z_][a-zA-Z_0-9]*/
+binop: bitws_binop | arith_binop | compr_binop | logcl_binop
+logcl_binop:   "is" "not" | "is" | "not" "in" | "in" | "and" | "or" | "xor"
+compr_binop:  "!=" | "==" | "<=" | ">=" | ">" | "<"
+arith_binop:  "//" | "**" | "+" | "-" | "*" | "/" | "%"
+bitws_binop:   "&" | "|" | "^" | "<<" | ">>"
+uniop: "not" | "~" | "-"
+
 
 
 // SECTION grammar def
@@ -34,10 +33,10 @@ VARNAME: /[a-z_][a-zA-Z_0-9]*/
 funcdef: "def" name LPAREN typelist RPAREN ("returns" VARNAME)? stmt_block
 classdef: "class" TYPENAME ("contains" LPAREN typelist RPAREN)? func_block
 
-typelist:  (name name (comma name name)*)?
-arglist: (name (comma name)*)? comma?
-params: (expr (comma expr)*)? comma?
-comma: COMMA NEWLINE?
+typelist:  (typename name (typename name name)*)?
+//arglist: (name (comma name)*)? comma?
+paramlist: (expr (comma expr)*)? comma?
+comma: COMMA (COMMENT? NEWLINE)?
 
 //stmts: stmt | stmts stmt
 stmt: pass_stmt | del_stmt | if_stmt | while_stmt | count_stmt | return_stmt | assign_stmt | expr_stmt
@@ -66,25 +65,19 @@ stmt_block: COLON NEWLINE INDENT stmt+ DEDENT | COLON stmt
 func_block: COLON NEWLINE INDENT (funcdef | pass_stmt)+ DEDENT | COLON pass_stmt
 
 
-expr: literal | name | call_expr | cmpnd_expr | binop_expr
-expr: literal | name | call_expr | cmpnd_expr
+expr: literal | type_expr | name | call_expr | binop_expr | uniop_expr
 //builtincast_expr: builtintype LPAREN expr RPAREN
-
-call_expr: name LPAREN params RPAREN
-cmpnd_expr: expr DOT call_expr | expr DOT name
+type_expr: typename LPAREN paramlist RPAREN
+call_expr: expr LPAREN paramlist RPAREN
+//cmpnd_expr: expr DOT call_expr | expr DOT name
 paren_expr: LPAREN expr RPAREN
+uniop_expr: uniop expr
 binop_expr: expr binop expr
 
-
+typename: builtintype | TYPENAME
 name: VARNAME | VARNAME (DOT VARNAME)+
 
 literal: number | string | array | bool | none
-
-// emptylist: LPAREN RPAREN
-//typelist: LPAREN (name name (comma name name)*)? RPAREN
-//arglist: LPAREN (name (comma name)*)? RPAREN
-
-
 
 
 // SECTION postlex declares and ignores
@@ -98,6 +91,9 @@ array: "<" expr (COMMA expr)* COMMA? ">"
 list: "[" expr (COMMA expr)* COMMA? "]"
 
 // Tokens
+builtintype: "int" | "bool" | "str" | "float" | "arr" | "list" | "NoneType"
+TYPENAME: /_*[A-Z][a-zA-Z_0-9]*/
+VARNAME: /[a-z_][a-zA-Z_0-9]*/
 
 
 COMMENT: /###[^#]*###/ | /#[^\n]*/

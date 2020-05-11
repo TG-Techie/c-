@@ -9,6 +9,7 @@ inttype combsintsfn(inttype a_var,inttype b_var){
 
     inttype out_var = refto(int__addfn(int__addfn(a_arg, b_arg), c_var));
     
+    // return routine 
     deref(a_var);
     deref(b_var);
     deref(c_var);
