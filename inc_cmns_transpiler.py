@@ -28,16 +28,20 @@ def trans_literal(litrl):
     else:
         raise CMNSCompileTimeError(f"{litrl.pretty()} invalid literal")
 
-def trans_func_call(var, funcname, args):
-    if 
+def do_nothing():
+    pass
+
+def trans_method_call(var, funcname, args):
+    pass_stmt
 
 def trans_expr(scope, expr):
     expr = expr.children[0] # all 'expr's only contain one child
     if expr.data == 'literal':
         litrl = trans_literal(expr)
         return Expr(scope, litrl.type, litrl.outstr)
-    if expr.data = 'binop_expr':
-        #your code
+    if expr.data == 'binop_expr':
+        pass#your code
+
 
 def comment(cmnt):
     if enable_comments:
@@ -92,7 +96,7 @@ def trans_module(foo):
 
 if __name__ == '__main__':
     paths =    ('./sentences/assign_int_lit.c-',
-                './sentences/ifstmt.c-',
+                './sentences/binop_add.c-',
                 )
     for path in paths:
         with open(path) as file:
