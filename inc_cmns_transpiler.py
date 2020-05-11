@@ -41,7 +41,10 @@ def trans_expr(scope, expr):
         litrl = trans_literal(expr)
         return Expr(scope, litrl.type, litrl.outstr)
     if expr.data == 'binop_expr':
-        pass#your code
+        a = trans_expr(scope, expr.children[0])
+        b = trans_expr(scope, expr.children[2])
+        op = expr.children[1]
+        print(print(type(op)), op.children[0])
 
 def comment(cmnt):
     if enable_comments:
