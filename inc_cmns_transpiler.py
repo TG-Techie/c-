@@ -59,6 +59,7 @@ def trans_stmt(scope, stmt):
     stmtmdl = Stmt(scope=scope)
     scope = stmtmdl.scope
     if stmt.data == 'assign_stmt':
+        print('assign_stmt')
         nametree, equals, expr, newline = stmt.children
 
         expr = trans_expr(scope, expr)
