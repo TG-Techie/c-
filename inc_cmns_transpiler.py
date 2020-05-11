@@ -89,6 +89,7 @@ def trans_stmt(scope, stmt):
     else:
         print(stmt)
         raise NotImplementedError("unsupported stmt found")
+    print(stmtmdl.lines)
     return stmtmdl
 
 def trans_module(foo):
