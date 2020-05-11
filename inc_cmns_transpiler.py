@@ -28,11 +28,12 @@ def trans_literal(litrl):
     else:
         raise CMNSCompileTimeError(f"{litrl.pretty()} invalid literal")
 
-def trans_method_call(scope, var, funcname, args):
+def trans_method_call(scope, expr, funcname, args):
     if funcname in var.type.methods:
-        return Expr(scope, var.type.methods[funcname].type, f"{funcname.outname}({var.outname}, {ourargs})")
+        outargs = ''.join([f', {argexpr.outstr}' for argexpr in args])
+        return Expr(scope, expr.type.methods[funcname].type, f"{funcname.outname}({expr.outname}, {ourargs})")
     else:
-        raise CMNSCompileTimeError("")
+        raise CMNSCompileTimeError(f"line #lineno not implemented#: expr '{expr.outstr}' of type '{expr.type.name}' has no method '{funcname}'")
 
 def trans_expr(scope, expr):
     expr = expr.children[0] # all 'expr's only contain one child
