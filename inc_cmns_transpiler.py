@@ -43,9 +43,7 @@ def trans_expr(scope, expr):
     if expr.data == 'binop_expr':
         a = trans_expr(scope, expr.children[0])
         b = trans_expr(scope, expr.children[2])
-        op = expr.children[1].children[0]
-        print(type(op), op.data, op.children)
-        print(dir(op))
+        op = expr.children[1].children[0].data
 
 def comment(cmnt):
     if enable_comments:
