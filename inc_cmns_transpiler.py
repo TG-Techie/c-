@@ -35,10 +35,6 @@ def trans_method_call(scope, expr, funcname, args):
     else:
         raise CMNSCompileTimeError(f"line #lineno not implemented#: expr '{expr.outstr}' of type '{expr.type.name}' has no method '{funcname}'")
 
-_binop_methodnames = {
-    'add':'__add__',
-}
-
 def trans_expr(scope, expr):
     expr = expr.children[0] # all 'expr's only contain one child
     if expr.data == 'literal':
@@ -50,6 +46,8 @@ def trans_expr(scope, expr):
         op = expr.children[1].children[0].data
         if op in _binop_methodnames:
             return trans_method_call(scope, a, _binop_methodnames[op], (b,))
+        else:
+            SHIT
 
 def comment(cmnt):
     if enable_comments:
