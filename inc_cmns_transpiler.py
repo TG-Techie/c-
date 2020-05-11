@@ -31,6 +31,8 @@ def trans_literal(litrl):
 def trans_method_call(scope, var, funcname, args):
     if funcname in var.type.methods:
         return Expr(scope, var.type.methods[funcname].type, f"{funcname.outname}({var.outname}, {ourargs})")
+    else:
+        raise CMNSCompileTimeError("")
 
 def trans_expr(scope, expr):
     expr = expr.children[0] # all 'expr's only contain one child
