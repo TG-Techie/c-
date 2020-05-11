@@ -47,7 +47,8 @@ def trans_expr(scope, expr):
         if op in binop_methodnames:
             return trans_method_call(scope, a, binop_methodnames[op], (b,))
         else:
-            SHIT
+            pass
+            #SHIT
 
 def comment(cmnt):
     if enable_comments:
@@ -98,6 +99,7 @@ def trans_module(foo):
             lines += trans_stmt(scope, foo.children[0]).lines
         else:
             raise NotImplementedError(f"unsupported sentence '{foo.data}'")
+    print(Stmt(lines))
     return Stmt(lines)
 
 if __name__ == '__main__':
@@ -107,5 +109,7 @@ if __name__ == '__main__':
     for path in paths:
         with open(path) as file:
             tree = parse(file.read())
-            print(tree.pretty())
+            #print(tree.pretty())
+            for line in trans_module(tree).lines:
+                print(line)
             [print(line) for line in trans_module(tree).lines]
