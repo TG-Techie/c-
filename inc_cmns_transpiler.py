@@ -1,6 +1,6 @@
 from cmns_parse import parse
 from cmns_model import *
-######TODO: add calllese start with capitcal, vars/attrs start with lower
+
 ######TODO: all functions return something to make expressions easier to deal with. with all taht means.
 # make: booltype, make: nonetype
 

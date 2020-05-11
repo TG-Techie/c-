@@ -9,7 +9,7 @@
 #define cmnstypebase
 
 //cmns dev utilitieas b/c lazy
-typedef unsigned int uint;
+typedef unsigned int /*as*/ uint;
 
 //memory functions and variables
 //a list of all alloced var
