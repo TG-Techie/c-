@@ -65,7 +65,7 @@ stmt_block: COLON NEWLINE INDENT stmt+ DEDENT | COLON stmt
 func_block: COLON NEWLINE INDENT (funcdef | pass_stmt)+ DEDENT | COLON pass_stmt
 
 
-expr: literal | type_expr | name | call_expr | binop_expr | uniop_expr
+expr: literal | type_expr | name | expr.name | call_expr | binop_expr | uniop_expr
 //builtincast_expr: builtintype LPAREN expr RPAREN
 type_expr: typename LPAREN paramlist RPAREN
 call_expr: expr LPAREN paramlist RPAREN

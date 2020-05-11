@@ -39,7 +39,6 @@ class Litrl():
         self.type = type
         self.outstr = source
 
-
 class TypeList():
 
     def __init__(self):
@@ -130,7 +129,7 @@ class Expr():
         self.type = type
         self.outstr = outstr
 
-class Function (Scope):
+class Function ():
 
     def __init__(self, name, type, argpairs):
         super().__init__()
@@ -162,6 +161,7 @@ class Type():
 intfuncs = []
 inttype = Type('int', intfuncs)
 Scope.types.append(inttype)
+
 strfuncs = []
 strtype = Type('str', strfuncs)
 Scope.types.append(strtype)

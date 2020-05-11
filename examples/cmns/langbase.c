@@ -7,7 +7,7 @@ void freeany(anytype self){
 
 cmnsclass anyclass = &((cmnsclass){&freeany});
 
-void constructany(anytype self){
+void any_constructfn(anytype self){
 }
 
 anytype newany(){
@@ -16,7 +16,7 @@ anytype newany(){
     base->type = anyclass;
     anytype inst = malloc(sizeof(anytype));
     inst->base = base;
-    constructany(inst);
+    any_constructfn(inst);
     _cmns_record_var_as_alloced(inst);
     return inst;
 }
