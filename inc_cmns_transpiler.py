@@ -28,8 +28,9 @@ def trans_literal(litrl):
     else:
         raise CMNSCompileTimeError(f"{litrl.pretty()} invalid literal")
 
-def trans_method_call(var, funcname, args):
-    pass
+def trans_method_call(scope, var, funcname, args):
+    if funcname in var.type.methods:
+        return Expr(scope, var.type.methods[funcname].type, f"{funcname.outname}({var.outname}, {ourargs})")
 
 def trans_expr(scope, expr):
     expr = expr.children[0] # all 'expr's only contain one child
@@ -72,7 +73,7 @@ def trans_stmt(scope, stmt):
         else:
             scope.locals[var.name] = var
             stmtmdl.lines.append(comment(f"first assignment of '{var.name}' in scope"))
-            stmtmdl.lines.append(f"{var.type.outstr} {var.outname} = refto({expr.outstr});")
+            stmtmdl.lines.append(f"{var.type.outname} {var.outname} = refto({expr.outstr});")
     elif stmt.data == 'if_stmt':
         print(stmt.pretty())
     else:

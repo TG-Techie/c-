@@ -151,28 +151,28 @@ class Type():
 
     def __init__(self, name, methods):
         self.name = name
-        self.methods = methods
+        self.methods = {}
 
-        self.outstr = name+'type'
+        self.outname = name+'type'
 
     def __repr__(self):
         return f"<cmnstype '{self.name}'>"
 
-intfuncs = []
-inttype = Type('int', intfuncs)
+    def addmethods(self, name, type, args):
+        if name not in self.methods:
+            self.methods[name] = Function(f"{}{name}", type, args)
+        else:
+            raise ValueError(f"function '{name}' already defined in type {self.name}")
+
+inttype = Type('int')
 Scope.types.append(inttype)
 
-strfuncs = []
-strtype = Type('str', strfuncs)
+strtype = Type('str')
 Scope.types.append(strtype)
 
-intfuncs.append(
-    Function('__add__', inttype,
+inttype.addmethod('__add__', inttype,
         (Pair('self', inttype), Pair('other', inttype))
-    )
 )
-intfuncs.append(
-    Function('__str__', strtype,
+inttype.addmethod('__str__', strtype,
         (Pair('self', inttype), Pair('other', inttype))
-    )
 )
