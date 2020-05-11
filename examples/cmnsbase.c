@@ -21,11 +21,14 @@ uint _cmns_next_alloced_var_index = 0;
 
 //FIXME: add a cmnsclass typedef as a
 //  cmns_struct_class pointer so ducktyping can identify the type
+typedef struct cmns_struct_class{
+    void (*free)(anytype self);
+}* cmnsclass;
 
 typedef struct cmns_struct_base{
     uint refs;
     uint _var_index;
-    void (*free)(anytype self);
+    cmnsclass type;
 }* cmnsbase;
 
 typedef struct any_struct_type {
@@ -126,13 +129,15 @@ void freeany(anytype self){
     free(self);
 }
 
+cmnsclass anyclass = &(struct {&freeany});
+
 void any_constructfn(anytype self){
 }
 
 anytype newany(){
     cmnsbase base = malloc(sizeof(cmnsbase));
     base->refs = 0;
-    base->free = &freeany;
+    base->type = anyclass;
     anytype inst = malloc(sizeof(anytype));
     inst->base = base;
     any_constructfn(inst);
@@ -151,6 +156,8 @@ void freeint(inttype self){
     freeany(self);
 }
 
+cmnsclass intclass = &(struct {&freeint});
+
 void int_constructfn(inttype self, int value){
     self->value = value;
 }
@@ -159,7 +166,7 @@ void int_constructfn(inttype self, int value){
 inttype newint(int value){
     cmnsbase base = malloc(sizeof(cmnsbase));
     base->refs = 0;
-    base->free = &freeint;
+    base->type = intclass;
     inttype inst = malloc(sizeof(inttype));
     inst->base = base;
     int_constructfn(inst, value);
@@ -180,6 +187,8 @@ void freestr(strtype self){
     return;
 }
 
+cmnsclass strclass = &(struct {&freestr});
+
 void str_constructfn(strtype self, char* contents){
     self->value = malloc(strlen(contents)+1);
     strcpy(self->value, contents);
@@ -189,7 +198,7 @@ void str_constructfn(strtype self, char* contents){
 strtype newstr(char* contents){
     cmnsbase base = malloc(sizeof(cmnsbase));
     base->refs = 0;
-    base->free = &freestr;
+    base->type = strclass;
     strtype inst = malloc(sizeof(strtype));
     inst->base = base;
 
