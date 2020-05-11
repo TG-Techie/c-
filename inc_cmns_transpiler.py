@@ -29,7 +29,7 @@ def trans_literal(litrl):
         raise CMNSCompileTimeError(f"{litrl.pretty()} invalid literal")
 
 def trans_func_call(var, funcname, args):
-
+    ...
 
 def trans_expr(scope, expr):
     expr = expr.children[0] # all 'expr's only contain one child
@@ -37,7 +37,7 @@ def trans_expr(scope, expr):
         litrl = trans_literal(expr)
         return Expr(scope, litrl.type, litrl.outstr)
     if expr.data = 'binop_expr':
-        #your code
+        pass#your code
 
 def comment(cmnt):
     if enable_comments:
