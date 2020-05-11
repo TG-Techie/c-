@@ -21,8 +21,9 @@ COMMA  : ","
 
 binop: bitws_binop | arith_binop | compr_binop | logcl_binop
 logcl_binop:   "is" "not" | "is" | "not" "in" | "in" | "and" | "or" | "xor"
-compr_binop:  "!=" | "==" | "<=" | ">=" | ">" | "<"
-arith_binop:  "//" | "**" | "+" | "-" | "*" | "/" | "%"
+compr_binop:  "!=" -> noteq| "==" -> eq | "<=" | ">=" | ">" | "<"
+arith_binop:  "//" -> floordiv | "**" -> pow | "+" -> add | "-" -> sub
+           | "*" -> mul | "/" -> div | "%" -> mod
 bitws_binop:   "&" | "|" | "^" | "<<" | ">>"
 uniop: "not" | "~" | "-"
 
