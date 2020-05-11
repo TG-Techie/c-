@@ -149,18 +149,21 @@ class Stmt():
 
 class Type():
 
-    def __init__(self, name, methods):
+    def __init__(self, name, methods=None):
         self.name = name
-        self.methods = {}
+        if methods is None:
+            self.methods = {}
+        else:
+            self.methods = mwthods
 
         self.outname = name+'type'
 
     def __repr__(self):
         return f"<cmnstype '{self.name}'>"
 
-    def addmethods(self, name, type, args):
+    def addmethod(self, name, type, args):
         if name not in self.methods:
-            self.methods[name] = Function(f"{}{name}", type, args)
+            self.methods[name] = Function(f"{self.name}_{name}fn", type, args)
         else:
             raise ValueError(f"function '{name}' already defined in type {self.name}")
 
