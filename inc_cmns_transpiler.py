@@ -94,14 +94,21 @@ def trans_stmt(scope, stmt):
             scope.locals[var.name] = var
             stmtmdl.lines.append(comment(f"first assignment of '{var.name}' in scope"))
             stmtmdl.lines.append(f"{var.type.outname} {var.outname} = refto({expr.outstr});")
-    elif stmt.data == 'if_stmt':
-        print(stmt.pretty())
+    #elif stmt.data == 'if_stmt':
+    #
     else:
         print(stmt)
         raise NotImplementedError("unsupported stmt found")
     return stmtmdl
 
 def trans_func(scope, funcdef):
+    print([foo.data for foo in funcdef.children])
+
+def trans_stmt_block(scope, funcdef):
+    pass
+
+# for later / classdef
+def trans_funcdef_block(scope, funcdef):
     pass
 
 def trans_module(foo):
