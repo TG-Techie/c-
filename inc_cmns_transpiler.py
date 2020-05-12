@@ -57,7 +57,6 @@ def trans_expr(scope, expr):
         if op in binop_methodnames:
             return trans_method_call(scope, a, binop_methodnames[op], (b,))
         else:
-            SHIT
 
 def comment(cmnt):
     if enable_comments:
