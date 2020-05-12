@@ -98,6 +98,7 @@ def trans_stmt(scope, stmt):
     else:
         print(stmt)
         raise NotImplementedError("unsupported stmt found")
+    SHIT
     return stmtmdl
 
 def trans_func(scope, funcdef):
