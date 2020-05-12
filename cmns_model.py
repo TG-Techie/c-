@@ -2,7 +2,15 @@ enable_comments = True
 static_typing = False
 
 binop_methodnames = {
+    # artihmetic
     'add':'__add__',
+    'sub':'__sub__',
+    'mul':'__mul__',
+    'div':'__div__',
+    'mod':'__mod__',
+    'floordiv':'__floordiv__',
+    # comprarisons
+
 }
 
 class CMNSCompileTimeError(Exception):
@@ -135,27 +143,41 @@ class Expr():
 
 class Function ():
 
-    def __init__(self, name, outname, type, argpairs):
+    def __init__(self, name, outname, type, argpairs, stmts=None):
         super().__init__()
         self.name = name
         self.outname = outname
         self.type = type
         self.args = tuple(argpairs)
+        
+        if stmts is None:
+            self.stmts = []
+        else:
+            self.stmts = stmts
 
 class Stmt():
 
-    def __init__(self, scope=None, lines=None):
+    def __init__(self, scope=None, stmts=None, lineno='unknown',  header='', footer=''):
         self.scope = Scope(outer=scope)
-        if lines is None:
-            self.lines = []
+        self.lineno = lineno
+        
+        if stmts is None:
+            self.stmts = []
         else:
-            self.lines = lines
-
+            self.stmts = stmts
+        
+        
 
 class Type():
 
-    def __init__(self, name, methods=None):
+    def __init__(self, name, attrs=None, methods=None):
         self.name = name
+        
+        if attrs is None:
+            self.attrs = {}
+        else:
+            self.attrs = attrs
+        
         if methods is None:
             self.methods = {}
         else:
@@ -171,6 +193,15 @@ class Type():
             self.methods[name] = Function(name, f"{self.name}_{name}fn", type, args)
         else:
             raise ValueError(f"function '{name}' already defined in type {self.name}")
+    
+    def __eq__(self, other):
+        if (self is anytype) or (other is anytype) or (self is other):
+            return True
+        else:
+            return False
+
+anytype = Type('any')
+Scope.types.append(anytype)
 
 inttype = Type('int')
 Scope.types.append(inttype)
