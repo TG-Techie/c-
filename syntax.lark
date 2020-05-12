@@ -70,8 +70,10 @@ stmt_block: ":" NEWLINE INDENT stmt+ DEDENT | ":" stmt
 func_block: ":" NEWLINE INDENT (funcdef | pass_stmt)+ DEDENT | ":" pass_stmt
 
 
-expr: literal | expr "." name | name | call_expr | binop_expr | uniop_expr
-call_expr: expr "." name "(" paramlist ")"
+expr: literal | funccall_expr | methodcall_expr | attrget_expr | name | binop_expr | uniop_expr
+funccall_expr: name "(" paramlist ")"
+methodcall_expr: expr "." name "(" paramlist ")"
+attrget_expr: expr "." name
 paren_expr: "(" expr ")"
 uniop_expr: uniop expr
 binop_expr: expr binop expr
