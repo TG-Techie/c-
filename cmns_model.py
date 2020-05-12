@@ -149,7 +149,7 @@ class Function ():
         self.outname = outname
         self.type = type
         self.args = tuple(argpairs)
-        
+
         if stmts is None:
             self.stmts = []
         else:
@@ -157,27 +157,27 @@ class Function ():
 
 class Stmt():
 
-    def __init__(self, scope=None, stmts=None, lineno='unknown',  header='', footer=''):
+    def __init__(self, scope=None, lines=None, lineno='unknown',  header='', footer=''):
         self.scope = Scope(outer=scope)
         self.lineno = lineno
-        
-        if stmts is None:
-            self.stmts = []
+
+        if lines is None:
+            self.lines = []
         else:
-            self.stmts = stmts
-        
-        
+            self.lines = lines
+
+
 
 class Type():
 
     def __init__(self, name, attrs=None, methods=None):
         self.name = name
-        
+
         if attrs is None:
             self.attrs = {}
         else:
             self.attrs = attrs
-        
+
         if methods is None:
             self.methods = {}
         else:
@@ -193,7 +193,7 @@ class Type():
             self.methods[name] = Function(name, f"{self.name}_{name}fn", type, args)
         else:
             raise ValueError(f"function '{name}' already defined in type {self.name}")
-    
+
     def __eq__(self, other):
         if (self is anytype) or (other is anytype) or (self is other):
             return True
