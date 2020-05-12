@@ -98,7 +98,6 @@ def trans_stmt(scope, stmt):
     else:
         print(stmt)
         raise NotImplementedError("unsupported stmt found")
-    SHIT
     return stmtmdl
 
 def trans_func(scope, funcdef):
@@ -117,12 +116,15 @@ def trans_module(foo):
     lines = []
     for foo in foo.children:
         if foo.data == 'stmt':
+            print('STMT!')
             contents.append(trans_stmt(scope, foo.children[0]).lines)
         elif foo.data == 'funcdef':
+            print('FUNCDEF!')
             contents.append(trans_func(scope, foo))
         else:
             print(f"'{foo.data}'", foo.pretty())
             raise NotImplementedError(f"unsupported sentence '{foo.data}'")
+    return contents
 
 if __name__ == '__main__':
     paths =    ('./sentences/assign_int_lit.c-',
