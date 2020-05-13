@@ -106,17 +106,23 @@ def trans_module(foo):
     return contents
 
 def trans_func(tree):
+    print("F:LNFSKJL")
     print([foo.data for foo in tree.children])
     children = tree.children
     if len(children) == 3:
-        name, typelist, stmt_block = tree.children
+        nametok, typelist, stmt_block = tree.children
     elif len(children) == 4:
         name, typelist, rettype, stmt_block = tree.children
     else:
         SHIT
     scope = Scope()
     lines = trans_stmt_block(scope, stmt_block)
+    
+    name = str(type(name))
+    print(name)
+
     [print(line) for line in lines]
+    #return_stmt Function()
 
 def trans_stmt_block(scope, tree) -> list:
     print(tree)
