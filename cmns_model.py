@@ -153,10 +153,10 @@ class Expr():
 
 class Function ():
 
-    def __init__(self, name, outstr, type, argpairs, lines=None):
+    def __init__(self, name, outname, type, argpairs, lines=None):
         super().__init__()
         self.name = name
-        self.outstr = outstr
+        self.outstr = outname
         self.type = type
         self.args = tuple(argpairs)
 

@@ -41,7 +41,7 @@ def trans_expr(scope, expr):
     if expr.data == 'literal':
         litrl = trans_literal(expr)
         return Expr(scope, litrl.type, litrl.outstr)
-    if expr.data == 'binop_expr':
+    elif expr.data == 'binop_expr':
         a = trans_expr(scope, expr.children[0])
         b = trans_expr(scope, expr.children[2])
         op = expr.children[1].children[0].data
@@ -49,6 +49,8 @@ def trans_expr(scope, expr):
             return trans_method_call(scope, a, binop_methodnames[op], (b,))
         else:
             SHIT
+    else:
+        SHIT
 
 def comment(cmnt):
     if enable_comments:
@@ -128,7 +130,7 @@ def trans_module(foo):
             raise NotImplementedError(f"unsupported sentence '{foo.data}'")
     return contents
 
-def trans_func(scope, tree):
+def trans_func(scope, tree, prefix=''):
     print("entering trans func")
 
     #print([foo.data for foo in tree.children])
@@ -149,15 +151,12 @@ def trans_func(scope, tree):
         SHIT
 
     name = str(nametok.children[0])
-    print(name)
 
     scope = Scope()
+
     lines = trans_stmt_block(scope, stmt_block, rettype)
-    print(lines)
 
-
-    [print(line) for line in lines]
-    #return_stmt Function()
+    #return Function(name, prefix+name+'fn', rettype, )
 
 def trans_stmt_block(scope, tree, rettype=None) -> list:
     ls = list()
