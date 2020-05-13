@@ -35,10 +35,10 @@ bwuniop     : "~" -> bwnot
 
 // SECTION grammar def
 
-funcdef: "def" name "(" typelist ")" ("returns" VARNAME)? stmt_block
+funcdef: "def" name "(" typelist ")" ("returns" typename)? stmt_block
 classdef: "class" TYPENAME ("contains" "(" typelist ")")? func_block
 
-typelist:  (typename name (typename name name)*)?
+typelist:  (typename name (comma typename name)*)?
 //arglist: (name (comma name)*)? comma?
 paramlist: (expr (comma expr)*)? comma?
 comma: COMMA (COMMENT? NEWLINE)?
@@ -55,11 +55,13 @@ del_stmt: "del" name (comma name)* NEWLINE
 
 while_stmt: "while" expr stmt_block
 
-count_stmt: "count" (to_cntpair|from_cntpair|by_cntpair|as_cntpair)* stmt_block
+for_stmt: "for" "each" name "in" expr stmt_block
+
+count_stmt: "count" name (to_cntpair|from_cntpair|by_cntpair)* stmt_block
 to_cntpair: "to" expr
 from_cntpair: "from" expr
 by_cntpair: "by" expr
-as_cntpair: "as" name
+//as_cntpair: "as" name
 
 //for_stmt: "for" name "in" expr stmt_block
 
