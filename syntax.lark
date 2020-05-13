@@ -44,7 +44,7 @@ paramlist: (expr (comma expr)*)? comma?
 comma: "," (COMMENT? NEWLINE)?
 
 //stmts: stmt | stmts stmt
-stmt: pass_stmt | del_stmt | if_stmt | while_stmt | count_stmt | return_stmt | assign_stmt | expr_stmt
+stmt: pass_stmt | del_stmt | if_stmt | while_stmt | count_stmt | for_stmt | return_stmt | assign_stmt | expr_stmt
 
 pass_stmt: "pass" NEWLINE
 expr_stmt: expr NEWLINE
@@ -54,8 +54,8 @@ if_stmt : "if" expr stmt_block ("elif" expr stmt_block)* ("else" stmt_block)?
 del_stmt : "del" name (comma name)* NEWLINE
 
 while_stmt : "while" expr stmt_block
-for_stmt   : "for" "each" name "in" expr stmt_block
 
+for_stmt   : "for" "each" name "in" expr stmt_block
 
 count_stmt   : "count" (to_pair|from_pair|by_pair)* stmt_block
 to_pair   : "to" expr
