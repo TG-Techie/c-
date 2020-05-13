@@ -96,6 +96,7 @@ def trans_stmt(scope, stmt, rettype=None):
                 foundtype = retexpr.type
             if foundtype != rettype:
                 #FIXME: add better error
+                print( foundtype , rettype,  foundtype != rettype)
                 raise CMNSCompileTimeError(f"type of return expression does not watch required return type ")
             for var in scope.all:
                 if var != retexpr:
@@ -135,11 +136,18 @@ def trans_func(scope, tree):
         nametok, typelist, stmt_block = tree.children
         rettype = nonetype
     elif len(children) == 4:
-        name, typelist, rettype, stmt_block = tree.children
+        nametok, typelist, rettypetok, stmt_block = tree.children
+        rettypename = rettypetok.children[0].data
+        for cmnstype in scope.types:
+            if rettypename == cmnstype.name:
+                rettype = cmnstype
+                break
+        else:
+            raise CMNSCompileTimeError(f"type '{rettypename}' not found, line {'UNKNOWN'}")
     else:
         SHIT
 
-    name = str(name.children[0])
+    name = str(nametok.children[0])
     print(name)
 
     scope = Scope()
@@ -150,12 +158,12 @@ def trans_func(scope, tree):
     [print(line) for line in lines]
     #return_stmt Function()
 
-def trans_stmt_block(scope, tree, rettype) -> list:
+def trans_stmt_block(scope, tree, rettype=None) -> list:
     ls = list()
     for stmt in tree.children:
         if type(stmt) == Tree and stmt.data == 'stmt':
             print(stmt.data)
-            ls += trans_stmt(scope, stmt.children[0], rettype).lines
+            ls += trans_stmt(scope, stmt.children[0], rettype=rettype).lines
     return ls
 
 

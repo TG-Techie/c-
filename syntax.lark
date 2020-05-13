@@ -95,7 +95,8 @@ array: "<" expr ("," expr)* ","? ">"
 //list: "[" expr ("," expr)* ","? "]"
 
 // Tokens
-builtintype : "int" | "bool" | "str" | "float" | "arr" | "list" | "NoneType"
+builtintype : "int" -> int | "bool" -> bool | "str" -> str
+            | "float" -> float | "NoneType" -> nonetype | "<" typename ">" -> arroftype
 TYPENAME    : /_*[A-Z][a-zA-Z_0-9]*/
 VARNAME     : /[a-z_][a-zA-Z_0-9]*/
 
