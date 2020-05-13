@@ -106,7 +106,7 @@ def trans_module(foo):
     return contents
 
 def trans_func(tree):
-    ...
+    print([foo.data for foo in tree.children])
 
 def stmt_block(scope, tree) -> List:
     ...
