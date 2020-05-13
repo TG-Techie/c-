@@ -68,8 +68,8 @@ by_pair   : "by" expr
 assign_stmt : name "=" expr NEWLINE
 return_stmt : "return" expr NEWLINE | "return" NEWLINE
 
-stmt_block : COLON NEWLINE INDENT stmt+ DEDENT | COLON stmt
-func_block : COLON NEWLINE INDENT (funcdef | pass_stmt)+ DEDENT | COLON pass_stmt
+stmt_block : ":" NEWLINE INDENT stmt+ DEDENT | ":" stmt
+func_block : ":" NEWLINE INDENT (funcdef | pass_stmt)+ DEDENT | ":" pass_stmt
 
 
 expr           : literal | funccall_expr | methodcall_expr | attrget_expr | name | binop_expr | uniop_expr
