@@ -156,7 +156,13 @@ def trans_func(scope, tree, prefix=''):
 
     lines = trans_stmt_block(scope, stmt_block, rettype)
 
+def type_name_from_tree(tree):
+    return 'int'
+
     #return Function(name, prefix+name+'fn', rettype, )
+def trans_typelist(scope, tree) -> TypeList:
+    #look in scope.types
+    ...
 
 def trans_stmt_block(scope, tree, rettype=None) -> list:
     ls = list()
