@@ -19,6 +19,8 @@ class CMNSCompileTimeError(Exception):
 class Pair():
 
     def __init__(self, name, type):
+        assert isinstance(name, str)
+        assert isinstance(type, Type)
         self.name = name
         self.type = type
 
@@ -32,12 +34,14 @@ class Var(Pair):
         super().__init__(*args, **kwargs)
         self.outstr = self.name+'_var'
 
+
 class Arg(Pair):
 
     def __init__(self, scope, *args, **kwargs):
         self.scope = scope
         super().__init__(*args, **kwargs)
         self.outstr = self.name+'_var'
+
 
 class Attr(Pair):
 
@@ -54,7 +58,7 @@ class Litrl():
 class TypeList():
 
     def __init__(self):
-        self._pairs = {}
+        self._pairs = {} # dicts are ordered
 
     """def add(self, var):
         if self.static:
@@ -71,6 +75,8 @@ class TypeList():
             raise CMNSCompileTimeError("cannot remove undeclared Pair'' from 'TypeList'")
         else:
             del self._pair[var.name]"""
+    def __iter__(self):
+        return iter(self._pairs.values())
 
     def __contains__(self, target):
         if isinstance(target, str):
@@ -114,6 +120,8 @@ class Scope(TypeList):
         return self._pairs
 
     def __contains__(self, string):
+        print('scanning for', string)
+        assert isinstance(string, str)
         if string in self.locals:
             return True
         elif self.outer is not None and string in self.outer:
@@ -130,18 +138,22 @@ class Scope(TypeList):
             raise CMNSCompileTimeError("'{var}' not found in scope")
 
     def __setitem__(self, name, var):
+        #print('fasdfas')
         #check if the name is a valid name
         if name != var.name:
             raise ValueError(f"key '{name}' does not match the name in the given variable, '{name}' != '{var.name}'")
         if name in self.locals: # overwrite local, check if in local before outer
+            #print('setting in local',name, var )
             self.locals[name] = var
-        elif self.outer is not None and name in self.outer: # overwrite in outer scope if same type
+        elif (self.outer is not None) and (name in self.outer): # overwrite in outer scope if same type
+            #print('setting in global',name, var )
             if var.type is self.outer[name].type:
                 self.outer[name] = var
             else:
                 raise CMNSCompileTimeError("cannot cast variables outsideof the local scope" #python auto cats string w/out a comma seperator
                     f"tried to cast '{name}' declared as a '{self.outer[name].type.name}' to a '{var.type.name}'")
         else:
+            #print('setting new in local',name, var )
             self.locals[name] = var
 
 class Expr():
@@ -155,6 +167,7 @@ class Function ():
 
     def __init__(self, name, outname, type, argpairs, lines=None):
         super().__init__()
+        #self.scope = Scope()
         self.name = name
         self.outstr = outname
         self.type = type
@@ -225,6 +238,11 @@ Scope.types.append(nonetype)
 inttype.addmethod('__add__', inttype,
         (Pair('self', inttype), Pair('other', inttype))
 )
+
 inttype.addmethod('__str__', strtype,
         (Pair('self', inttype), Pair('other', inttype))
+)
+
+strtype.addmethod('__add__', strtype,
+        (Pair('self', strtype), Pair('other', strtype))
 )

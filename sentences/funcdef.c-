@@ -1,2 +1,7 @@
 def addints(int a, int b) returns int:
-    return 7 + 5
+    return a + b
+
+def addstr(str a, str b) returns str:
+    g = 5
+    g = "oof!"
+    return "foo" + "bar"

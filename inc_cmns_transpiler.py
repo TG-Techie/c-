@@ -35,21 +35,26 @@ def trans_method_call(scope, expr, funcname, args):
         outargs = ''.join([f', {argexpr.outstr}' for argexpr in args])
         return Expr(scope, expr.type.methods[funcname].type, f"{expr.type.methods[funcname].outstr}({expr.outstr}{outargs})")
     else:
-        raise CMNSCompileTimeError(f"line #lineno not implemented#: expr '{expr.outstr}' of type '{expr.type.name}' has no method '{funcname}'")
+        raise CMNSCompileTimeError(f"line {'UNKNOWN'}: expr '{expr.outstr}' of type '{expr.type.name}' has no method '{funcname}'")
 
-def trans_expr(scope, expr):
-    expr = expr.children[0] # all 'expr's only contain one child
-    if expr.data == 'literal':
-        litrl = trans_literal(expr)
+def trans_expr(scope, tree):
+    tree = tree.children[0] # all 'expr's only contain one child
+    if tree.data == 'literal':
+        litrl = trans_literal(tree)
         return Expr(scope, litrl.type, litrl.outstr)
-    elif expr.data == 'binop_expr':
-        a = trans_expr(scope, expr.children[0])
-        b = trans_expr(scope, expr.children[2])
-        op = expr.children[1].children[0].data
+    elif tree.data == 'binop_expr':
+        a = trans_expr(scope, tree.children[0])
+        b = trans_expr(scope, tree.children[2])
+        op = tree.children[1].children[0].data
         if op in binop_methodnames:
             return trans_method_call(scope, a, binop_methodnames[op], (b,))
         else:
             SHIT
+    elif tree.data == 'name':
+        for varname, var in scope.all:
+            #print(varname, var, str(tree.children[0]))
+            if varname == str(tree.children[0]):
+                return var
     else:
         SHIT
 
@@ -61,8 +66,9 @@ def comment(cmnt):
 
 def trans_stmt(scope, stmt, rettype=None):
     stmtmdl = Stmt(scope=scope)
-    scope = stmtmdl.scope
+    #scope = stmtmdl.scope
     if stmt.data == 'assign_stmt':
+        print(scope)
         nametree, expr, newline = stmt.children
 
         expr = trans_expr(scope, expr)
@@ -101,40 +107,24 @@ def trans_stmt(scope, stmt, rettype=None):
                 #FIXME: add better error
                 print( foundtype , rettype,  foundtype == rettype)
                 raise CMNSCompileTimeError(f"type of return expression does not watch required return type ")
-            for var in scope.all:
+
+            stmtmdl.lines.append(comment("return routine"))
+            stmtmdl.lines.append(f'anytype retval = refto({retexpr.outstr});')
+            stmtmdl.lines.append(comment("return type validated at compile time"))
+            for varname, var in scope.all:
                 if var != retexpr:
                     stmtmdl.lines.append(f"deref({var.outstr});")
             stmtmdl.lines.append('_cmns_gc();')
-            if retexpr is not None:
-                stmtmdl.lines.append(f'refreturn({retexpr.outstr});')
-            else:
-                stmtmdl.lines.append(f'return nonelitrl();')
-            #[print(line) for line in stmtmdl.lines]
-
+            #if retexpr is not None:
+            stmtmdl.lines.append(f'refreturn(retval);')
+            #else:
+            #    stmtmdl.lines.append(f'return nonelitrl();')
     else:
-        print(stmt)
         raise NotImplementedError(f"unsupported stmt found: '{stmt.data}'")
     return stmtmdl
 
-def trans_module(foo):
-    scope = Scope()
-    contents = []
-    lines = []
-    for foo in foo.children:
-        if foo.data == 'stmt':
-            print('STMT!')
-            contents.append(trans_stmt(scope, foo.children[0]).lines)
-        elif foo.data == 'funcdef':
-            print('FUNCDEF!')
-            contents.append(trans_func(scope, foo))
-        else:
-            raise NotImplementedError(f"unsupported sentence '{foo.data}'")
-    return contents
-
 def trans_func(scope, tree, prefix=''):
-    scope = Scope()
-    print("entering trans func")
-
+    funcscope = Scope()
     #print([foo.data for foo in tree.children])
     children = tree.children
     if len(children) == 3:
@@ -145,19 +135,22 @@ def trans_func(scope, tree, prefix=''):
         rettype = cmnstype_from_tree(scope, rettypetok)
     else:
         SHIT
-
     name = str(nametok.children[0])
+    outname = prefix+name+'fn'
+    params = trans_typelist(scope, typelist, content_type=Arg)
+    for arg in params:
+        funcscope[arg.name] = arg
+    c_open_block = "{"
+    paramsout = ", ".join([f"{arg.type.outstr} {arg.outstr}" for arg in params])
+    lines = [f"{rettype.outstr} {outname}({paramsout}){c_open_block}", '    '+comment("argument refs to preclude gc")]
+    lines += ['    '+f"refto({arg.outstr});" for arg in params]
+    lines += ['    '+line for line in trans_stmt_block(funcscope, stmt_block, rettype=rettype)]
+    #[print(arg.type, arg.outstr) for arg in params]
 
-
-    params = trans_typelist(scope, typelist)
-
-    if isinstance(params, TypeList):
-        raise returned
-    SHIT
-    lines = trans_stmt_block(scope, stmt_block, rettype, params, lines=lines)
+    lines.append("}")
+    return Function(name, outname, rettype, params, lines=lines)
 
 def cmnstype_from_tree(scope, tree):
-    print(tree)
     child = tree.children[0]
     if type(child) == Tree:
         rettypename = child.data
@@ -165,25 +158,57 @@ def cmnstype_from_tree(scope, tree):
         rettypename = str(child)
     for cmnstype in scope.types:
         if rettypename == cmnstype.name:
-            rettype = cmnstype
+            return cmnstype
             break
     else:
         raise CMNSCompileTimeError(f"type '{rettypename}' not found, line {'UNKNOWN'}")
 
-
-
     #return Function(name, prefix+name+'fn', rettype, )
-def trans_typelist(scope, tree) -> TypeList:
-    #look in scope.types
-    ...
+def trans_typelist(scope, tree, content_type=Var) -> TypeList:
+    pairs = TypeList()
+    toks = tree.children
+    #print(tree.pretty())
+    argname = ''
+    argtype = None
+    while len(toks):
+        tok = toks.pop(0)
+        if tok.data == 'typename':
+            argtype = cmnstype_from_tree(scope, tok)
+        elif tok.data == 'name':
+
+            argname = str(tok.children[0])
+        elif tok.data == 'comma':
+            pairs[argname] = content_type(scope, argname, argtype)
+            argname = ''
+            argtype = None
+    if tok.data != 'comma':
+        pairs[argname] = content_type(scope, argname, argtype)
+        argname = ''
+        argtype = None
+    return pairs
 
 def trans_stmt_block(scope, tree, rettype=None) -> list:
+    scope = Scope(outer=scope)
     ls = list()
     for stmt in tree.children:
         if type(stmt) == Tree and stmt.data == 'stmt':
-            print(stmt.data)
             ls += trans_stmt(scope, stmt.children[0], rettype=rettype).lines
     return ls
+
+def trans_module(foo):
+    scope = Scope()
+    contents = []
+    lines = []
+    for foo in foo.children:
+        if foo.data == 'stmt':
+            #print('STMT!')
+            contents.append(trans_stmt(scope, foo.children[0]))
+        elif foo.data == 'funcdef':
+            #print('FUNCDEF!')
+            contents.append(trans_func(scope, foo))
+        else:
+            raise NotImplementedError(f"unsupported sentence '{foo.data}'")
+    return contents
 
 
 if __name__ == '__main__':
@@ -192,7 +217,15 @@ if __name__ == '__main__':
                 './sentences/funcdef.c-',
                 )
     for path in paths:
+        print(f"\ntesting: '{path}'")
         with open(path) as file:
             tree = parse(file.read())
-            print(tree.pretty())
-            [print(line) for line in trans_module(tree)]
+            #print(tree.pretty())
+            mod = trans_module(tree)
+            print(mod)
+            for thing in mod:
+                print(f"\nprinting: {thing}")
+                [print(line) for line in thing.lines]
+            #[print(thing) for thing in mod]
+            #for line in mod[0].lines:
+            #    print(line)
