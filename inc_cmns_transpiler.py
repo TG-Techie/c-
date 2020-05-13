@@ -121,7 +121,7 @@ def trans_func(tree):
 def trans_stmt_block(scope, tree) -> list:
     print(tree)
     ls = list()
-    for stmt in tree:
+    for stmt in tree.children:
         ls.append(trans_stmt(scope, stmt))
     return ls
     #return all lines it contains
