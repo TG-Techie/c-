@@ -47,6 +47,7 @@ def trans_expr(scope, expr):
         if op in binop_methodnames:
             return trans_method_call(scope, a, binop_methodnames[op], (b,))
         else:
+            SHIT
 
 def comment(cmnt):
     if enable_comments:
@@ -58,7 +59,7 @@ def trans_stmt(scope, stmt):
     stmtmdl = Stmt(scope=scope)
     scope = stmtmdl.scope
     if stmt.data == 'assign_stmt':
-        nametree, equals, expr, newline = stmt.children
+        nametree, expr, newline = stmt.children
 
         expr = trans_expr(scope, expr)
         varname, lineno = namefromtree(nametree)
@@ -91,7 +92,8 @@ def trans_stmt(scope, stmt):
 
 def trans_module(foo):
     scope = Scope()
-    lines = []x
+    contents = []
+    lines = []
     for foo in foo.children:
         if foo.data == 'stmt':
             print('STMT!')
@@ -103,10 +105,17 @@ def trans_module(foo):
             raise NotImplementedError(f"unsupported sentence '{foo.data}'")
     return contents
 
+def trans_func():
+    ...
+
+def stmt_block():
+    ...
+
 
 if __name__ == '__main__':
     paths =    ('./sentences/assign_int_lit.c-',
                 './sentences/binop_add.c-',
+                './sentences/funcdef.c-',
                 )
     for path in paths:
         with open(path) as file:

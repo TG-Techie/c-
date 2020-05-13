@@ -5,16 +5,16 @@ start: (funcdef | classdef | stmt | NEWLINE)*
 // SECTION Token defs (exclude indent and dedent)
 
 //symbols
-LPAREN : "("
-RPAREN : ")"
+//"(" : "("
+//")" : ")"
 LBRACK : "["
 RBRACK : "]"
 LBRACE : "{"
 RBRACE : "}"
 
-DOT    : "."
-COLON  : ":"
-EQUALS : "="
+//"."    : "."
+//":"  : ":"
+//"=" : "="
 COMMA  : ","
 
 // x = <1,2,3>; g = x@1
@@ -35,10 +35,10 @@ bwuniop     : "~" -> bwnot
 
 // SECTION grammar def
 
-funcdef: "def" name LPAREN typelist RPAREN ("returns" VARNAME)? stmt_block
-classdef: "class" TYPENAME ("contains" LPAREN typelist RPAREN)? func_block
+funcdef: "def" name "(" typelist ")" ("returns" typename)? stmt_block
+classdef: "class" TYPENAME ("contains" "(" typelist ")")? func_block
 
-typelist:  (typename name (typename name name)*)?
+typelist:  (typename name (comma typename name)*)?
 //arglist: (name (comma name)*)? comma?
 paramlist: (expr (comma expr)*)? comma?
 comma: COMMA (COMMENT? NEWLINE)?
@@ -54,12 +54,14 @@ if_stmt : "if" expr stmt_block ("elif" expr stmt_block)* ("else" stmt_block)?
 del_stmt : "del" name (comma name)* NEWLINE
 
 while_stmt : "while" expr stmt_block
+for_stmt   : "for" "each" name "in" expr stmt_block
+
 
 count_stmt   : "count" (to_cntpair|from_cntpair|by_cntpair|as_cntpair)* stmt_block
 to_cntpair   : "to" expr
 from_cntpair : "from" expr
 by_cntpair   : "by" expr
-as_cntpair   : "as" name
+//as_cntpair   : "as" name
 
 //for_stmt: "for" name "in" expr stmt_block
 
@@ -70,20 +72,17 @@ stmt_block : COLON NEWLINE INDENT stmt+ DEDENT | COLON stmt
 func_block : COLON NEWLINE INDENT (funcdef | pass_stmt)+ DEDENT | COLON pass_stmt
 
 
-expr       : literal | type_expr | name | expr DOT name | call_expr | binop_expr | uniop_expr
-//builtincast_expr: builtintype LPAREN expr RPAREN
-type_expr  : typename LPAREN paramlist RPAREN
-call_expr  : expr LPAREN paramlist RPAREN
-//cmpnd_expr: expr DOT call_expr | expr DOT name
-paren_expr : LPAREN expr RPAREN
-uniop_expr : uniop expr
-binop_expr : expr binop expr
+expr           : literal | funccall_expr | methodcall_expr | attrget_expr | name | binop_expr | uniop_expr
+funccall_expr  : name "(" paramlist ")"
+methodcall_expr: expr "." name "(" paramlist ")"
+attrget_expr   : expr "." name
+uniop_expr     : uniop expr
+binop_expr     : expr binop expr
 
 typename : builtintype | TYPENAME
-name     : VARNAME | VARNAME (DOT VARNAME)+
+name     : VARNAME
 
 literal : number | string | array | bool | none
-
 
 // SECTION postlex declares and ignores
 number  : integer | float
@@ -93,13 +92,12 @@ string  : STRING | LONG_STRING
 bool    : "True" | "False"
 none    : "None"
 array   : "<" expr (COMMA expr)* COMMA? ">"
-list    : "[" expr (COMMA expr)* COMMA? "]"
+// list    : "[" expr (COMMA expr)* COMMA? "]"
 
 // Tokens
 builtintype : "int" | "bool" | "str" | "float" | "arr" | "list" | "NoneType"
 TYPENAME    : /_*[A-Z][a-zA-Z_0-9]*/
 VARNAME     : /[a-z_][a-zA-Z_0-9]*/
-
 
 COMMENT : /###[^#]*###/ | /#[^\n]*/
 NEWLINE : ( /\r?\n[\t ]*/ | COMMENT )+
