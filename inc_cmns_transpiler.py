@@ -105,6 +105,13 @@ def trans_module(foo):
             raise NotImplementedError(f"unsupported sentence '{foo.data}'")
     return contents
 
+def trans_func():
+    ...
+
+def stmt_block():
+    ...
+
+
 if __name__ == '__main__':
     paths =    ('./sentences/assign_int_lit.c-',
                 './sentences/binop_add.c-',
