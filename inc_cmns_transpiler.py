@@ -105,7 +105,7 @@ def trans_module(foo):
             raise NotImplementedError(f"unsupported sentence '{foo.data}'")
     return contents
 
-def trans_func():
+def trans_func(scope, tree):
     ...
 
 def stmt_block():

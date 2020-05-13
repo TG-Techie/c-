@@ -15,7 +15,7 @@ RBRACE : "}"
 //"."    : "."
 //":"  : ":"
 //"=" : "="
-COMMA  : ","
+//","  : ","
 
 // x = <1,2,3>; g = x@1
 
@@ -41,7 +41,7 @@ classdef: "class" TYPENAME ("contains" "(" typelist ")")? func_block
 typelist:  (typename name (comma typename name)*)?
 //arglist: (name (comma name)*)? comma?
 paramlist: (expr (comma expr)*)? comma?
-comma: COMMA (COMMENT? NEWLINE)?
+comma: "," (COMMENT? NEWLINE)?
 
 //stmts: stmt | stmts stmt
 stmt: pass_stmt | del_stmt | if_stmt | while_stmt | count_stmt | return_stmt | assign_stmt | expr_stmt
@@ -92,8 +92,8 @@ float: FLOAT_NUMBER
 string: STRING | LONG_STRING
 bool: "True" | "False"
 none: "None"
-array: "<" expr (COMMA expr)* COMMA? ">"
-//list: "[" expr (COMMA expr)* COMMA? "]"
+array: "<" expr ("," expr)* ","? ">"
+//list: "[" expr ("," expr)* ","? "]"
 
 // Tokens
 builtintype: "int" | "bool" | "str" | "float" | "NoneType"
