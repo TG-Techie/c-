@@ -100,6 +100,16 @@ class Scope(TypeList):
         #self.locals = TypeList()
 
     @property
+    def all(self):
+        if self.outer is not None:
+            return list(self.locals.items()) + self.outer.all
+        else:
+            return list(self.locals.items())
+
+    def __iter__(self):
+        return iter(self.all)
+
+    @property
     def locals(self):
         return self._pairs
 
