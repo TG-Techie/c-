@@ -108,8 +108,13 @@ def trans_module(foo):
 def trans_func(tree):
     ...
 
-def stmt_block(scope, tree) -> List:
-    ...
+def stmt_block(scope, tree) -> list:
+    print(tree)
+    ls = list()
+    for stmt in tree:
+        ls.append(trans_stmt(scope, stmt))
+    return ls
+    #return all lines it contains
 
 
 if __name__ == '__main__':
