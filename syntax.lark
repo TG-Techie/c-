@@ -65,7 +65,7 @@ by_pair   : "by" expr
 
 //for_stmt: "for" name "in" expr stmt_block
 
-assign_stmt : name EQUALS expr NEWLINE
+assign_stmt : name "=" expr NEWLINE
 return_stmt : "return" expr NEWLINE | "return" NEWLINE
 
 stmt_block : COLON NEWLINE INDENT stmt+ DEDENT | COLON stmt
