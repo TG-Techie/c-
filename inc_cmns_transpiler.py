@@ -131,6 +131,7 @@ def trans_module(foo):
     return contents
 
 def trans_func(scope, tree, prefix=''):
+    scope = Scope()
     print("entering trans func")
 
     #print([foo.data for foo in tree.children])
@@ -152,9 +153,10 @@ def trans_func(scope, tree, prefix=''):
 
     name = str(nametok.children[0])
 
-    scope = Scope()
 
-    lines = trans_stmt_block(scope, stmt_block, rettype)
+    params = trans_typelist(scope, typelist)
+    raise good_job_probs
+    lines = trans_stmt_block(scope, stmt_block, rettype, params, lines=lines)
 
 def type_name_from_tree(tree):
     return 'int'
