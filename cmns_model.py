@@ -143,17 +143,17 @@ class Expr():
 
 class Function ():
 
-    def __init__(self, name, outname, type, argpairs, stmts=None):
+    def __init__(self, name, outname, type, argpairs, lines=None):
         super().__init__()
         self.name = name
         self.outname = outname
         self.type = type
         self.args = tuple(argpairs)
 
-        if stmts is None:
-            self.stmts = []
+        if lines is None:
+            self.lines = []
         else:
-            self.stmts = stmts
+            self.lines = lines
 
 class Stmt():
 
