@@ -57,11 +57,11 @@ while_stmt : "while" expr stmt_block
 for_stmt   : "for" "each" name "in" expr stmt_block
 
 
-count_stmt   : "count" (to_cntpair|from_cntpair|by_cntpair|as_cntpair)* stmt_block
-to_cntpair   : "to" expr
-from_cntpair : "from" expr
-by_cntpair   : "by" expr
-//as_cntpair   : "as" name
+count_stmt   : "count" (to_pair|from_pair|by_pair)* stmt_block
+to_pair   : "to" expr
+from_pair : "from" expr
+by_pair   : "by" expr
+//as_pair   : "as" name
 
 //for_stmt: "for" name "in" expr stmt_block
 
