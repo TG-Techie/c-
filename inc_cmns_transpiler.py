@@ -88,8 +88,24 @@ def trans_stmt(scope, stmt, rettype=None):
         if rettype is None:
             raise CMNSCompileTimeError(f"return type not specified for return on line {'UNKNOWN'}, given '{rettype}' instead")
         else:
+            if len(stmt.children):
+                retexpr = None
+                foundtype = nonetype
+            else:
+                retexpr = trans_expr(scope, stmt.children[0])
+                foundtype = retexpr.type
+            if foundtype != rettype:
+                #FIXME: add better error
+                raise CMNSCompileTimeError(f"type of return expression does not watch required return type ")
+            for var in scope.all:
+                if var != retexpr:
+                    stmtmdl.lines.append(f"deref({var.outstr});")
+            stmtmdl.lines.append('_cmns_gc();')
+            if retexpr is not None:
+                stmtmdl.lines.append(f'refreturn({retexpr.outstr});')
+            else:
+                stmtmdl.lines.append(f'return nonelitrl();')
 
-            ret_val = trans_expr(scope, )
     else:
         print(stmt)
         raise NotImplementedError(f"unsupported stmt found: '{stmt.data}'")
@@ -112,6 +128,7 @@ def trans_module(foo):
 
 def trans_func(scope, tree):
     print("entering trans func")
+
     #print([foo.data for foo in tree.children])
     children = tree.children
     if len(children) == 3:
