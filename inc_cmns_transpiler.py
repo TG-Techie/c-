@@ -116,7 +116,7 @@ def trans_func(scope, tree):
     children = tree.children
     if len(children) == 3:
         nametok, typelist, stmt_block = tree.children
-        rettype = NoneType
+        rettype = nonetype
     elif len(children) == 4:
         name, typelist, rettype, stmt_block = tree.children
     else:
