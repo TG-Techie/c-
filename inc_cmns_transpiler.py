@@ -89,14 +89,14 @@ def trans_stmt(scope, stmt, rettype=None):
             raise CMNSCompileTimeError(f"return type not specified for return on line {'UNKNOWN'}, given '{rettype}' instead")
         else:
             if len(stmt.children):
-                retexpr = None
-                foundtype = nonetype
-            else:
                 retexpr = trans_expr(scope, stmt.children[0])
                 foundtype = retexpr.type
+            else:
+                retexpr = None
+                foundtype = nonetype
             if foundtype != rettype:
                 #FIXME: add better error
-                print( foundtype , rettype,  foundtype != rettype)
+                print( foundtype , rettype,  foundtype == rettype)
                 raise CMNSCompileTimeError(f"type of return expression does not watch required return type ")
             for var in scope.all:
                 if var != retexpr:
@@ -106,6 +106,7 @@ def trans_stmt(scope, stmt, rettype=None):
                 stmtmdl.lines.append(f'refreturn({retexpr.outstr});')
             else:
                 stmtmdl.lines.append(f'return nonelitrl();')
+            [print(line) for line in stmtmdl.lines]
 
     else:
         print(stmt)
