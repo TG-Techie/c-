@@ -171,6 +171,7 @@ def cmnstype_from_tree(scope, tree):
         raise CMNSCompileTimeError(f"type '{rettypename}' not found, line {'UNKNOWN'}")
 
 
+
     #return Function(name, prefix+name+'fn', rettype, )
 def trans_typelist(scope, tree) -> TypeList:
     #look in scope.types
