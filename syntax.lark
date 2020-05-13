@@ -85,7 +85,6 @@ name     : VARNAME
 literal : number | string | array | bool | none
 
 // SECTION postlex declares and ignores
-<<<<<<< HEAD
 number: integer | float
 integer: HEX_NUMBER | BIN_NUMBER | OCT_NUMBER | QUAD_NUMBER | DEC_NUMBER
 float: FLOAT_NUMBER
@@ -94,16 +93,6 @@ bool: "True" | "False"
 none: "None"
 array: "<" expr ("," expr)* ","? ">"
 //list: "[" expr ("," expr)* ","? "]"
-=======
-number  : integer | float
-integer : HEX_NUMBER | BIN_NUMBER | OCT_NUMBER | QUAD_NUMBER | DEC_NUMBER
-float   : FLOAT_NUMBER
-string  : STRING | LONG_STRING
-bool    : "True" | "False"
-none    : "None"
-array   : "<" expr (COMMA expr)* COMMA? ">"
-// list    : "[" expr (COMMA expr)* COMMA? "]"
->>>>>>> 02c646d6ce23ca7b05c4a0c9bc54a03426d81cc9
 
 // Tokens
 builtintype : "int" | "bool" | "str" | "float" | "arr" | "list" | "NoneType"
