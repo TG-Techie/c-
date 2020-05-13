@@ -38,7 +38,7 @@ bwuniop     : "~" -> bwnot
 funcdef: "def" name "(" typelist ")" ("returns" typename)? stmt_block
 classdef: "class" TYPENAME ("contains" "(" typelist ")")? func_block
 
-typelist:  (typename name (comma typename name)*)?
+typelist:  (typename name (comma typename name)*)?  comma?
 //arglist: (name (comma name)*)? comma?
 paramlist: (expr (comma expr)*)? comma?
 comma: "," (COMMENT? NEWLINE)?
