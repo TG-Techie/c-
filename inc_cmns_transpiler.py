@@ -1,4 +1,4 @@
-from lark import tree
+from lark.tree import Tree
 from cmns_parse import parse
 from cmns_model import *
 
@@ -107,8 +107,7 @@ def trans_module(foo):
     return contents
 
 def trans_func(tree):
-    print("F:LNFSKJL")
-    print([foo.data for foo in tree.children])
+    #print([foo.data for foo in tree.children])
     children = tree.children
     if len(children) == 3:
         nametok, typelist, stmt_block = tree.children
@@ -122,17 +121,16 @@ def trans_func(tree):
 
     scope = Scope()
     lines = trans_stmt_block(scope, stmt_block)
-
+    print(lines)
 
 
     [print(line) for line in lines]
     #return_stmt Function()
 
 def trans_stmt_block(scope, tree) -> list:
-    print(tree)
     ls = list()
     for stmt in tree.children:
-        if type(stmt) == tree and stmt.data == 'stmt':
+        if type(stmt) == Tree and stmt.data == 'stmt':
             ls += trans_stmt(scope, stmt).lines
     return ls
 
