@@ -88,7 +88,7 @@ def trans_stmt(scope, stmt, rettype=None):
         print(stmt.pretty())
     else:
         print(stmt)
-        raise NotImplementedError("unsupported stmt found")
+        raise NotImplementedError(f"unsupported stmt found: '{stmt.data}'")
     return stmtmdl
 
 def trans_module(foo):
@@ -131,7 +131,7 @@ def trans_stmt_block(scope, tree) -> list:
     ls = list()
     for stmt in tree.children:
         if type(stmt) == Tree and stmt.data == 'stmt':
-            ls += trans_stmt(scope, stmt).lines
+            ls += trans_stmt(scope, stmt.children[0]).lines
     return ls
 
 
