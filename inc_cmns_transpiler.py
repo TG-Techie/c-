@@ -47,6 +47,7 @@ def trans_expr(scope, expr):
         if op in binop_methodnames:
             return trans_method_call(scope, a, binop_methodnames[op], (b,))
         else:
+            SHIT
 
 def comment(cmnt):
     if enable_comments:
@@ -91,25 +92,17 @@ def trans_stmt(scope, stmt):
 
 def trans_module(foo):
     scope = Scope()
-    lines = []x
+    lines = []
     for foo in foo.children:
         if foo.data == 'stmt':
-<<<<<<< HEAD
             print('STMT!')
             contents.append(trans_stmt(scope, foo.children[0]).lines)
         elif foo.data == 'funcdef':
             print('FUNCDEF!')
             contents.append(trans_func(scope, foo))
-=======
-            lines += trans_stmt(scope, foo.children[0]).lines
->>>>>>> 72f0b048a73568de53da31b80909945d5c094b89
         else:
             raise NotImplementedError(f"unsupported sentence '{foo.data}'")
-<<<<<<< HEAD
     return contents
-=======
-    return lines
->>>>>>> 72f0b048a73568de53da31b80909945d5c094b89
 
 if __name__ == '__main__':
     paths =    ('./sentences/assign_int_lit.c-',

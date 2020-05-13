@@ -5,16 +5,16 @@ start: (funcdef | classdef | stmt | NEWLINE)*
 // SECTION Token defs (exclude indent and dedent)
 
 //symbols
-LPAREN : "("
-RPAREN : ")"
+//"(" : "("
+//")" : ")"
 LBRACK : "["
 RBRACK : "]"
 LBRACE : "{"
 RBRACE : "}"
 
-DOT    : "."
-COLON  : ":"
-EQUALS : "="
+//"."    : "."
+//":"  : ":"
+//"=" : "="
 COMMA  : ","
 
 // x = <1,2,3>; g = x@1
@@ -35,8 +35,8 @@ bwuniop     : "~" -> bwnot
 
 // SECTION grammar def
 
-funcdef: "def" name LPAREN typelist RPAREN ("returns" VARNAME)? stmt_block
-classdef: "class" TYPENAME ("contains" LPAREN typelist RPAREN)? func_block
+funcdef: "def" name "(" typelist ")" ("returns" VARNAME)? stmt_block
+classdef: "class" TYPENAME ("contains" "(" typelist ")")? func_block
 
 typelist:  (typename name (typename name name)*)?
 //arglist: (name (comma name)*)? comma?
@@ -63,24 +63,22 @@ as_cntpair: "as" name
 
 //for_stmt: "for" name "in" expr stmt_block
 
-assign_stmt: name EQUALS expr NEWLINE
+assign_stmt: name "=" expr NEWLINE
 return_stmt: "return" expr NEWLINE | "return" NEWLINE
 
-stmt_block: COLON NEWLINE INDENT stmt+ DEDENT | COLON stmt
-func_block: COLON NEWLINE INDENT (funcdef | pass_stmt)+ DEDENT | COLON pass_stmt
+stmt_block: ":" NEWLINE INDENT stmt+ DEDENT | ":" stmt
+func_block: ":" NEWLINE INDENT (funcdef | pass_stmt)+ DEDENT | ":" pass_stmt
 
 
-expr: literal | type_expr | name | expr DOT name | call_expr | binop_expr | uniop_expr
-//builtincast_expr: builtintype LPAREN expr RPAREN
-type_expr: typename LPAREN paramlist RPAREN
-call_expr: expr LPAREN paramlist RPAREN
-//cmpnd_expr: expr DOT call_expr | expr DOT name
-paren_expr: LPAREN expr RPAREN
+expr: literal | funccall_expr | methodcall_expr | attrget_expr | name | binop_expr | uniop_expr
+funccall_expr: name "(" paramlist ")"
+methodcall_expr: expr "." name "(" paramlist ")"
+attrget_expr: expr "." name
 uniop_expr: uniop expr
 binop_expr: expr binop expr
 
 typename: builtintype | TYPENAME
-name: VARNAME | VARNAME (DOT VARNAME)+
+name: VARNAME
 
 literal: number | string | array | bool | none
 
@@ -93,10 +91,10 @@ string: STRING | LONG_STRING
 bool: "True" | "False"
 none: "None"
 array: "<" expr (COMMA expr)* COMMA? ">"
-list: "[" expr (COMMA expr)* COMMA? "]"
+//list: "[" expr (COMMA expr)* COMMA? "]"
 
 // Tokens
-builtintype: "int" | "bool" | "str" | "float" | "arr" | "list" | "NoneType"
+builtintype: "int" | "bool" | "str" | "float" | "NoneType"
 TYPENAME: /_*[A-Z][a-zA-Z_0-9]*/
 VARNAME: /[a-z_][a-zA-Z_0-9]*/
 
