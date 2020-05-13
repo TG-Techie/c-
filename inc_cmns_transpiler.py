@@ -32,7 +32,7 @@ def trans_literal(litrl):
 def trans_method_call(scope, expr, funcname, args):
     if funcname in expr.type.methods:
         outargs = ''.join([f', {argexpr.outstr}' for argexpr in args])
-        return Expr(scope, expr.type.methods[funcname].type, f"{expr.type.methods[funcname].outname}({expr.outstr}{outargs})")
+        return Expr(scope, expr.type.methods[funcname].type, f"{expr.type.methods[funcname].outstr}({expr.outstr}{outargs})")
     else:
         raise CMNSCompileTimeError(f"line #lineno not implemented#: expr '{expr.outstr}' of type '{expr.type.name}' has no method '{funcname}'")
 
@@ -74,18 +74,22 @@ def trans_stmt(scope, stmt, rettype=None):
                 elif var.name in scope.locals:
                         stmtmdl.lines.append(comment(f"casting '{var.name}' from type '{scope[var.name].type.name}' to  type '{var.type.name}'"))
                         scope[var.name] = var
-                        stmtmdl.lines.append(f"rerefto({var.outname}, {expr.outstr});")
+                        stmtmdl.lines.append(f"rerefto({var.outstr}, {expr.outstr});")
                 else:
                     raise CMNSCompileTimeError(f"line {lineno}: cannot cast variables outside of the local scope, you tried to assign '{var.name}' declared as a '{scope[var.name].type.name}' to a '{var.type.name}'")
 
             else:
-                stmtmdl.lines.append(f"rerefto({var.outname}, {expr.outstr});")
+                stmtmdl.lines.append(f"rerefto({var.outstr}, {expr.outstr});")
         else:
             scope.locals[var.name] = var
             stmtmdl.lines.append(comment(f"first assignment of '{var.name}' in scope"))
-            stmtmdl.lines.append(f"{var.type.outname} {var.outname} = refto({expr.outstr});")
-    elif stmt.data == 'if_stmt':
-        print(stmt.pretty())
+            stmtmdl.lines.append(f"{var.type.outstr} {var.outstr} = refto({expr.outstr});")
+    elif stmt.data == 'return_stmt':
+        if rettype is None:
+            raise CMNSCompileTimeError(f"return type not specified for return on line {'UNKNOWN'}, given '{rettype}' instead")
+        else:
+
+            ret_val = trans_expr(scope, )
     else:
         print(stmt)
         raise NotImplementedError(f"unsupported stmt found: '{stmt.data}'")

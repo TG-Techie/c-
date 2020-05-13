@@ -30,20 +30,20 @@ class Var(Pair):
     def __init__(self, scope, *args, **kwargs):
         self.scope = scope
         super().__init__(*args, **kwargs)
-        self.outname = self.name+'_var'
+        self.outstr = self.name+'_var'
 
 class Arg(Pair):
 
     def __init__(self, scope, *args, **kwargs):
         self.scope = scope
         super().__init__(*args, **kwargs)
-        self.outname = self.name+'_var'
+        self.outstr = self.name+'_var'
 
 class Attr(Pair):
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
-        self.outname = self.name+'_attr'
+        self.outstr = self.name+'_attr'
 
 class Litrl():
 
@@ -143,10 +143,10 @@ class Expr():
 
 class Function ():
 
-    def __init__(self, name, outname, type, argpairs, lines=None):
+    def __init__(self, name, outstr, type, argpairs, lines=None):
         super().__init__()
         self.name = name
-        self.outname = outname
+        self.outstr = outstr
         self.type = type
         self.args = tuple(argpairs)
 
@@ -183,7 +183,7 @@ class Type():
         else:
             self.methods = mwthods
 
-        self.outname = name+'type'
+        self.outstr = name+'type'
 
     def __repr__(self):
         return f"<cmnstype '{self.name}'>"
@@ -208,6 +208,9 @@ Scope.types.append(inttype)
 
 strtype = Type('str')
 Scope.types.append(strtype)
+
+nonetype = Type('none')
+Scope.types.append(nonetype)
 
 inttype.addmethod('__add__', inttype,
         (Pair('self', inttype), Pair('other', inttype))
