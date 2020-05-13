@@ -101,16 +101,18 @@ def trans_module(foo):
             contents.append(trans_stmt(scope, foo.children[0]).lines)
         elif foo.data == 'funcdef':
             print('FUNCDEF!')
-            contents.append(trans_func(foo))
+            contents.append(trans_func(scope, foo))
         else:
             raise NotImplementedError(f"unsupported sentence '{foo.data}'")
     return contents
 
-def trans_func(tree):
+def trans_func(scope, tree):
+    print("entering trans func")
     #print([foo.data for foo in tree.children])
     children = tree.children
     if len(children) == 3:
         nametok, typelist, stmt_block = tree.children
+        rettype = NoneType
     elif len(children) == 4:
         name, typelist, rettype, stmt_block = tree.children
     else:
@@ -120,18 +122,19 @@ def trans_func(tree):
     print(name)
 
     scope = Scope()
-    lines = trans_stmt_block(scope, stmt_block)
+    lines = trans_stmt_block(scope, stmt_block, rettype)
     print(lines)
 
 
     [print(line) for line in lines]
     #return_stmt Function()
 
-def trans_stmt_block(scope, tree) -> list:
+def trans_stmt_block(scope, tree, rettype) -> list:
     ls = list()
     for stmt in tree.children:
         if type(stmt) == Tree and stmt.data == 'stmt':
-            ls += trans_stmt(scope, stmt.children[0]).lines
+            print(stmt.data)
+            ls += trans_stmt(scope, stmt.children[0], rettype).lines
     return ls
 
 
