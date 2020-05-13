@@ -1,4 +1,5 @@
 from lark.tree import Tree
+from lark import Token
 from cmns_parse import parse
 from cmns_model import *
 
@@ -108,7 +109,7 @@ def trans_stmt(scope, stmt, rettype=None):
                 stmtmdl.lines.append(f'refreturn({retexpr.outstr});')
             else:
                 stmtmdl.lines.append(f'return nonelitrl();')
-            [print(line) for line in stmtmdl.lines]
+            #[print(line) for line in stmtmdl.lines]
 
     else:
         print(stmt)
@@ -139,13 +140,7 @@ def trans_func(scope, tree, prefix=''):
         rettype = nonetype
     elif len(children) == 4:
         nametok, typelist, rettypetok, stmt_block = tree.children
-        rettypename = rettypetok.children[0].data
-        for cmnstype in scope.types:
-            if rettypename == cmnstype.name:
-                rettype = cmnstype
-                break
-        else:
-            raise CMNSCompileTimeError(f"type '{rettypename}' not found, line {'UNKNOWN'}")
+        rettype = cmnstype_from_tree(scope, rettypetok)
     else:
         SHIT
 
@@ -159,8 +154,20 @@ def trans_func(scope, tree, prefix=''):
     SHIT
     lines = trans_stmt_block(scope, stmt_block, rettype, params, lines=lines)
 
-def type_name_from_tree(tree):
-    return 'int'
+def cmnstype_from_tree(scope, tree):
+    print(tree)
+    child = tree.children[0]
+    if type(child) == Tree:
+        rettypename = child.data
+    else:
+        rettypename = str(child)
+    for cmnstype in scope.types:
+        if rettypename == cmnstype.name:
+            rettype = cmnstype
+            break
+    else:
+        raise CMNSCompileTimeError(f"type '{rettypename}' not found, line {'UNKNOWN'}")
+
 
     #return Function(name, prefix+name+'fn', rettype, )
 def trans_typelist(scope, tree) -> TypeList:
