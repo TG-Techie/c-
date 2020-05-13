@@ -105,6 +105,7 @@ def trans_stmt(scope, stmt, rettype=None):
                 stmtmdl.lines.append(f'refreturn({retexpr.outstr});')
             else:
                 stmtmdl.lines.append(f'return nonelitrl();')
+
     else:
         print(stmt)
         raise NotImplementedError(f"unsupported stmt found: '{stmt.data}'")
@@ -126,10 +127,13 @@ def trans_module(foo):
     return contents
 
 def trans_func(scope, tree):
+    print("entering trans func")
+
     #print([foo.data for foo in tree.children])
     children = tree.children
     if len(children) == 3:
         nametok, typelist, stmt_block = tree.children
+        rettype = nonetype
     elif len(children) == 4:
         name, typelist, rettype, stmt_block = tree.children
     else:
@@ -139,18 +143,19 @@ def trans_func(scope, tree):
     print(name)
 
     scope = Scope()
-    lines = trans_stmt_block(scope, stmt_block)
+    lines = trans_stmt_block(scope, stmt_block, rettype)
     print(lines)
 
 
     [print(line) for line in lines]
     #return_stmt Function()
 
-def trans_stmt_block(scope, tree) -> list:
+def trans_stmt_block(scope, tree, rettype) -> list:
     ls = list()
     for stmt in tree.children:
         if type(stmt) == Tree and stmt.data == 'stmt':
-            ls += trans_stmt(scope, stmt.children[0]).lines
+            print(stmt.data)
+            ls += trans_stmt(scope, stmt.children[0], rettype).lines
     return ls
 
 
