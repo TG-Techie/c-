@@ -155,7 +155,10 @@ def trans_func(scope, tree, prefix=''):
 
 
     params = trans_typelist(scope, typelist)
-    raise good_job_probs
+
+    if isinstance(params, TypeList):
+        raise returned
+    SHIT
     lines = trans_stmt_block(scope, stmt_block, rettype, params, lines=lines)
 
 def type_name_from_tree(tree):
