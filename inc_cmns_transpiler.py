@@ -99,11 +99,10 @@ def trans_module(foo):
         elif foo.data == 'funcdef':
             print('FUNCDEF!')
             contents.append(trans_func(scope, foo))
-            lines += trans_stmt(scope, foo.children[0]).lines
         else:
             raise NotImplementedError(f"unsupported sentence '{foo.data}'")
     return contents
-    
+
 
 if __name__ == '__main__':
     paths =    ('./sentences/assign_int_lit.c-',

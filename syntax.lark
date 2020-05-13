@@ -49,70 +49,70 @@ stmt: pass_stmt | del_stmt | if_stmt | while_stmt | count_stmt | return_stmt | a
 pass_stmt: "pass" NEWLINE
 expr_stmt: expr NEWLINE
 
-if_stmt: "if" expr stmt_block ("elif" expr stmt_block)* ("else" stmt_block)?
+if_stmt : "if" expr stmt_block ("elif" expr stmt_block)* ("else" stmt_block)?
 
-del_stmt: "del" name (comma name)* NEWLINE
+del_stmt : "del" name (comma name)* NEWLINE
 
-while_stmt: "while" expr stmt_block
+while_stmt : "while" expr stmt_block
 
-count_stmt: "count" (to_cntpair|from_cntpair|by_cntpair|as_cntpair)* stmt_block
-to_cntpair: "to" expr
-from_cntpair: "from" expr
-by_cntpair: "by" expr
-as_cntpair: "as" name
+count_stmt   : "count" (to_cntpair|from_cntpair|by_cntpair|as_cntpair)* stmt_block
+to_cntpair   : "to" expr
+from_cntpair : "from" expr
+by_cntpair   : "by" expr
+as_cntpair   : "as" name
 
 //for_stmt: "for" name "in" expr stmt_block
 
-assign_stmt: name EQUALS expr NEWLINE
-return_stmt: "return" expr NEWLINE | "return" NEWLINE
+assign_stmt : name EQUALS expr NEWLINE
+return_stmt : "return" expr NEWLINE | "return" NEWLINE
 
-stmt_block: COLON NEWLINE INDENT stmt+ DEDENT | COLON stmt
-func_block: COLON NEWLINE INDENT (funcdef | pass_stmt)+ DEDENT | COLON pass_stmt
+stmt_block : COLON NEWLINE INDENT stmt+ DEDENT | COLON stmt
+func_block : COLON NEWLINE INDENT (funcdef | pass_stmt)+ DEDENT | COLON pass_stmt
 
 
-expr: literal | type_expr | name | expr DOT name | call_expr | binop_expr | uniop_expr
+expr       : literal | type_expr | name | expr DOT name | call_expr | binop_expr | uniop_expr
 //builtincast_expr: builtintype LPAREN expr RPAREN
-type_expr: typename LPAREN paramlist RPAREN
-call_expr: expr LPAREN paramlist RPAREN
+type_expr  : typename LPAREN paramlist RPAREN
+call_expr  : expr LPAREN paramlist RPAREN
 //cmpnd_expr: expr DOT call_expr | expr DOT name
-paren_expr: LPAREN expr RPAREN
-uniop_expr: uniop expr
-binop_expr: expr binop expr
+paren_expr : LPAREN expr RPAREN
+uniop_expr : uniop expr
+binop_expr : expr binop expr
 
-typename: builtintype | TYPENAME
-name: VARNAME | VARNAME (DOT VARNAME)+
+typename : builtintype | TYPENAME
+name     : VARNAME | VARNAME (DOT VARNAME)+
 
-literal: number | string | array | bool | none
+literal : number | string | array | bool | none
 
 
 // SECTION postlex declares and ignores
-number: integer | float
-integer: HEX_NUMBER | BIN_NUMBER | OCT_NUMBER | QUAD_NUMBER | DEC_NUMBER
-float: FLOAT_NUMBER
-string: STRING | LONG_STRING
-bool: "True" | "False"
-none: "None"
-array: "<" expr (COMMA expr)* COMMA? ">"
-list: "[" expr (COMMA expr)* COMMA? "]"
+number  : integer | float
+integer : HEX_NUMBER | BIN_NUMBER | OCT_NUMBER | QUAD_NUMBER | DEC_NUMBER
+float   : FLOAT_NUMBER
+string  : STRING | LONG_STRING
+bool    : "True" | "False"
+none    : "None"
+array   : "<" expr (COMMA expr)* COMMA? ">"
+list    : "[" expr (COMMA expr)* COMMA? "]"
 
 // Tokens
-builtintype: "int" | "bool" | "str" | "float" | "arr" | "list" | "NoneType"
-TYPENAME: /_*[A-Z][a-zA-Z_0-9]*/
-VARNAME: /[a-z_][a-zA-Z_0-9]*/
+builtintype : "int" | "bool" | "str" | "float" | "arr" | "list" | "NoneType"
+TYPENAME    : /_*[A-Z][a-zA-Z_0-9]*/
+VARNAME     : /[a-z_][a-zA-Z_0-9]*/
 
 
-COMMENT: /###[^#]*###/ | /#[^\n]*/
-NEWLINE: ( /\r?\n[\t ]*/ | COMMENT )+
+COMMENT : /###[^#]*###/ | /#[^\n]*/
+NEWLINE : ( /\r?\n[\t ]*/ | COMMENT )+
 // mine NEWLINE: /[\r\n]+[\t ]*/
 
-STRING : /[ubf]?r?("(?!"").*?(?<!\\)(\\\\)*?"|'(?!'').*?(?<!\\)(\\\\)*?')/i
-LONG_STRING: /[ubf]?r?(""".*?(?<!\\)(\\\\)*?"""|'''.*?(?<!\\)(\\\\)*?''')/is
+STRING      : /[ubf]?r?("(?!"").*?(?<!\\)(\\\\)*?"|'(?!'').*?(?<!\\)(\\\\)*?')/i
+LONG_STRING : /[ubf]?r?(""".*?(?<!\\)(\\\\)*?"""|'''.*?(?<!\\)(\\\\)*?''')/is
 
-DEC_NUMBER: /[0-9]\d*/i
-HEX_NUMBER: /0x[\da-f]*/i
-OCT_NUMBER: /0o[0-7]*/i
-QUAD_NUMBER: /0q[0-3]*/i
-BIN_NUMBER: /0b[0-1]*/i
+DEC_NUMBER  : /[0-9]\d*/i
+HEX_NUMBER  : /0x[\da-f]*/i
+OCT_NUMBER  : /0o[0-7]*/i
+QUAD_NUMBER : /0q[0-3]*/i
+BIN_NUMBER  : /0b[0-1]*/i
 FLOAT_NUMBER: /((\d+\.\d*|\.\d+)(e[-+]?\d+)?|\d+(e[-+]?\d+))/i
 //IMAG_NUMBER: /\d+j/i | FLOAT_NUMBER "j"i
 
