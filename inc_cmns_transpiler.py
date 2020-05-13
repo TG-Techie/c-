@@ -100,15 +100,15 @@ def trans_module(foo):
             contents.append(trans_stmt(scope, foo.children[0]).lines)
         elif foo.data == 'funcdef':
             print('FUNCDEF!')
-            contents.append(trans_func(scope, foo))
+            contents.append(trans_func(foo))
         else:
             raise NotImplementedError(f"unsupported sentence '{foo.data}'")
     return contents
 
-def trans_func(scope, tree):
+def trans_func(tree):
     ...
 
-def stmt_block():
+def stmt_block(scope, tree) -> List:
     ...
 
 
