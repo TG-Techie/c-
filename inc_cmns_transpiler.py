@@ -55,7 +55,7 @@ def comment(cmnt):
     else:
         return ''
 
-def trans_stmt(scope, stmt):
+def trans_stmt(scope, stmt, rettype=None):
     stmtmdl = Stmt(scope=scope)
     scope = stmtmdl.scope
     if stmt.data == 'assign_stmt':
@@ -115,11 +115,14 @@ def trans_func(tree):
         name, typelist, rettype, stmt_block = tree.children
     else:
         SHIT
+
+    name = str(name.children[0])
+    print(name)
+
     scope = Scope()
     lines = trans_stmt_block(scope, stmt_block)
-    
-    name = str(type(name))
-    print(name)
+
+
 
     [print(line) for line in lines]
     #return_stmt Function()
@@ -127,10 +130,9 @@ def trans_func(tree):
 def trans_stmt_block(scope, tree) -> list:
     print(tree)
     ls = list()
-    for stmt in tree:
-        ls.append(trans_stmt(scope, stmt))
+    for stmt in tree.children:
+        ls += trans_stmt(scope, stmt).lines
     return ls
-    #return all lines it contains
 
 
 if __name__ == '__main__':
