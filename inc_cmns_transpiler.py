@@ -1,3 +1,4 @@
+from lark import tree
 from cmns_parse import parse
 from cmns_model import *
 
@@ -130,11 +131,9 @@ def trans_func(tree):
 def trans_stmt_block(scope, tree) -> list:
     print(tree)
     ls = list()
-    print(type(tree.children[0]))
     for stmt in tree.children:
-        if type(stmt) == HELP:
-            continue
-        ls += trans_stmt(scope, stmt).lines
+        if type(stmt) == tree and stmt.data == 'stmt':
+            ls += trans_stmt(scope, stmt).lines
     return ls
 
 
