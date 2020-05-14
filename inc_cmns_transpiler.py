@@ -11,6 +11,8 @@ def namefromtree(nametree):
     if len(nametree.children) == 1:
         tok = nametree.children[0]
         return str(tok), int(tok.line)
+    else:
+        SHIT
 
 def trans_literal(litrl):
     litrl = litrl.children[0]
@@ -43,7 +45,15 @@ def trans_method_call(scope, expr, funcname, args, lineno):
         outargs = ''.join([f', {argexpr.outstr}' for argexpr in args])
         return Expr(scope, expr.type.methods[funcname].type, f"{expr.type.methods[funcname].outstr}({expr.outstr}{outargs})")
     else:
-        raise CMNSCompileTimeError(f"line {'UNKNOWN'}: expr '{expr.outstr}' of type '{expr.type.name}' has no method '{funcname}'")
+        raise CMNSCompileTimeError(f"line {lineno}: expr of type '{expr.type.name}' has no method '{funcname}'")
+
+def trans_paramlist(scope, tree, lineno):
+    print(tree.pretty())
+    params = []
+    for param in tree.children:
+        if param.data == 'expr':
+           params.append(trans_expr(scope, param, lineno)) 
+    return params
 
 def trans_expr(scope, tree, lineno):
     roottree = tree
@@ -64,8 +74,22 @@ def trans_expr(scope, tree, lineno):
             #print(varname, var, str(tree.children[0]))
             if varname == str(tree.children[0]):
                 return var
-    else:
-        raise NotImplementedError(f"unimplemented expr '{tree.data}'")
+    elif tree.data == 'methodcall_expr':
+        print(tree.pretty())
+        target_expr, nametree, params = tree.children
+        params = trans_paramlist(scope, params, lineno)
+        name, namelineno = namefromtree(nametree)
+        print('filtered name', name)
+        print('filtered params', params)
+        return trans_method_call(scope, 
+            trans_expr(scope, target_expr, lineno),
+            name,
+            params,
+            lineno
+        )
+        
+    #else:
+    raise NotImplementedError(f"unimplemented expr '{tree.data}'")
 
 def comment(cmnt):
     if enable_comments:
@@ -125,7 +149,7 @@ def trans_stmt(scope, tree, rettype):
             if foundtype != rettype:
                 #FIXME: add better error
                 #print( foundtype , rettype,  foundtype == rettype)
-                raise CMNSCompileTimeError(f"type '{foundtype.name}' of return expression does not watch required return type '{rettype.name}' ")
+                raise CMNSCompileTimeError(f"type '{foundtype.name}' of return expression does not match required return type '{rettype.name}' ")
 
 
             stmtmdl.lines.append(comment(f"line {stmtmdl.lineno}: return routine,  type '{rettype.name}'"))
@@ -348,6 +372,8 @@ def trans_module(foo):
     contents = []
     lines = []
     for foo in foo.children:
+        if isinstance(foo, Token):
+            continue
         if foo.data == 'stmt':
             #print('STMT!')
             contents.append(trans_stmt(scope, foo, None))
@@ -370,7 +396,8 @@ if __name__ == '__main__':
                 './sentences/ifstmt.c-',
                 #'./sentences/casterror.c-',
                 './sentences/nestedif.c-',
-                './sentences/whileloop.c-'
+                './sentences/whileloop.c-',
+                './sentences/methodcall.c-'
                 )
     for path in paths:
         print(f"\ntesting: '{path}'")
