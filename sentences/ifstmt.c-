@@ -9,6 +9,7 @@ def the_question(str prompt) returns bool:
         redvar = 3
         return True
     else: pass
+
     return False
 
 def main():

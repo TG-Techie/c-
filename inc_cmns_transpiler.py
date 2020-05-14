@@ -3,7 +3,9 @@ from lark import Token
 from cmns_parse import parse
 from cmns_model import *
 
-######TODO: add traits? get, set,
+
+#####TODO: make else not required
+#FUTURE: add traits? get, set,
 
 
 def namefromtree(nametree):
@@ -28,16 +30,17 @@ def trans_literal(litrl):
         return Litrl(strtype, f'''strlitrl("{litrl_text}")''')
     elif litrl.data == 'bool':
         if litrl.children[0] == 'True':
-            return Litrl(booltype, f'''truelitrl''')
+            return Litrl(booltype, "truelitrl")
         elif litrl.children[0] == 'False':
-            return Litrl(booltype, f'''falselit''')
+            return Litrl(booltype, "falselitrl")
         else:
             SHIT
-
+    elif litrl.data == 'nonetype':
+        return Litrl(nonetype, "nonelitrl")
     #else:
     raise CMNSCompileTimeError(f"{litrl.pretty()} invalid literal")
 
-def trans_method_call(scope, expr, funcname, args):
+def trans_method_call(scope, expr, funcname, args, lineno):
     if funcname in expr.type.methods:
         outargs = ''.join([f', {argexpr.outstr}' for argexpr in args])
         return Expr(scope, expr.type.methods[funcname].type, f"{expr.type.methods[funcname].outstr}({expr.outstr}{outargs})")
@@ -55,7 +58,7 @@ def trans_expr(scope, tree, lineno):
         b = trans_expr(scope, tree.children[2], lineno)
         op = tree.children[1].children[0].data
         if op in binop_methodnames:
-            return trans_method_call(scope, a, binop_methodnames[op], (b,))
+            return trans_method_call(scope, a, binop_methodnames[op], (b,), lineno)
         else:
             raise NotImplementedError(f"unimplemented binop '{tree.data}'")
     elif tree.data == 'name':
@@ -123,7 +126,7 @@ def trans_stmt(scope, tree, rettype):
             if foundtype != rettype:
                 #FIXME: add better error
                 #print( foundtype , rettype,  foundtype == rettype)
-                raise CMNSCompileTimeError(f"type of return expression does not watch required return type ")
+                raise CMNSCompileTimeError(f"type '{foundtype.name}' of return expression does not watch required return type '{rettype.name}' ")
 
             stmtmdl.lines.append(comment("return routine"))
             stmtmdl.lines.append(f'anytype retval = refto({retexpr.outstr});')
@@ -139,10 +142,36 @@ def trans_stmt(scope, tree, rettype):
     elif stmt.data == 'if_stmt':
         children = stmt.children
         #print(children[0].children[0], children[1].data, children[-1].data)
+        toplines, lineno = trans_stmt_block(scope, children[1], rettype)
+        elselines, elselineno = trans_stmt_block(scope, children[-1], rettype)
+        topexpr = trans_expr(scope, children[0], lineno)
+        if topexpr.type != booltype:
+            #FURTURE: use a cast attempt
+            topexpr = trans_method_call(scope, topexpr, '__bool__', [], lineno)
 
-        topblock, topblock_lineno = trans_stmt_block(scope, children[1], rettype)
-        elseblock, elseblock_lineno = trans_stmt_block(scope, children[-1], rettype)
-        topexpr = trans_expr(scope, children[0], topblock_lineno)
+        #if header: "if (){"
+        stmtmdl.lines.append(f'if (({topexpr.outstr})->value)'+"{")
+        stmtmdl.lines += ['    '+line for line in toplines]
+
+        elifs = children[2:-1]
+        while len(elifs):
+
+            eliflines, eliflineno = trans_stmt_block(scope, elifs[1], rettype)
+            elifexpr = trans_expr(scope, elifs[0], eliflineno)
+            #remove first two items form list
+            elifs = elifs[2:]
+
+            if elifexpr.type != booltype:
+                #FURTURE: use a cast attempt
+                elifexpr = trans_method_call(scope, elifexpr, '__bool__', [], lineno)
+
+            stmtmdl.lines.append("} "+f'else if (({elifexpr}.outstr)->value)'+"{")
+            stmtmdl.lines += ['    '+line for line in eliflines]
+
+        #else footer "} else {"
+        stmtmdl.lines.append('} else {')
+        stmtmdl.lines += ['    '+line for line in elselines]
+        stmtmdl.lines.append('}')
     elif stmt.data == 'pass_stmt':
         stmtmdl.lines.append(comment("pass"))
     else:
@@ -180,8 +209,34 @@ def trans_func(scope, tree, prefix=''):
     paramsout = ", ".join([f"{arg.type.outstr} {arg.outstr}" for arg in params])
     lines = [f"{rettype.outstr} {outname}({paramsout}){c_open_block}", '    '+comment("argument refs to preclude gc")]
     lines += ['    '+f"refto({arg.outstr});" for arg in params]
-    lines += ['    '+line for line in trans_stmt_block(funcscope, stmt_block, rettype=rettype)[0]]
+    blocklines, blocklineno = trans_stmt_block(funcscope, stmt_block, rettype=rettype)
+    lines += ['    '+line for line in blocklines]
     #[print(arg.type, arg.outstr) for arg in params]
+
+    if not lines[-1].strip().startswith('refreturn'):#stmt.data != 'return_stmt':
+
+        if rettype != nonetype:
+            print(rettype)
+            raise CMNSCompileTimeError(f"return statement missing from end of function '{name}'")
+        else:
+            lines.append('    '+comment("return routine"))
+            lines.append('    '+comment("automatically returning none"))
+            #stmtmdl.lines.append(f'anytype retval = refto(nonelitrl);')
+            lines.append('    '+comment("return type validated at compile time"))
+            for varname, var in scope.all:
+                stmtmdl.lines.append('    '+f"deref({var.outstr});")
+            lines.append('    '+'_cmns_gc();')
+            #if retexpr is not None:
+            lines.append('    '+f'refreturn(nonelitrl);')
+
+
+        ## check for return
+        #for line in reversed(lines):
+        #    if line.strip() = '}':
+        #        continue
+        #    else:
+        #        if not line.strip().startswith('refreturn'):
+        #            raise CMNSCompileTimeError("return statement missinf from end function")
 
     lines.append("}")
     return Function(name, outname, rettype, params, lines=lines)
@@ -243,12 +298,27 @@ def trans_stmt_block(scope, tree, rettype) -> list:
         #print('mulit-line smtmt def')
         lineno = lineno_from_newline(tree.children[0])
         #print('stmt_block lineno rettype', lineno, rettype)
+        #last_stmt = None
+        #last_line_of_stmt = ''
         for stmt in tree.children:
-
             if type(stmt) == Tree and stmt.data == 'stmt':
                 newstmt = trans_stmt(scope, stmt, rettype)
                 finallineno = newstmt.lineno
                 ls += newstmt.lines
+
+                #last_stmt = stmt
+                #if len(stmt.lines):
+                #    last_line_of_stmt = stmt.lines[-1]
+                #else:
+                #    last_line_of_stmt = ''
+
+        #check for return
+
+
+        #if stmt.data != 'return_stmt':
+        #    if stmt.data == 'if_stmt':
+        #        if last_line_of_stmt.strip().startswith
+
     #print(lineno)
     return ls, lineno
 
@@ -287,6 +357,16 @@ if __name__ == '__main__':
             for thing in mod:
                 #print(f"\nprinting: {thing}")
                 [print(line) for line in thing.lines]
+
+            with open(path[:-3]+'_result.c', 'w') as outfile:
+                outfile.truncate(0)
+                outfile.write('#include "cmns/langbase.h"\n')
+                for thing in mod:
+                    outfile.write('\n')
+                    [outfile.write(line+'\n') for line in thing.lines]
+                outfile.write('\n')
+
+
             #[print(thing) for thing in mod]
             #for line in mod[0].lines:
             #    print(line)

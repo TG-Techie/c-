@@ -224,11 +224,11 @@ class Type():
         else:
             raise ValueError(f"function '{name}' already defined in type {self.name}")
 
-    def __eq__(self, other):
-        if (self is anytype) or (other is anytype) or (self is other):
-            return True
-        else:
-            return False
+    #def __eq__(self, other):
+        #if (self is anytype) or (other is anytype) or (self is other):
+        #    return True
+        #else:
+        #    return False
 
 anytype = Type('any')
 Scope.types.append(anytype)

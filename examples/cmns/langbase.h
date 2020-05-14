@@ -67,10 +67,15 @@ void any_constructfn(anytype self);
 
 anytype newany();
 
-//typedefs for all built-in  types 
+//typedefs for all built-in  types
 typedef struct none_struct_type{
     cmnsbase base;
 }* nonetype;
+
+typedef struct bool_struct_type{
+    cmnsbase base;
+    bool value;
+}* booltype;
 
 typedef struct int_struct_type{
     cmnsbase base;

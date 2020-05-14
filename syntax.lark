@@ -83,7 +83,7 @@ binop_expr     : expr binop expr
 typename : builtintype | TYPENAME
 name     : VARNAME
 
-literal : number | string | array | bool | none
+literal : number | string | array | bool | nonetype
 
 // SECTION postlex declares and ignores
 number: integer | float
@@ -92,7 +92,7 @@ float: FLOAT_NUMBER
 string: STRING | LONG_STRING
 bool: TRUE | FALSE
 pass: PASS
-none: "None"
+nonetype: NONE
 array: "<" expr ("," expr)* ","? ">"
 //list: "[" expr ("," expr)* ","? "]"
 
@@ -108,7 +108,7 @@ NEWLINE : ( /\r?\n[\t ]*/ | COMMENT )+
 
 TRUE: "True"
 FALSE: "False"
-
+NONE: "None"
 PASS: "pass"
 
 STRING      : /[ubf]?r?("(?!"").*?(?<!\\)(\\\\)*?"|'(?!'').*?(?<!\\)(\\\\)*?')/i
