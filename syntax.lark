@@ -106,7 +106,7 @@ builtintype : "int" -> int | "bool" -> bool | "str" -> str
 TYPENAME    : /_*[A-Z][a-zA-Z_0-9]*/
 VARNAME     : /[a-z_][a-zA-Z_0-9]*/
 
-COMMENT : /###[^#]*###/ | /#[^\n]*/
+COMMENT : /###[^#]*###/ | /##[^\n]*##/ | /#[^\n]*/
 NEWLINE : ( /\r?\n[\t ]*/ | COMMENT )+
 // mine NEWLINE: /[\r\n]+[\t ]*/
 
