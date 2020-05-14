@@ -3,8 +3,8 @@ from lark import Token
 from cmns_parse import parse
 from cmns_model import *
 
-######TODO: add traits? get, set,
-
+#####TODO: make else not required, line no comments
+#FUTURE: add traits? get, set,
 
 def namefromtree(nametree):
     #FIXME: make work for dotting and such
@@ -33,7 +33,7 @@ def trans_literal(litrl):
             return Litrl(booltype, "falselitrl")
         else:
             SHIT
-    elif litrl.data == 'none':
+    elif litrl.data == 'nonetype':
         return Litrl(nonetype, "nonelitrl")
     #else:
     raise CMNSCompileTimeError(f"{litrl.pretty()} invalid literal")
@@ -126,12 +126,8 @@ def trans_stmt(scope, tree, rettype):
                 #print( foundtype , rettype,  foundtype == rettype)
                 raise CMNSCompileTimeError(f"type '{foundtype.name}' of return expression does not watch required return type '{rettype.name}' ")
 
-
             stmtmdl.lines.append(comment("return routine"))
-            if retexpr != None:
-                stmtmdl.lines.append(f'anytype retval = refto({retexpr.outstr});')
-            else:
-                stmtmdl.lines.append(f'anytype retval = refto(nonelitrl);')
+            stmtmdl.lines.append(f'anytype retval = refto({retexpr.outstr});')
             stmtmdl.lines.append(comment("return type validated at compile time"))
             for varname, var in scope.all:
                 if var != retexpr:
@@ -167,7 +163,7 @@ def trans_stmt(scope, tree, rettype):
                 #FURTURE: use a cast attempt
                 elifexpr = trans_method_call(scope, elifexpr, '__bool__', [], lineno)
 
-            stmtmdl.lines.append("} "+f'else if (({elifexpr.outstr})->value)'+"{")
+            stmtmdl.lines.append("} "+f'else if (({elifexpr}.outstr)->value)'+"{")
             stmtmdl.lines += ['    '+line for line in eliflines]
 
         #else footer "} else {"
@@ -189,7 +185,7 @@ def trans_stmt(scope, tree, rettype):
         raise NotImplementedError(f"unsupported stmt '{stmt.data}' found at newline {lineno}:\n{pretty}")
     return stmtmdl
 
-def trans_func(scope, tree, prefix='', prototype = False):
+def trans_func(scope, tree, prefix=''):
     funcscope = Scope()
     #print([foo.data for foo in tree.children])
     children = tree.children
@@ -204,37 +200,32 @@ def trans_func(scope, tree, prefix='', prototype = False):
 
     name = str(nametok.children[0])
     outname = prefix+name+'fn'
-    params = trans_typelist(funcscope, typelist, content_type=Arg)
+    params = trans_typelist(scope, typelist, content_type=Arg)
     for arg in params:
         funcscope[arg.name] = arg
     c_open_block = "{"
     paramsout = ", ".join([f"{arg.type.outstr} {arg.outstr}" for arg in params])
-    lines = [f"{rettype.outstr} {outname}({paramsout}){c_open_block}"]
-    if len(params):
-        lines.append('    '+comment("argument refs to preclude gc"))
-    else:
-        lines.append('    '+comment('no arguments passed'))
+    lines = [f"{rettype.outstr} {outname}({paramsout}){c_open_block}", '    '+comment("argument refs to preclude gc")]
     lines += ['    '+f"refto({arg.outstr});" for arg in params]
-    blocklines, blocklineno = trans_stmt_block(funcscope, stmt_block, rettype)
+    blocklines, blocklineno = trans_stmt_block(funcscope, stmt_block, rettype=rettype)
     lines += ['    '+line for line in blocklines]
     #[print(arg.type, arg.outstr) for arg in params]
-    if not prototype:
-        if not lines[-1].strip().startswith('refreturn'):#stmt.data != 'return_stmt':
 
-            if rettype != nonetype:
-                print(rettype)
-                raise CMNSCompileTimeError(f"return statement missing from end of function '{name}'")
-            else:
-                lines.append('    '+comment("return routine"))
-                lines.append('    '+comment("automatically returning none"))
-                #stmtmdl.lines.append(f'anytype retval = refto(nonelitrl);')
-                lines.append('    '+comment("return type validated at compile time"))
-                for varname, var in funcscope.all:
-                    #print(varname, var)
-                    stmtmdl.lines.append('    '+f"deref({var.outstr});")
-                lines.append('    '+'_cmns_gc();')
-                #if retexpr is not None:
-                lines.append('    '+f'refreturn(nonelitrl);')
+    if not lines[-1].strip().startswith('refreturn'):#stmt.data != 'return_stmt':
+
+        if rettype != nonetype:
+            print(rettype)
+            raise CMNSCompileTimeError(f"return statement missing from end of function '{name}'")
+        else:
+            lines.append('    '+comment("return routine"))
+            lines.append('    '+comment("automatically returning none"))
+            #stmtmdl.lines.append(f'anytype retval = refto(nonelitrl);')
+            lines.append('    '+comment("return type validated at compile time"))
+            for varname, var in scope.all:
+                stmtmdl.lines.append('    '+f"deref({var.outstr});")
+            lines.append('    '+'_cmns_gc();')
+            #if retexpr is not None:
+            lines.append('    '+f'refreturn(nonelitrl);')
 
 
         ## check for return
@@ -349,9 +340,7 @@ if __name__ == '__main__':
     paths =    ('./sentences/assign_int_lit.c-',
                 './sentences/binop_add.c-',
                 './sentences/funcdef.c-',
-                './sentences/ifstmt.c-',
-                './sentences/nestedif.c-'
-                #'./sentences/casterror.c-'
+                './sentences/ifstmt.c-'
                 )
     for path in paths:
         print(f"\ntesting: '{path}'")

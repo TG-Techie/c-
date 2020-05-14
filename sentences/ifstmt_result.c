@@ -1,7 +1,7 @@
 #include "cmns/langbase.h"
 
 nonetype block_align_testfn(){
-    /*argument refs to preclude gc*/
+    /*no arguments passed*/
     /*line 1: assign 'x'*/
     /*first assignment of 'x' in scope*/
     inttype x_var = refto(intlitrl(5));
@@ -30,7 +30,7 @@ booltype the_questionfn(strtype prompt_var){
         deref(prompt_var);
         _cmns_gc();
         refreturn(retval);
-    } else if ((<cmns_model.Expr object at 0x109e6da58>.outstr)->value){
+    } else if ((str___eq__fn(prompt_var, strlitrl("\")))->value){
         /*line 9: assign 'redvar'*/
         /*first assignment of 'redvar' in scope*/
         inttype redvar_var = refto(intlitrl(3));
@@ -55,7 +55,7 @@ booltype the_questionfn(strtype prompt_var){
 }
 
 nonetype mainfn(){
-    /*argument refs to preclude gc*/
+    /*no arguments passed*/
     /*line 16: assign 'answer'*/
     /*first assignment of 'answer' in scope*/
     inttype answer_var = refto(intlitrl(5));

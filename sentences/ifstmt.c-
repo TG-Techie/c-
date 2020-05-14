@@ -5,7 +5,7 @@ def the_question(str prompt) returns bool:
     if prompt == "blue":
         bluevar = 2
         return True
-    elif prompt == "red":
+    elif prompt == "\"":
         redvar = 3
         return True
     else: pass

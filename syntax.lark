@@ -83,22 +83,26 @@ binop_expr     : expr binop expr
 typename : builtintype | TYPENAME
 name     : VARNAME
 
-literal : number | string | array | bool | nonetype
+literal : number | string | bool | nonetype | arraylitrl | dictlitrl
 
 // SECTION postlex declares and ignores
 number: integer | float
 integer: HEX_NUMBER | BIN_NUMBER | OCT_NUMBER | QUAD_NUMBER | DEC_NUMBER
 float: FLOAT_NUMBER
 string: STRING | LONG_STRING
+//string: single_string | double_string //| ling_single_string | long_double_string
 bool: TRUE | FALSE
 pass: PASS
 nonetype: NONE
-array: "<" expr ("," expr)* ","? ">"
+arraylitrl: "<" expr ("," expr)* ","? ">"
+dictlitrl: "{" expr ":" expr ("," expr ":" expr)* ","? "}"
 //list: "[" expr ("," expr)* ","? "]"
 
 // Tokens
 builtintype : "int" -> int | "bool" -> bool | "str" -> str
-            | "float" -> float | "NoneType" -> nonetype | "<" typename ">" -> arroftype
+            | "float" -> float | "NoneType" -> nonetype
+            | "<" typename ">" -> arrtype
+            | "{" typename ":" typename "}" -> dicttype
 TYPENAME    : /_*[A-Z][a-zA-Z_0-9]*/
 VARNAME     : /[a-z_][a-zA-Z_0-9]*/
 
@@ -111,8 +115,12 @@ FALSE: "False"
 NONE: "None"
 PASS: "pass"
 
-STRING      : /[ubf]?r?("(?!"").*?(?<!\\)(\\\\)*?"|'(?!'').*?(?<!\\)(\\\\)*?')/i
-LONG_STRING : /[ubf]?r?(""".*?(?<!\\)(\\\\)*?"""|'''.*?(?<!\\)(\\\\)*?''')/is
+//ADD \() string literals
+//single_string: "\'" ("\\(" expr ")"| _STRINGINNNER) "\'"
+//double_string: "\""  "\""
+//_STRINGINNNER
+STRING      : /("(?!"").*?(?<!\\)(\\\\)*?"|'(?!'').*?(?<!\\)(\\\\)*?')/i
+LONG_STRING : /(""".*?(?<!\\)(\\\\)*?"""|'''.*?(?<!\\)(\\\\)*?''')/is
 
 DEC_NUMBER  : /[0-9]\d*/i
 HEX_NUMBER  : /0x[\da-f]*/i

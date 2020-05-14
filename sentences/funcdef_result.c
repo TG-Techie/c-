@@ -24,7 +24,7 @@ strtype addstrfn(strtype a_var, strtype b_var){
     /*casting 'baz' from type 'int' to  type 'str'*/
     rerefto(baz_var, strlitrl("baz"));
     /*return routine*/
-    anytype retval = refto(str___add__fn(a_var, str___add__fn(b_var, baz_var)));
+    anytype retval = refto(str___add__fn(str___add__fn(a_var, b_var), baz_var));
     /*return type validated at compile time*/
     deref(baz_var);
     deref(a_var);

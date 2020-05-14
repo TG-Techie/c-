@@ -102,6 +102,9 @@ class TypeList():
             raise ValueError(f"key '{name}' does not match the name in the given variable, '{name}' != '{var.name}'")
         else:
             self._pairs[name] = var
+    
+    def __len__(self):
+        return len(self._pairs)
 
 class Scope(TypeList):
     #globals = TypeList()
@@ -140,7 +143,7 @@ class Scope(TypeList):
         if var in self.locals:
             return  self.locals[var]
         elif self.outer is not None and var in self.outer:
-            return  self.super[var]
+            return  self.outer[var]
         else:
             raise CMNSCompileTimeError("'{var}' not found in scope")
 
