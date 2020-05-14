@@ -97,7 +97,16 @@ typedef struct str_struct_type{
 typedef struct arr_struct_type{
     cmnsbase base;
     anytype[] items;
-    cmnsclass item_type;
+    //FIXME:need?:cmnsclass item_type;
+    uint length; // current length
+    uint capacity; // amount of allocated space;
+}* arrtype;
+
+typedef struct dict_struct_type{
+    cmnsbase base;
+    anytype[] keys;
+    anytype[] values;
+    //FIXME:need?:cmnsclass value_type;
     uint length; // current length
     uint capacity; // amount of allocated space;
 }* arrtype;

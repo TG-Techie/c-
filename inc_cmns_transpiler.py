@@ -109,6 +109,7 @@ def trans_stmt(scope, tree, rettype):
             scope.locals[var.name] = var
             stmtmdl.lines.append(comment(f"first assignment of '{var.name}' in scope"))
             stmtmdl.lines.append(f"{var.type.outstr} {var.outstr} = refto({expr.outstr});")
+        return stmtmdl
     elif stmt.data == 'return_stmt':
         stmtmdl.lineno = lineno_from_newline(stmt.children[-1])
         if rettype is None:
@@ -127,9 +128,9 @@ def trans_stmt(scope, tree, rettype):
                 raise CMNSCompileTimeError(f"type '{foundtype.name}' of return expression does not watch required return type '{rettype.name}' ")
 
 
-            stmtmdl.lines.append(comment("return routine"))
+            stmtmdl.lines.append(comment(f"line {stmtmdl.lineno}: return routine,  type '{rettype.name}'"))
             if retexpr != None:
-                stmtmdl.lines.append(f'anytype retval = refto({retexpr.outstr});')
+                stmtmdl.lines.append(f'{rettype.outstr} retval = refto({retexpr.outstr});')
             else:
                 stmtmdl.lines.append(f'anytype retval = refto(nonelitrl);')
             stmtmdl.lines.append(comment("return type validated at compile time"))
@@ -141,7 +142,9 @@ def trans_stmt(scope, tree, rettype):
             stmtmdl.lines.append(f'refreturn(retval);')
             #else:
             #    stmtmdl.lines.append(f'return nonelitrl();')
+        return stmtmdl
     elif stmt.data == 'if_stmt':
+        #FIXME: add line comment in output
         children = stmt.children
         #print(children[0].children[0], children[1].data, children[-1].data)
         toplines, lineno = trans_stmt_block(scope, children[1], rettype)
@@ -152,6 +155,7 @@ def trans_stmt(scope, tree, rettype):
             topexpr = trans_method_call(scope, topexpr, '__bool__', [], lineno)
 
         #if header: "if (){"
+        stmtmdl.lines.append(comment(f"line {lineno}: conditional branch"))
         stmtmdl.lines.append(f'if (({topexpr.outstr})->value)'+"{")
         stmtmdl.lines += ['    '+line for line in toplines]
 
@@ -174,20 +178,43 @@ def trans_stmt(scope, tree, rettype):
         stmtmdl.lines.append('} else {')
         stmtmdl.lines += ['    '+line for line in elselines]
         stmtmdl.lines.append('}')
+        return stmtmdl
+    elif stmt.data == 'while_stmt':
+        children = stmt.children
+        blocklines, lineno = trans_stmt_block(scope, children[1], rettype)
+        whileexpr = trans_expr(scope, children[0], lineno)
+
+        if whileexpr.type != booltype:
+            whileexpr = trans_method_call(scope, whileexpr, '__bool__', [], lineno)
+
+        stmtmdl.lines.append(comment(f"line {lineno}: while"))
+        stmtmdl.lines.append(f"while (({whileexpr.outstr})->value)"+"{")
+        stmtmdl.lines += ['    '+line for line in blocklines]
+        stmtmdl.lines.append("}")
+        return stmtmdl
     elif stmt.data == 'pass_stmt':
-        stmtmdl.lines.append(comment("pass"))
+        stmtmdl.lines.append(comment(f'line {stmt.children[-1].line}: pass'))
+        return stmtmdl
+    elif stmt.data == 'continue_stmt':
+        stmtmdl.lines.append(comment(f'line {stmt.children[-1].line}: continue'))
+        stmtmdl.lines.append('continue;')
+        return stmtmdl
+    elif stmt.data == 'break_stmt':
+        stmtmdl.lines.append(comment(f'line {stmt.children[-1].line}: break'))
+        stmtmdl.lines.append('break;')
+        return stmtmdl
+
+    maybe_nl = stmt.children[-1]
+    if isinstance(maybe_nl, Token) and maybe_nl.type == 'NEWLINE':
+        lineno = lineno_from_newline(maybe_nl)
     else:
-        maybe_nl = stmt.children[-1]
-        if isinstance(maybe_nl, Token) and maybe_nl.type == 'NEWLINE':
-            lineno = lineno_from_newline(maybe_nl)
-        else:
-            lineno = 'UNKNOWN'
-        try:
-            pretty = stmt.pretty()
-        except:
-            pretty = ''
-        raise NotImplementedError(f"unsupported stmt '{stmt.data}' found at newline {lineno}:\n{pretty}")
-    return stmtmdl
+        lineno = 'UNKNOWN'
+    try:
+        pretty = stmt.pretty()
+    except:
+        pretty = ''
+    raise NotImplementedError(f"unsupported stmt '{stmt.data}' found at newline {lineno}:\n\n\ntree w/ unknown statement:\n{pretty}\nSee above for error")
+
 
 def trans_func(scope, tree, prefix='', prototype = False):
     funcscope = Scope()
@@ -225,10 +252,10 @@ def trans_func(scope, tree, prefix='', prototype = False):
                 print(rettype)
                 raise CMNSCompileTimeError(f"return statement missing from end of function '{name}'")
             else:
-                lines.append('    '+comment("return routine"))
-                lines.append('    '+comment("automatically returning none"))
+                lines.append('    '+comment(f"implicit 'nonetype' return routine at end of function '{name}'"))
+                #lines.append('    '+comment("automatically returning none"))
                 #stmtmdl.lines.append(f'anytype retval = refto(nonelitrl);')
-                lines.append('    '+comment("return type validated at compile time"))
+                #lines.append('    '+comment("return type validated at compile time"))
                 for varname, var in funcscope.all:
                     #print(varname, var)
                     stmtmdl.lines.append('    '+f"deref({var.outstr});")
@@ -254,6 +281,7 @@ def cmnstype_from_tree(scope, tree):
         rettypename = child.data
     else:
         rettypename = str(child)
+
     for cmnstype in scope.types:
         if rettypename == cmnstype.name:
             return cmnstype
@@ -285,7 +313,7 @@ def trans_typelist(scope, tree, content_type=Var) -> TypeList:
         argtype = None
     return pairs
 
-def trans_stmt_block(scope, tree, rettype) -> list:
+def trans_stmt_block(scope, tree, rettype):
     scope = Scope(outer=scope)
     ls = list()
     #print(tree.pretty())
@@ -313,20 +341,6 @@ def trans_stmt_block(scope, tree, rettype) -> list:
                 finallineno = newstmt.lineno
                 ls += newstmt.lines
 
-                #last_stmt = stmt
-                #if len(stmt.lines):
-                #    last_line_of_stmt = stmt.lines[-1]
-                #else:
-                #    last_line_of_stmt = ''
-
-        #check for return
-
-
-        #if stmt.data != 'return_stmt':
-        #    if stmt.data == 'if_stmt':
-        #        if last_line_of_stmt.strip().startswith
-
-    #print(lineno)
     return ls, lineno
 
 def trans_module(foo):
@@ -346,12 +360,17 @@ def trans_module(foo):
 
 
 if __name__ == '__main__':
+    """
+    desc: a test of the transpiler on a bunch of sentences;
+    returns NoneType;
+    """
     paths =    ('./sentences/assign_int_lit.c-',
                 './sentences/binop_add.c-',
                 './sentences/funcdef.c-',
                 './sentences/ifstmt.c-',
-                './sentences/nestedif.c-'
-                #'./sentences/casterror.c-'
+                #'./sentences/casterror.c-',
+                './sentences/nestedif.c-',
+                './sentences/whileloop.c-'
                 )
     for path in paths:
         print(f"\ntesting: '{path}'")
@@ -359,9 +378,17 @@ if __name__ == '__main__':
             text = file.read()
             print(text)
 
-            tree = parse(text)
-            print(tree.pretty())
-            mod = trans_module(tree)
+            try:
+                tree = parse(text)
+                print(tree.pretty())
+            except:
+                print(f"!parse error while parsing file: '{path}'")
+                raise
+            try:
+                mod = trans_module(tree)
+            except:
+                print(f"!transpile error while transpiling file: '{path}'")
+                raise
             #print(mod)
             for thing in mod:
                 #print(f"\nprinting: {thing}")
@@ -369,7 +396,7 @@ if __name__ == '__main__':
 
             with open(path[:-3]+'_result.c', 'w') as outfile:
                 outfile.truncate(0)
-                outfile.write('#include "cmns/langbase.h"\n')
+                outfile.write('#include "cmns/file.h"\n')
                 for thing in mod:
                     outfile.write('\n')
                     [outfile.write(line+'\n') for line in thing.lines]

@@ -1,4 +1,4 @@
-#include "cmns/langbase.h"
+#include "cmns/file.h"
 
 /*line 1: assign 'foo'*/
 /*first assignment of 'foo' in scope*/

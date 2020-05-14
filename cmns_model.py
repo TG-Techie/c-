@@ -8,16 +8,23 @@ binop_methodnames = {
     'mul':'__mul__',
     'div':'__div__',
     'mod':'__mod__',
+    'pow':'__pow__',
     'floordiv':'__floordiv__',
     # comprarisons
-    'eq':'__eq__',
+    'eq':'__eqls__',
+    'ls':'__lessthan__',
+    'gr':'__grtrthan__',
+    'lesseq':'__lesseqls__',
+    'grtreq':'__grtreqls__',
+    #semantic
 }
 
 # binops that ar teh "!(expr)" of other binops
 inverse_binop_methodnames = {
     # comprarisons
-    'noteq':'__eq__'
-
+    'noteq':'__eq__',
+    'notin':'__contains__',
+    #'isnot':'__is__'
 }
 
 class CMNSCompileTimeError(Exception):
@@ -102,7 +109,7 @@ class TypeList():
             raise ValueError(f"key '{name}' does not match the name in the given variable, '{name}' != '{var.name}'")
         else:
             self._pairs[name] = var
-    
+
     def __len__(self):
         return len(self._pairs)
 
@@ -245,8 +252,10 @@ Scope.types.append(strtype)
 booltype = Type('bool')
 Scope.types.append(booltype)
 
-nonetype = Type('none')
+nonetype = Type('nonetype')
 Scope.types.append(nonetype)
+
+nonetype.outstr = 'nonetype'
 
 inttype.addmethod('__add__', inttype,
         (Pair('self', inttype), Pair('other', inttype))
@@ -256,10 +265,18 @@ inttype.addmethod('__str__', strtype,
         (Pair('self', inttype), Pair('other', inttype))
 )
 
+inttype.addmethod('__lessthan__', booltype,
+        (Pair('self', inttype), Pair('other', inttype))
+)
+inttype.addmethod('__grtrthan__', booltype,
+        (Pair('self', inttype), Pair('other', inttype))
+)
+
+
 strtype.addmethod('__add__', strtype,
         (Pair('self', strtype), Pair('other', strtype))
 )
 
-strtype.addmethod('__eq__', booltype,
+strtype.addmethod('__eqls__', booltype,
         (Pair('self', strtype), Pair('other', strtype))
 )

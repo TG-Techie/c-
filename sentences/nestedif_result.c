@@ -1,13 +1,15 @@
-#include "cmns/langbase.h"
+#include "cmns/file.h"
 
 nonetype mainfn(){
     /*no arguments passed*/
     /*line 2: assign 'x'*/
     /*first assignment of 'x' in scope*/
     strtype x_var = refto(strlitrl("5"));
-    if ((str___eq__fn(x_var, strlitrl("5")))->value){
+    /*line 3: conditional branch*/
+    if ((str___eqls__fn(x_var, strlitrl("5")))->value){
+        /*line 4: conditional branch*/
         if ((truelitrl)->value){
-            /*return routine*/
+            /*line 5: return routine,  type 'nonetype'*/
             anytype retval = refto(nonelitrl);
             /*return type validated at compile time*/
             deref(x_var);
@@ -18,11 +20,9 @@ nonetype mainfn(){
             rerefto(x_var, strlitrl("56"));
         }
     } else {
-        /*pass*/
+        /*line 9: pass*/
     }
-    /*return routine*/
-    /*automatically returning none*/
-    /*return type validated at compile time*/
+    /*implicit 'nonetype' return routine at end of function 'main'*/
     _cmns_gc();
     refreturn(nonelitrl);
 }

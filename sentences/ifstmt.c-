@@ -5,12 +5,13 @@ def the_question(str prompt) returns bool:
     if prompt == "blue":
         bluevar = 2
         return True
-    elif prompt == "\"":
+    elif prompt == "red":
         redvar = 3
+        redvar = "3" ###implicit cast###
         return True
     else: pass
 
     return False
 
-def main():
+def main() returns nonetype:
     answer = 5
