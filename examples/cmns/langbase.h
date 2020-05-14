@@ -67,5 +67,34 @@ void any_constructfn(anytype self);
 
 anytype newany();
 
+//typedefs for all built-in  types 
+typedef struct none_struct_type{
+    cmnsbase base;
+}* nonetype;
+
+typedef struct int_struct_type{
+    cmnsbase base;
+    int value;
+}* inttype;
+
+//define float double
+typedef struct float_struct_type{
+    cmnsbase base;
+    float value;
+}* floattype;
+
+typedef struct str_struct_type{
+    cmnsbase base;
+    char[] values; // the char array
+    uint length; // length of the char array stored for ease
+}* strtype;
+
+typedef struct arr_struct_type{
+    cmnsbase base;
+    anytype[] items;
+    cmnsclass item_type;
+    uint length; // current length
+    uint capacity; // amount of allocated space;
+}* arrtype;
 
 #endif /* end of include guard: cmnstypebase */

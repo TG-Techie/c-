@@ -10,6 +10,13 @@ binop_methodnames = {
     'mod':'__mod__',
     'floordiv':'__floordiv__',
     # comprarisons
+    'eq':'__eq__',
+}
+
+# binops that ar teh "!(expr)" of other binops
+inverse_binop_methodnames = {
+    # comprarisons
+    'noteq':'__eq__'
 
 }
 
@@ -120,7 +127,7 @@ class Scope(TypeList):
         return self._pairs
 
     def __contains__(self, string):
-        print('scanning for', string)
+        #print('scanning for', string)
         assert isinstance(string, str)
         if string in self.locals:
             return True
@@ -232,6 +239,9 @@ Scope.types.append(inttype)
 strtype = Type('str')
 Scope.types.append(strtype)
 
+booltype = Type('bool')
+Scope.types.append(booltype)
+
 nonetype = Type('none')
 Scope.types.append(nonetype)
 
@@ -244,5 +254,9 @@ inttype.addmethod('__str__', strtype,
 )
 
 strtype.addmethod('__add__', strtype,
+        (Pair('self', strtype), Pair('other', strtype))
+)
+
+strtype.addmethod('__eq__', booltype,
         (Pair('self', strtype), Pair('other', strtype))
 )

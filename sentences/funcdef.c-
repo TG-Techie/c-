@@ -2,6 +2,6 @@ def addints(int a, int b) returns int:
     return a + b
 
 def addstr(str a, str b) returns str:
-    g = 5
-    g = "oof!"
-    return "foo" + "bar"
+    baz = 0
+    baz = "baz"
+    return a + b + baz
