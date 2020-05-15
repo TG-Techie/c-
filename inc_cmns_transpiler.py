@@ -40,6 +40,27 @@ def trans_literal(litrl):
     #else:
     raise CMNSCompileTimeError(f"{litrl.pretty()} invalid literal")
 
+def trans_function_call(scope, name, params, lineno):
+    func = None
+    for fn in scope.types:
+        if name == fn.name:
+            func = fn
+            break
+
+    else:
+        raise CMNSCompileTimeError(f"line {lineno}: could not find function by name '{name}' in namespace")
+
+    if len(params) == len(func.args):
+        for index, funcs in enumerate(zip(params, func.args)):
+            paramexpr, argfn = funcs
+            if paramexpr.type != argfn.type:
+                raise CMNSCompileTimeError(f"line {lineno}: incorrect argument type for argument number {index+1}, got type '{paramexpr.type.name}' expected type '{argfn.type.name}' ")
+    else:
+        raise CMNSCompileTimeError(f"line {lineno}: incorrect number of arguments for function '{func.name}', got {len(params)} expected {len(func.args)}")
+    paramsout = ', '.join([param.outstr for param in params])
+    print(paramsout)
+    return Expr(scope, func.type, f"{func.outstr}({paramsout})")
+
 def trans_method_call(scope, expr, funcname, args, lineno):
     if funcname in expr.type.methods:
         outargs = ''.join([f', {argexpr.outstr}' for argexpr in args])
@@ -91,25 +112,7 @@ def trans_expr(scope, tree, lineno):
         nametree, params = tree.children
         name, lineno = name_and_line_from_tree(nametree)
         params = trans_paramlist(scope, params, lineno)
-        func = None
-        for fn in scope.types:
-            if name == fn.name:
-                func = fn
-                break
-
-        else:
-            raise CMNSCompileTimeError(f"line {lineno}: could not find function by name '{name}' in namespace")
-
-        if len(params) == len(func.args):
-            for index, funcs in enumerate(zip(params, func.args)):
-                paramexpr, argfn = funcs
-                if paramexpr.type != argfn.type:
-                    raise CMNSCompileTimeError(f"line {lineno}: incorrect argument type for argument number {index+1}, got type '{paramexpr.type.name}' expected type '{argfn.type.name}' ")
-        else:
-            raise CMNSCompileTimeError(f"line {lineno}: incorrect number of arguments for function '{func.name}', got {len(params)} expected {len(func.args)}")
-        paramsout = ', '.join([param.outstr for param in params])
-        print(paramsout)
-        return Expr(scope, func.type, f"{func.outstr}({paramsout})")
+        return trans_function_call(scope, name, params, lineno)
     #else:
     raise NotImplementedError(f"unimplemented expr '{tree.data}'")
 
