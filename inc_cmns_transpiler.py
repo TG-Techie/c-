@@ -51,8 +51,8 @@ def trans_function_call(scope, name, params, lineno):
         raise CMNSCompileTimeError(f"line {lineno}: could not find function by name '{name}' in namespace")
 
     if len(params) == len(func.args):
-        for index, funcs in enumerate(zip(params, func.args)):
-            paramexpr, argfn = funcs
+        for index, compare_pair in enumerate(zip(params, func.args)):
+            paramexpr, argfn = compare_pair
             if paramexpr.type != argfn.type:
                 raise CMNSCompileTimeError(f"line {lineno}: incorrect argument type for argument number {index+1}, got type '{paramexpr.type.name}' expected type '{argfn.type.name}' ")
     else:
@@ -63,8 +63,13 @@ def trans_function_call(scope, name, params, lineno):
 
 def trans_method_call(scope, expr, funcname, args, lineno):
     if funcname in expr.type.methods:
+        func = expr.type.methods[funcname]
+        for index, compare_pair in enumerate(zip(args, func.args)):
+            paramexpr, argfn = compare_pair
+            if paramexpr.type != argfn.type:
+                raise CMNSCompileTimeError(f"line {lineno}: incorrect argument type on method '{funcname}' for argument number {index+1}, got type '{paramexpr.type.name}' expected type '{argfn.type.name}' ")
         outargs = ''.join([f', {argexpr.outstr}' for argexpr in args])
-        return Expr(scope, expr.type.methods[funcname].type, f"{expr.type.methods[funcname].outstr}({expr.outstr}{outargs})")
+        return Expr(scope, func.type, f"{expr.type.methods[funcname].outstr}({expr.outstr}{outargs})")
     else:
         raise CMNSCompileTimeError(f"line {lineno}: expr of type '{expr.type.name}' has no method '{funcname}'")
 
