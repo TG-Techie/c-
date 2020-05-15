@@ -6,7 +6,7 @@ from cmns_model import *
 ######TODO: add traits? get, set,
 
 
-def namefromtree(nametree):
+def name_and_line_from_tree(nametree):
     #FIXME: make work for dotting and such
     if len(nametree.children) == 1:
         tok = nametree.children[0]
@@ -52,7 +52,7 @@ def trans_paramlist(scope, tree, lineno):
     params = []
     for param in tree.children:
         if param.data == 'expr':
-           params.append(trans_expr(scope, param, lineno)) 
+           params.append(trans_expr(scope, param, lineno))
     return params
 
 def trans_expr(scope, tree, lineno):
@@ -78,16 +78,38 @@ def trans_expr(scope, tree, lineno):
         print(tree.pretty())
         target_expr, nametree, params = tree.children
         params = trans_paramlist(scope, params, lineno)
-        name, namelineno = namefromtree(nametree)
+        name, namelineno = name_and_line_from_tree(nametree)
         print('filtered name', name)
         print('filtered params', params)
-        return trans_method_call(scope, 
+        return trans_method_call(scope,
             trans_expr(scope, target_expr, lineno),
             name,
             params,
             lineno
         )
-        
+    elif tree.data == 'funccall_expr':
+        nametree, params = tree.children
+        name, lineno = name_and_line_from_tree(nametree)
+        params = trans_paramlist(scope, params, lineno)
+        func = None
+        for fn in scope.types:
+            if name == fn.name:
+                func = fn
+                break
+
+        else:
+            raise CMNSCompileTimeError(f"line {lineno}: could not find function by name '{name}' in namespace")
+
+        if len(params) == len(func.args):
+            for index, funcs in enumerate(zip(params, func.args)):
+                paramexpr, argfn = funcs
+                if paramexpr.type != argfn.type:
+                    raise CMNSCompileTimeError(f"line {lineno}: incorrect argument type for argument number {index+1}, got type '{paramexpr.type.name}' expected type '{argfn.type.name}' ")
+        else:
+            raise CMNSCompileTimeError(f"line {lineno}: incorrect number of arguments for function '{func.name}', got {len(params)} expected {len(func.args)}")
+        paramsout = ', '.join([param.outstr for param in params])
+        print(paramsout)
+        return Expr(scope, func.type, f"{func.outstr}({paramsout})")
     #else:
     raise NotImplementedError(f"unimplemented expr '{tree.data}'")
 
@@ -112,7 +134,7 @@ def trans_stmt(scope, tree, rettype):
         stmtmdl.lineno = lineno_from_newline(newline)
 
         expr = trans_expr(scope, expr, stmtmdl.lineno)
-        varname, lineno = namefromtree(nametree)
+        varname, lineno = name_and_line_from_tree(nametree)
         var = Var(scope, varname, expr.type)
         stmtmdl.lines.append(comment(f"line {lineno}: assign '{varname}'"))
         if var.name in scope:
@@ -375,11 +397,14 @@ def trans_module(foo):
         if isinstance(foo, Token):
             continue
         if foo.data == 'stmt':
+            raise NotImplementedError(f"global statements not unsupported yet, used in file '{path}''")
             #print('STMT!')
             contents.append(trans_stmt(scope, foo, None))
         elif foo.data == 'funcdef':
             #print('FUNCDEF!')
-            contents.append(trans_func(scope, foo))
+            func = trans_func(scope, foo)
+            scope.types.append(func)
+            contents.append(func)
         else:
             raise NotImplementedError(f"unsupported sentence '{foo.data}'")
     return contents

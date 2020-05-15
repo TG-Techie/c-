@@ -5,7 +5,7 @@ inttype addintsfn(inttype a_var, inttype b_var){
     refto(a_var);
     refto(b_var);
     /*line 2: return routine,  type 'int'*/
-    inttype retval = refto(int___add__fn(a_var, b_var));
+    inttype retval = refto(intlitrl(5));
     /*return type validated at compile time*/
     deref(a_var);
     deref(b_var);
@@ -24,9 +24,8 @@ strtype addstrfn(strtype a_var, strtype b_var){
     /*casting 'baz' from type 'int' to  type 'str'*/
     rerefto(baz_var, strlitrl("baz"));
     /*line 7: return routine,  type 'str'*/
-    strtype retval = refto(str___add__fn(str___add__fn(a_var, b_var), baz_var));
+    strtype retval = refto(baz_var);
     /*return type validated at compile time*/
-    deref(baz_var);
     deref(a_var);
     deref(b_var);
     _cmns_gc();

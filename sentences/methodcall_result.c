@@ -19,7 +19,7 @@ inttype retintfn(){
     /*first assignment of 'a' in scope*/
     inttype a_var = refto(intlitrl(100));
     /*line 6: return routine,  type 'int'*/
-    inttype retval = refto(intlitrl(5));
+    inttype retval = refto(addintsfn(a_var, intlitrl(9999)));
     /*return type validated at compile time*/
     deref(a_var);
     _cmns_gc();

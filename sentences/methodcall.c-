@@ -3,4 +3,4 @@ def addints(int a, int b) returns int:
     return a.__add__(b)
 def retint() returns int:
     a = 100
-    return 5#addints(a, 9999)
+    return addints(a, 9999)

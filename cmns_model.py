@@ -113,9 +113,12 @@ class TypeList():
     def __len__(self):
         return len(self._pairs)
 
+class NameSpace():
+    ...
+
 class Scope(TypeList):
     #globals = TypeList()
-    types = []
+    types = [] #FIXME: transition types into a namespace type
 
     def __init__(self, outer=None):
         super().__init__()
@@ -221,7 +224,7 @@ class Type():
         if methods is None:
             self.methods = {}
         else:
-            self.methods = mwthods
+            self.methods = methods
 
         self.outstr = name+'type'
 
