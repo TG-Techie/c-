@@ -7,4 +7,4 @@ void freebool(booltype self);
 const cmnsclass boolclass;
 
 const booltype truelitrl;
-const booltype truelitrl;
+const booltype falselitrl;

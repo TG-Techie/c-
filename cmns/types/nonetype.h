@@ -4,6 +4,7 @@
 
 void freenone(nonetype self); // does nothing
 
+struct cmns_struct_class _noneclass_struct;
 const cmnsclass noneclass;
 
 //no constructor

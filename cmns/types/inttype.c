@@ -5,7 +5,7 @@ void freeint(inttype self){
     freeany((anytype)self);
 }
 
-cmnsclass intclass = &((struct cmns_struct_class){&freeint});
+const cmnsclass intclass = &((struct cmns_struct_class){&freeint});
 
 void int_constructfn(inttype self, int value){
     self->value = value;

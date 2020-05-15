@@ -4,7 +4,7 @@
 #define cmns_inttype_def
 // int typedef in langbase
 
-cmnsclass intclass;
+const cmnsclass intclass;
 
 void freeint(inttype self);
 

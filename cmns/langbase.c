@@ -2,7 +2,7 @@
 
 #define _cmns_max_vars  ((int)1024)
 anytype _cmns_alloced_vars[_cmns_max_vars];
-uint _cmns_next_alloced_var_index = 0;
+uint _cmns_next_alloced_var_index = 1;
 
 cmnsclass anyclass = &((struct cmns_struct_class){&freeany});
 

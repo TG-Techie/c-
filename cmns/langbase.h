@@ -22,7 +22,7 @@ typedef struct any_struct_type* /*as*/ anytype;
 
 
 anytype _cmns_referenceto(anytype inst);
-#define refto(varname) _cmns_referenceto(varname)
+#define refto(varname) _cmns_referenceto((anytype)varname)
 
 void _cmns_free(anytype inst);
 
@@ -33,10 +33,10 @@ void _cmns_record_var_as_alloced(anytype newvar);
 void _cmns_gc();
 
 void _cmns_dereference_var(anytype inst);
-#define deref(varname) _cmns_dereference_var(varname);\
+#define deref(varname) _cmns_dereference_var((anytype)varname);\
                         varname = NULL
-#define rerefto(varname,newvar) _cmns_dereference_var(varname);\
-                        varname = _cmns_referenceto(newvar)
+#define rerefto(varname,newvar) _cmns_dereference_var((anytype)varname);\
+                        varname = _cmns_referenceto((anytype)newvar)
 
 void dereference_no_gc(anytype inst);
 
