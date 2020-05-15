@@ -1,10 +1,12 @@
-#include "langbase.h"
+#include "../langbase.h"
+
+#ifndef cmns_floattype_def
+#define cmns_floattype_def
 
 //float typedef in langbase
+cmnsclass floatclass;
 
-void freefloat(inttype self);
-
-cmnsclass floatclass = &((cmnsclass){&freefloat});
+void freefloat(floattype self);
 
 void float_constructfn(floattype self, float value);
 
@@ -27,3 +29,5 @@ inttype float___int__fn(floattype self);
 floattype float___float__fn(floattype self);
 // __str__ for casting to a str
 strtype float___str__fn(floattype self);
+
+#endif

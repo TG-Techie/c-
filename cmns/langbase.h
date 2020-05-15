@@ -5,8 +5,11 @@
 #include <math.h>
 
 
-#ifndef cmnstypebase
-#define cmnstypebase
+//TODO: switch intclass, floatclass, etc to bool and
+//      none class definition foamts ot avoind null pointers
+
+#ifndef cmns_langbase_def
+#define cmns_langbase_def
 
 //cmns dev utilitieas b/c lazy
 typedef unsigned int /*as*/ uint;
@@ -17,11 +20,6 @@ typedef unsigned int /*as*/ uint;
 //anytype prototype
 typedef struct any_struct_type* /*as*/ anytype;
 
-//gc
-//memory stacking stuff
-//#define _cmns_max_vars  ((int)1024)
-anytype _cmns_alloced_vars[1];
-uint _cmns_next_alloced_var_index = 0;
 
 anytype _cmns_referenceto(anytype inst);
 #define refto(varname) _cmns_referenceto(varname)
@@ -35,16 +33,16 @@ void _cmns_record_var_as_alloced(anytype newvar);
 void _cmns_gc();
 
 void _cmns_dereference_var(anytype inst);
-#define deref(varname) _cmns_dereference_var(varname); varname = NULL
-#define rerefto(varname,newvar) _cmns_dereference_var(varname); varname = _cmns_referenceto(newvar)
+#define deref(varname) _cmns_dereference_var(varname);\
+                        varname = NULL
+#define rerefto(varname,newvar) _cmns_dereference_var(varname);\
+                        varname = _cmns_referenceto(newvar)
 
 void dereference_no_gc(anytype inst);
 
 
-
-
 typedef struct cmns_struct_class{
-    void (*free)(anytype self);
+    void (*free)(anytype);
 }* cmnsclass;
 
 typedef struct cmns_struct_base{
@@ -90,25 +88,25 @@ typedef struct float_struct_type{
 
 typedef struct str_struct_type{
     cmnsbase base;
-    char[] values; // the char array
     uint length; // length of the char array stored for ease
+    char* values; // the char array location
 }* strtype;
 
 typedef struct arr_struct_type{
     cmnsbase base;
-    anytype[] items;
     //FIXME:need?:cmnsclass item_type;
     uint length; // current length
     uint capacity; // amount of allocated space;
+    anytype itemarr; // array pointer
 }* arrtype;
 
 typedef struct dict_struct_type{
     cmnsbase base;
-    anytype[] keys;
-    anytype[] values;
     //FIXME:need?:cmnsclass value_type;
     uint length; // current length
     uint capacity; // amount of allocated space;
-}* arrtype;
+    anytype keyarr; // pointer to carray
+    anytype valuearr; // pointer to carray
+}* dicttype;
 
-#endif /* end of include guard: cmnstypebase */
+#endif /* end of include guard: cmns_langbase_def */

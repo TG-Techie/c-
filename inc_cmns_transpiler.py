@@ -1,3 +1,4 @@
+import argparse
 from lark.tree import Tree
 from lark import Token
 from cmns_parse import parse
@@ -418,7 +419,7 @@ def trans_module(foo):
     return contents
 
 
-if __name__ == '__main__':
+def test():
     """
     desc: a test of the transpiler on a bunch of sentences;
     returns NoneType;
@@ -427,11 +428,12 @@ if __name__ == '__main__':
                 './sentences/binop_add.c-',
                 './sentences/funcdef.c-',
                 './sentences/ifstmt.c-',
-                #'./sentences/casterror.c-',
                 './sentences/nestedif.c-',
                 './sentences/whileloop.c-',
                 './sentences/methodcall.c-'
                 )
+    error_paths =  ('./sentences/casterror.c-',
+                    )
     for path in paths:
         print(f"\ntesting: '{path}'")
         with open(path) as file:
@@ -463,6 +465,5 @@ if __name__ == '__main__':
                 outfile.write('\n')
 
 
-            #[print(thing) for thing in mod]
-            #for line in mod[0].lines:
-            #    print(line)
+if __name__ == '__main__':
+    test()

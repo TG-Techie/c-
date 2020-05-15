@@ -1,36 +1,26 @@
-#include "langbase.h"
+#include "floattype.h"
+#include "inttype.h"
 
-void freefloat(inttype self){
-    freeany(self);
+void freefloat(floattype self){
+    freeany((anytype)self);
 }
 
-void float_constructfn(inttype self, float value){
+cmnsclass floatclass = &((struct cmns_struct_class){&freefloat});
+
+void float_constructfn(floattype self, float value){
     self->value = value;
 }
-inttype newfloat(float value){
+
+floattype newfloat(float value){
     cmnsbase base = malloc(sizeof(cmnsbase));
     base->refs = 0;
     base->type = floatclass;
-    inttype inst = malloc(sizeof(floattype));
+    floattype inst = malloc(sizeof(floattype));
     inst->base = base;
     float_constructfn(inst, value);
-    _cmns_record_var_as_alloced(inst);
+    _cmns_record_var_as_alloced((anytype)inst);
     return inst;
 }
-
-/*
-float float_from_anynumber(anytype var){
-    if (var->base->type == intclass){
-        return (float)(((inttype)var)->value);
-    } else if (var->base->type == floatclass) {
-        return        ((floattype)var)->value;
-    } else {
-        printf("could not cast to float at runtime");//, passed incorrect type '%s'", var->base->type-
-        anytype SHIT = NULL;
-        SHIT->base;
-    }
-}
-*/
 
 //method
 
@@ -51,11 +41,10 @@ floattype float___mul__fn(floattype self, floattype other){
 
 // __div__ method for the / operator
 floattype float___div__fn(floattype self, floattype other){
-    return floatint(self->value * other->value);
+    return newfloat((float)(self->value * other->value));
 }
 
 // __floordiv__ method for the // operator
 inttype float___floordiv__fn(floattype self, floattype other){
     return newint((int)(self->value * other->value));
 }
-
