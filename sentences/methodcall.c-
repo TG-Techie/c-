@@ -1,0 +1,8 @@
+
+def addints(int a, int b) returns int:
+    #x = a.__smoosh__(b, b, 5)
+    return a.__add__(b)
+
+def retint() returns int:
+    a = 100 #+ "20"
+    return addints(a, 9999)

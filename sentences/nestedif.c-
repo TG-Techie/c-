@@ -1,0 +1,9 @@
+ def main():
+     x = '5'
+     if x == '5':
+         if True:
+             return
+         else:
+             x = '56'
+     else:
+         pass

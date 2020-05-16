@@ -1,0 +1,7 @@
+def addints(int a, int b) returns int:
+    return 5
+
+def addstr(str a, str b) returns str:
+    baz = 0
+    baz = "baz"
+    return baz

@@ -1,7 +1,7 @@
 
 def combsints(int a, int b) returns int:
     c = 5# making local variables to assist in testing
-    out = a._add(b)._add(c)
+    out = a + b + c
     return out
 
 def main():

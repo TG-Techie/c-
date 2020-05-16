@@ -1,13 +1,17 @@
-#include "typebase.h"
+#include "langbase.h"
+
+#define _cmns_max_vars  ((int)1024)
+anytype _cmns_alloced_vars[_cmns_max_vars];
+uint _cmns_next_alloced_var_index = 1;
+
+cmnsclass anyclass = &((struct cmns_struct_class){&freeany});
 
 void freeany(anytype self){
     free(self->base);
     free(self);
 }
 
-cmnsclass anyclass = &((cmnsclass){&freeany});
-
-void constructany(anytype self){
+void any_constructfn(anytype self){
 }
 
 anytype newany(){
@@ -16,7 +20,7 @@ anytype newany(){
     base->type = anyclass;
     anytype inst = malloc(sizeof(anytype));
     inst->base = base;
-    constructany(inst);
+    any_constructfn(inst);
     _cmns_record_var_as_alloced(inst);
     return inst;
 }
@@ -71,7 +75,7 @@ void _cmns_gc(){
             } else if (moveback > 1) {
                 _cmns_alloced_vars[i-moveback] = var;
                 var->base->var_index = i-moveback;
-                _cmns_alloced_vars[i] = NULL;
+                _cmns_alloced_vars[i] = (anytype)NULL;
             }
         }
     }

@@ -1,6 +1,17 @@
-if True:
-    x = 5
-elif False:
-    pass
-else:
-    y = 5
+def block_align_test(): x = 5
+
+def the_question(str prompt) returns bool:
+    rootvar = 1
+    if prompt == "blue":
+        bluevar = 2
+        return True
+    elif prompt == "red":
+        redvar = 3
+        redvar = "3" ###implicit cast###
+        return True
+    else: pass
+
+    return False
+
+def main() returns nonetype:
+    answer = 5

@@ -1,0 +1,38 @@
+trait indice:
+    def __index__(intable self) returns int: pass
+    # cast to an int so it cna be used as an index
+    #   (but notall things that can be used as an
+    #    int shoudl be used as an index)
+    # integers can be indice
+
+trait lengthed:
+    #here a return is not require (maybe: b/c this is a prototype?)
+    def __len__(lengthed self) returns int: pass
+
+
+def len(lengthed subj) returns int:
+    return subj.__len__()
+
+# a language used feature for the [] syntax
+trait itemized:
+    # some means that it will be a type or trait later but must be specified
+    #   by the type function implementation
+    def __getitem__(itemized self, sometype index) returns sometype: pass
+    def __setitem__(itemized self, sometype index, sometype value): pass
+
+
+class CustomList contains(
+    <int> _inner_arr, # an internally used array
+    ):
+
+    trait lengthed:
+        def __len__(CustomList self) returns int:
+            return len(self._inner_arr)
+
+    trait itemized:
+        def __getitem__(CustomList self, indice index) returns int:
+            # index checking somrhow woill be in the arr implementation
+            return self._inner_arr[index]
+
+        def __setitem__(CustomList self, indice index, intable value):
+            self._inner_arr[index] = value
