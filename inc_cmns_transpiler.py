@@ -7,6 +7,9 @@ from cmns_model import *
 ######TODO: add traits? get, set,
 
 
+#OPTIMIZE: switch to jai like contexts for memory mamngemnt at a c level.
+#allocatiors are argument based
+
 def name_and_line_from_tree(nametree):
     #FIXME: make work for dotting and such
     if len(nametree.children) == 1:

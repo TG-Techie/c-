@@ -4,12 +4,22 @@
 #include <stdbool.h>
 #include <math.h>
 
-
+/*build with cmns jonahym: gcc -Wno-incompatible-function-pointer-types -c
+for all:
+langbase.c
+file.c
+types/floattype.c
+types/inttype.c
+types/nonetype.c
+types/booltype.c
+types/strtype.c
+*/
 //TODO: switch intclass, floatclass, etc to bool and
 //      none class definition foamts ot avoind null pointers
 
 #ifndef cmns_langbase_def
 #define cmns_langbase_def
+
 
 //cmns dev utilitieas b/c lazy
 typedef unsigned int /*as*/ uint;
@@ -22,7 +32,6 @@ typedef struct any_struct_type* /*as*/ anytype;
 
 
 anytype _cmns_referenceto(anytype inst);
-#define refto(varname) _cmns_referenceto((anytype)varname)
 
 void _cmns_free(anytype inst);
 
@@ -33,12 +42,20 @@ void _cmns_record_var_as_alloced(anytype newvar);
 void _cmns_gc();
 
 void _cmns_dereference_var(anytype inst);
+
+void dereference_no_gc(anytype inst);
+
+
+#define refto(varname) _cmns_referenceto((anytype)varname)
+
 #define deref(varname) _cmns_dereference_var((anytype)varname);\
                         varname = NULL
+
 #define rerefto(varname,newvar) _cmns_dereference_var((anytype)varname);\
                         varname = _cmns_referenceto((anytype)newvar)
 
-void dereference_no_gc(anytype inst);
+#define refreturn(varname) dereference_no_gc((anytype)varname);\
+                        return varname
 
 
 typedef struct cmns_struct_class{

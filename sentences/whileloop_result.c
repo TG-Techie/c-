@@ -1,4 +1,4 @@
-#include "../cmns/file.h"
+#include "cmns/file.h"
 
 nonetype mainfn(){
     /*no arguments passed*/
@@ -22,3 +22,4 @@ nonetype mainfn(){
     _cmns_gc();
     refreturn(nonelitrl);
 }
+

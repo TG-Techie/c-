@@ -3,11 +3,17 @@
 #include "types/booltype.h"
 #include "types/inttype.h"
 #include "types/floattype.h"
+#include "types/strtype.h"
 
 //build with
 //clear; gcc -Wno-incompatible-function-pointer-types -g  atest.c langbase.c
 
+/*
 //tie in to user code
-nonetype mainfn();
+#ifndef cmns_file_base
+#define cmns_file_base
+extern nonetype mainfn();
 
-extern int main();
+int main();
+#endif
+*/
