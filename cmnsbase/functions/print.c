@@ -1,7 +1,6 @@
 #include "print.h"
 
 nonetype printfn(strtype string){
-    char *c = (string->values);
-    printf("%s\n", c);
+    printf("%s\n", (string->values));
     return nonelitrl;
 }

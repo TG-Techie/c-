@@ -114,11 +114,22 @@ class TypeList():
         return len(self._pairs)
 
 class NameSpace():
-    ...
+
+    def __init__(self, outer=None):
+        if outer is None:
+            outer = builtins
+        self.outer = outer
+        self.functions = {}
+        self.classes = {}
+        self.traits = {}
+
+
+
 
 class Scope(TypeList):
     #globals = TypeList()
-    types = [] #FIXME: transition types into a namespace type
+    types = []
+    functions = []
 
     def __init__(self, outer=None):
         super().__init__()
@@ -283,3 +294,8 @@ strtype.addmethod('__add__', strtype,
 strtype.addmethod('__eqls__', booltype,
         (Pair('self', strtype), Pair('other', strtype))
 )
+
+
+#functions
+printfn = Function('print', 'printfn', nonetype, (Pair('outstr', strtype),))
+Scope.functions.append(printfn)

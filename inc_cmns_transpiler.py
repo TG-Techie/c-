@@ -46,7 +46,7 @@ def trans_literal(litrl):
 
 def trans_function_call(scope, name, params, lineno):
     func = None
-    for fn in scope.types:
+    for fn in scope.functions:
         if name == fn.name:
             func = fn
             break
@@ -113,9 +113,7 @@ def trans_expr(scope, tree, lineno):
         print('filtered params', params)
         return trans_method_call(scope,
             trans_expr(scope, target_expr, lineno),
-            name,
-            params,
-            lineno
+            name, params, lineno
         )
     elif tree.data == 'funccall_expr':
         nametree, params = tree.children
@@ -249,6 +247,14 @@ def trans_stmt(scope, tree, rettype):
         stmtmdl.lines.append(f"while (({whileexpr.outstr})->value)"+"{")
         stmtmdl.lines += ['    '+line for line in blocklines]
         stmtmdl.lines.append("}")
+        return stmtmdl
+    elif stmt.data == 'expr_stmt':
+        print(stmt.children)
+        exprtree, newline = stmt.children
+        lineno = lineno_from_newline(newline)
+        expr = trans_expr(scope, exprtree, lineno)
+        print(expr)
+        stmtmdl.lines.append(expr.outstr + ';')
         return stmtmdl
     elif stmt.data == 'pass_stmt':
         stmtmdl.lines.append(comment(f'line {stmt.children[-1].line}: pass'))
@@ -415,7 +421,7 @@ def trans_module(foo):
         elif foo.data == 'funcdef':
             #print('FUNCDEF!')
             func = trans_func(scope, foo)
-            scope.types.append(func)
+            scope.functions.append(func)
             contents.append(func)
         else:
             raise NotImplementedError(f"unsupported sentence '{foo.data}'")
@@ -433,7 +439,8 @@ def test():
                 './sentences/ifstmt.c-',
                 './sentences/nestedif.c-',
                 './sentences/whileloop.c-',
-                './sentences/methodcall.c-'
+                './sentences/methodcall.c-',
+                './sentences/printtest.c-',
                 )
     error_paths =  ('./sentences/casterror.c-',
                     )
