@@ -5,10 +5,10 @@ void freenone(nonetype self){
     return;
 }
 
-const cmnsclass noneclass = &((struct cmns_struct_class){&freenone});
+const cmnsclass noneclass = &((cmns_struct_class){&freenone});
 
-const nonetype nonelitrl = &( (struct none_struct_type){
-    &( (struct cmns_struct_base){0, 0, noneclass} )
+const nonetype nonelitrl = &( (none_struct_type){
+    &( (cmns_struct_base){0, 0, noneclass} )
 });
 
 //other implementations:

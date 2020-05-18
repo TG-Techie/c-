@@ -5,17 +5,17 @@ void freeint(inttype self){
     freeany((anytype)self);
 }
 
-const cmnsclass intclass = &((struct cmns_struct_class){&freeint});
+const cmnsclass intclass = &((cmns_struct_class){&freeint});
 
 void int_constructfn(inttype self, int value){
     self->value = value;
 }
 
 inttype newint(int value){
-    cmnsbase base = malloc(sizeof(cmnsbase));
+    cmnsbase base = malloc(sizeof(cmns_struct_base));
     base->refs = 0;
     base->type = intclass;
-    inttype inst = malloc(sizeof(inttype));
+    inttype inst = malloc(sizeof(int_struct_type));
     inst->base = base;
     int_constructfn(inst, value);
     _cmns_record_var_as_alloced((anytype)inst);

@@ -6,10 +6,10 @@ void freestr(strtype self);
 
 const cmnsclass strclass;
 
-void str_constructfn(strtype self, char *values);
+void str_constructfn(strtype self, char* values);
 
 #define strlitrl newstr
-strtype newstr(char *);
+strtype newstr(char* values);
 
 
 booltype str___eqls__fn(strtype self, strtype other);

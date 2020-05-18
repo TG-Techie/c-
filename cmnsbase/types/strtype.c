@@ -1,24 +1,38 @@
+#include "../langbase.h"
 #include "strtype.h"
 #include "booltype.h"
 
 void freestr(strtype self){
     free(self->values);
-    free(self->base);
+    //free(self->base);
     free(self);
 }
 
-const cmnsclass strclass = &((struct cmns_struct_class){&freestr});
+const cmnsclass strclass = &((cmns_struct_class){&freestr});
 
 void str_constructfn(strtype self, char* values){
-    self->values = malloc(strlen(values)+1);
-    strcpy(self->values, values);
+
+    // constructor for the strtype
+
+    // find the length of the str to duplicate it
+    int length = strlen(values) + 1;
+
+    //reserve a place in the heap to store the char[]
+    char * arr = (char*)malloc(length);
+
+    // copy the contents of the desired string into the heap
+    strcpy(arr, values);
+
+    //set the pointer in teh struct equal to the arr location
+    self->values = arr;
+
 }
 
 strtype newstr(char* values){
-    cmnsbase base = malloc(sizeof(cmnsbase));
+    cmnsbase base = malloc(sizeof(cmns_struct_base));
     base->refs = 0;
     base->type = strclass;
-    strtype inst = malloc(sizeof(strtype));
+    strtype inst = malloc(sizeof(str_struct_type));
     inst->base = base;
 
     str_constructfn(inst, values);

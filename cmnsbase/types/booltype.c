@@ -6,21 +6,21 @@ void freebool(booltype self){
     return;
 }
 
-const cmnsclass boolclass = &(struct cmns_struct_class){&freebool};
+const cmnsclass boolclass = &(cmns_struct_class){&freebool};
 
-const booltype truelitrl = &(struct bool_struct_type){
-    &((struct cmns_struct_base){0, 0, boolclass}),
+const booltype truelitrl = &(bool_struct_type){
+    &((cmns_struct_base){0, 0, boolclass}),
     true
 };
 
-const booltype falselitrl = &(struct bool_struct_type){
-    &((struct cmns_struct_base){0, 0, boolclass}),
+const booltype falselitrl = &(bool_struct_type){
+    &((cmns_struct_base){0, 0, boolclass}),
     false
 };
 
 // other implementations:
 /*
-struct bool_struct_type _truelitrl_struct = {
+bool_struct_type _truelitrl_struct = {
     &((struct cmns_struct_base){0, 0, boolclass})
 };
 const booltype truelitrl = &_truelitrl_struct;

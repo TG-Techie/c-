@@ -4,7 +4,7 @@
 anytype _cmns_alloced_vars[_cmns_max_vars];
 uint _cmns_next_alloced_var_index = 1;
 
-cmnsclass anyclass = &((struct cmns_struct_class){&freeany});
+cmnsclass anyclass = &((cmns_struct_class){&freeany});
 
 void freeany(anytype self){
     free(self->base);
@@ -15,10 +15,10 @@ void any_constructfn(anytype self){
 }
 
 anytype newany(){
-    cmnsbase base = malloc(sizeof(cmnsbase));
+    cmnsbase base = malloc(sizeof(cmns_struct_base));
     base->refs = 0;
     base->type = anyclass;
-    anytype inst = malloc(sizeof(anytype));
+    anytype inst = malloc(sizeof(any_struct_type));
     inst->base = base;
     any_constructfn(inst);
     _cmns_record_var_as_alloced(inst);

@@ -4,15 +4,25 @@
 #include <stdbool.h>
 #include <math.h>
 
-/*build with cmns jonahym: gcc -Wno-incompatible-function-pointer-types -c
-for all:
-langbase.c
-file.c
-types/floattype.c
-types/inttype.c
-types/nonetype.c
-types/booltype.c
-types/strtype.c
+/* // potential build tool replacements
+re.findall('#include[a \t]*.*\n', x)
+['#include <stdlib.h>\n', '#include <stdio.h>\n', '#include <string.h>\n', '#include <stdbool.h>\n', '#include <math.h>\n']
+>>> includes = re.findall('#include[a \t]*.*\n', x)
+>>> incs = includes
+>>> incs
+['#include <stdlib.h>\n', '#include <stdio.h>\n', '#include <string.h>\n', '#include <stdbool.h>\n', '#include <math.h>\n']
+>>> paths = [path.split() for path in incs]
+>>> paths = [path.split()[-1] for path in incs]
+>>>
+>>> paths
+['<stdlib.h>', '<stdio.h>', '<string.h>', '<stdbool.h>', '<math.h>']
+>>>
+*/
+
+/*
+build command
+gcc  -Wno-incompatible-function-pointer-types -Wno-incompatible-pointer-types atest.c langbase.c file.c types/booltype.c types/floattype.c types/inttype.c types/nonetype.c types/strtype.c functions/print.c
+
 */
 //TODO: switch intclass, floatclass, etc to bool and
 //      none class definition foamts ot avoind null pointers
@@ -28,7 +38,7 @@ typedef unsigned int /*as*/ uint;
 //a list of all alloced var
 
 //anytype prototype
-typedef struct any_struct_type* /*as*/ anytype;
+typedef struct _any_t /*as*/ *anytype, any_struct_type;
 
 
 anytype _cmns_referenceto(anytype inst);
@@ -58,21 +68,21 @@ void dereference_no_gc(anytype inst);
                         return varname
 
 
-typedef struct cmns_struct_class{
+typedef struct {
     void (*free)(anytype);
-}* cmnsclass;
+}* cmnsclass, cmns_struct_class;
 
-typedef struct cmns_struct_base{
+typedef struct {
     uint refs;
     uint var_index;
     cmnsclass type;
-}* cmnsbase;
+}* cmnsbase, cmns_struct_base;
 
 
 //anytype definition
-typedef struct any_struct_type {
+typedef struct _any_t {
     cmnsbase base;
-}* anytype;
+}* anytype, any_struct_type;
 
 void freeany(anytype self);
 
@@ -83,47 +93,47 @@ void any_constructfn(anytype self);
 anytype newany();
 
 //typedefs for all built-in  types
-typedef struct none_struct_type{
+typedef struct {
     cmnsbase base;
-}* nonetype;
+}* nonetype, none_struct_type;
 
-typedef struct bool_struct_type{
+typedef struct {
     cmnsbase base;
     bool value;
-}* booltype;
+}* booltype, bool_struct_type;
 
-typedef struct int_struct_type{
+typedef struct {
     cmnsbase base;
     int value;
-}* inttype;
+}* inttype, int_struct_type;
 
 //define float double
-typedef struct float_struct_type{
+typedef struct {
     cmnsbase base;
     float value;
-}* floattype;
+}* floattype, float_struct_type;
 
-typedef struct str_struct_type{
+typedef struct {
     cmnsbase base;
     uint length; // length of the char array stored for ease
     char* values; // the char array location
-}* strtype;
+}* strtype, str_struct_type;
 
-typedef struct arr_struct_type{
+typedef struct {
     cmnsbase base;
     //FIXME:need?:cmnsclass item_type;
     uint length; // current length
     uint capacity; // amount of allocated space;
     anytype itemarr; // array pointer
-}* arrtype;
+}* arrtype, arr_struct_type;
 
-typedef struct dict_struct_type{
+typedef struct {
     cmnsbase base;
     //FIXME:need?:cmnsclass value_type;
     uint length; // current length
     uint capacity; // amount of allocated space;
     anytype keyarr; // pointer to carray
     anytype valuearr; // pointer to carray
-}* dicttype;
+}* dicttype, dict_struct_type;
 
 #endif /* end of include guard: cmns_langbase_def */

@@ -5,17 +5,17 @@ void freefloat(floattype self){
     freeany((anytype)self);
 }
 
-cmnsclass floatclass = &((struct cmns_struct_class){&freefloat});
+cmnsclass floatclass = &((cmns_struct_class){&freefloat});
 
 void float_constructfn(floattype self, float value){
     self->value = value;
 }
 
 floattype newfloat(float value){
-    cmnsbase base = malloc(sizeof(cmnsbase));
+    cmnsbase base = malloc(sizeof(cmns_struct_base));
     base->refs = 0;
     base->type = floatclass;
-    floattype inst = malloc(sizeof(floattype));
+    floattype inst = malloc(sizeof(float_struct_type));
     inst->base = base;
     float_constructfn(inst, value);
     _cmns_record_var_as_alloced((anytype)inst);
