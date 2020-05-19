@@ -254,6 +254,7 @@ def trans_stmt(scope, tree, rettype):
         lineno = lineno_from_newline(newline)
         expr = trans_expr(scope, exprtree, lineno)
         print(expr)
+        stmtmdl.lines.append(comment(f"line {lineno}: expression as statement"))
         stmtmdl.lines.append(expr.outstr + ';')
         return stmtmdl
     elif stmt.data == 'pass_stmt':

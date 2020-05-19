@@ -15,16 +15,17 @@ void str_constructfn(strtype self, char* values){
     // constructor for the strtype
 
     // find the length of the str to duplicate it
-    int length = strlen(values) + 1;
+    int length = strlen(values);
 
     //reserve a place in the heap to store the char[]
-    char * arr = (char*)malloc(length);
+    char * arr = (char*)malloc(length + 1);
 
     // copy the contents of the desired string into the heap
     strcpy(arr, values);
 
     //set the pointer in teh struct equal to the arr location
     self->values = arr;
+    self->length = length;
 
 }
 
