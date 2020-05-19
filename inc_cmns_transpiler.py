@@ -443,6 +443,7 @@ def test():
                 './sentences/methodcall.c-',
                 './sentences/printtest.c-',
                 './sentences/inputtest.c-',
+                './sentences/classdef.c-',
                 )
     error_paths =  ('./sentences/casterror.c-',
                     )

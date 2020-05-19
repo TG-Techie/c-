@@ -1,0 +1,16 @@
+class PolarCoord contains (
+    float theta, # the angle around the unit circle
+    float radius, # the distance from teh center of the origin cirle
+    ):
+
+    constructor (PolarCoord self, float theta, float radius):
+        # documetnation comments go here
+        self.theta = theta
+        self.radius = radius
+
+class CartesianCoord contains (
+    int x, # a horizontal location relative to the origin
+    int y, # a horizontal location relative to the origin
+    ):
+    # we will leave this constructor to the default one
+    pass
