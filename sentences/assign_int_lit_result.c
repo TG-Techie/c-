@@ -11,6 +11,7 @@ nonetype mainfn(){
     /*casting 'foo' from type 'int' to  type 'str'*/
     rerefto(foo_var, strlitrl("teststr"));
     /*implicit 'nonetype' return routine at end of function 'main'*/
+    deref(foo_var);
     _cmns_gc();
     refreturn(nonelitrl);
 }

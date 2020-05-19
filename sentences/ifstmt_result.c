@@ -6,6 +6,7 @@ nonetype block_align_testfn(){
     /*first assignment of 'x' in scope*/
     inttype x_var = refto(intlitrl(5));
     /*implicit 'nonetype' return routine at end of function 'block_align_test'*/
+    deref(x_var);
     _cmns_gc();
     refreturn(nonelitrl);
 }
@@ -62,6 +63,7 @@ nonetype mainfn(){
     /*first assignment of 'answer' in scope*/
     inttype answer_var = refto(intlitrl(5));
     /*implicit 'nonetype' return routine at end of function 'main'*/
+    deref(answer_var);
     _cmns_gc();
     refreturn(nonelitrl);
 }

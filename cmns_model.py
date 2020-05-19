@@ -299,3 +299,6 @@ strtype.addmethod('__eqls__', booltype,
 #functions
 printfn = Function('print', 'printfn', nonetype, (Pair('outstr', strtype),))
 Scope.functions.append(printfn)
+
+inputfn = Function('input', 'inputfn', strtype, (Pair('primpt', strtype),))
+Scope.functions.append(inputfn)

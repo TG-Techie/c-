@@ -23,6 +23,7 @@ nonetype mainfn(){
         /*line 9: pass*/
     }
     /*implicit 'nonetype' return routine at end of function 'main'*/
+    deref(x_var);
     _cmns_gc();
     refreturn(nonelitrl);
 }

@@ -6,6 +6,7 @@ nonetype mainfn(){
     /*first assignment of 'x' in scope*/
     inttype x_var = refto(int___add__fn(intlitrl(5), intlitrl(7)));
     /*implicit 'nonetype' return routine at end of function 'main'*/
+    deref(x_var);
     _cmns_gc();
     refreturn(nonelitrl);
 }
