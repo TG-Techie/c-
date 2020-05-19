@@ -279,6 +279,11 @@ def trans_stmt(scope, tree, rettype):
         pretty = ''
     raise NotImplementedError(f"unsupported stmt '{stmt.data}' found at newline {lineno}:\n\n\ntree w/ unknown statement:\n{pretty}\nSee above for error")
 
+def trans_class(scope, tree):
+    nametok, typelisttok, clsblock = tree.children
+    name, lineno = name_and_line_from_tree(nametok)
+    typelist = trans_typelist(typelisttok)
+    raise NotImplementedError("class defniitions are not implemted")
 
 def trans_func(scope, tree, prefix='', prototype = False):
     funcscope = Scope()
@@ -424,6 +429,10 @@ def trans_module(foo):
             func = trans_func(scope, foo)
             scope.functions.append(func)
             contents.append(func)
+        elif foo.data == 'classdef':
+            cls = trans_class(scope, foo)
+            scope.types.append(cls)
+            contents.append(cls)
         else:
             raise NotImplementedError(f"unsupported sentence '{foo.data}'")
     return contents

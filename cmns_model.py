@@ -242,7 +242,7 @@ class Type():
     def __repr__(self):
         return f"<cmnstype '{self.name}'>"
 
-    def addmethod(self, name, type, args):
+    def newmethod(self, name, type, args):
         if name not in self.methods:
             self.methods[name] = Function(name, f"{self.name}_{name}fn", type, args)
         else:
@@ -271,27 +271,27 @@ Scope.types.append(nonetype)
 
 nonetype.outstr = 'nonetype'
 
-inttype.addmethod('__add__', inttype,
+inttype.newmethod('__add__', inttype,
         (Pair('self', inttype), Pair('other', inttype))
 )
 
-inttype.addmethod('__str__', strtype,
+inttype.newmethod('__str__', strtype,
         (Pair('self', inttype), Pair('other', inttype))
 )
 
-inttype.addmethod('__lessthan__', booltype,
+inttype.newmethod('__lessthan__', booltype,
         (Pair('self', inttype), Pair('other', inttype))
 )
-inttype.addmethod('__grtrthan__', booltype,
+inttype.newmethod('__grtrthan__', booltype,
         (Pair('self', inttype), Pair('other', inttype))
 )
 
 
-strtype.addmethod('__add__', strtype,
+strtype.newmethod('__add__', strtype,
         (Pair('self', strtype), Pair('other', strtype))
 )
 
-strtype.addmethod('__eqls__', booltype,
+strtype.newmethod('__eqls__', booltype,
         (Pair('self', strtype), Pair('other', strtype))
 )
 

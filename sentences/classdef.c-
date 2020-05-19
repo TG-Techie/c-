@@ -1,16 +1,19 @@
-class PolarCoord contains (
-    float theta, # the angle around the unit circle
-    float radius, # the distance from teh center of the origin cirle
-    ):
+class Widget contains (
+    int x,
+    int y, # the horizontal and vertical coordinates of the widget
+    int width, int height, # the horizontal and vertical dimentions fothe widget
+    # for later, maybe add kwargs #{strtype: int} kwarg # optional configureation
+):
+    def place(Widget self):
+        pass
 
-    constructor (PolarCoord self, float theta, float radius):
+    constructor (Widget self, int x, int y, int width, int height):
         # documetnation comments go here
-        self.theta = theta
-        self.radius = radius
+        self.x = x
+        self.y = y
+        self.width = width
+        self.height = height
 
-class CartesianCoord contains (
-    int x, # a horizontal location relative to the origin
-    int y, # a horizontal location relative to the origin
-    ):
-    # we will leave this constructor to the default one
+def foo():
+    # a function to test the indenting syntax
     pass

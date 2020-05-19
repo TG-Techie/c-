@@ -42,9 +42,12 @@ bwuniop     : "~" -> bwnot
 // SECTION grammar def
 
 funcdef: "def" name "(" typelist ")" ("returns" typename)? stmt_block
-classdef: "class" TYPENAME ("contains" "(" typelist ")")? func_block
+classdef: "class" TYPENAME ("contains" "(" typelist ")")? class_block
+constrdef: "constructor" "(" typelist ")" stmt_block
 
-typelist:  (typename name (comma typename name)*)?  comma?
+
+typelist: (typename name (comma typename name)*)?  comma?
+        | NEWLINE INDENT (typename name (comma typename name)*)?  comma? DEDENT?
 //arglist: (name (comma name)*)? comma?
 paramlist: (expr (comma expr)*)? comma?
 comma: "," (COMMENT? NEWLINE)?
@@ -72,16 +75,14 @@ to_pair   : "to" expr
 from_pair : "from" expr
 by_pair   : "by" expr
 
-assign_stmt : name "=" expr NEWLINE
+assign_stmt : name("." name)* "=" expr NEWLINE
 return_stmt : "return" expr NEWLINE | "return" NEWLINE
 
 
-
-
-
 stmt_block : ":" NEWLINE INDENT stmt+ DEDENT | ":" stmt
-func_block : ":" NEWLINE INDENT (funcdef | pass_stmt)+ DEDENT | ":" pass_stmt
-
+//func_block : ":" NEWLINE INDENT (funcdef | pass_stmt)+ DEDENT | ":" pass_stmt
+class_block: ":" NEWLINE INDENT (constrdef | funcdef | pass_stmt)* DEDENT | ":" pass_stmt
+//class_block: ":" NEWLINE INDENT (funcdef | constrdef | trait_impl | pass_stmt)* DEDENT | ":" pass_stmt
 
 expr           : literal | funccall_expr | methodcall_expr | attrget_expr | name | binop_expr | uniop_expr
 funccall_expr  : name "(" paramlist ")"
@@ -116,7 +117,7 @@ builtintype : "int" -> int | "bool" -> bool | "str" -> str
 TYPENAME    : /_*[A-Z][a-zA-Z_0-9]*/
 VARNAME     : /[a-z_][a-zA-Z_0-9]*/
 
-COMMENT : /###[^#]*###/ | /#[^\n]*/
+COMMENT : /###[^#]*###/ | /[c\t]*#[^\n]*/
 NEWLINE : ( /\r?\n[\t ]*/ | COMMENT )+
 // mine NEWLINE: /[\r\n]+[\t ]*/
 
