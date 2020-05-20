@@ -104,8 +104,7 @@ arith_binop : "+" -> add        | "-" -> sub    | "*" -> mul
             | "//" -> floordiv  | "/" -> div    | "%" -> mod
             | "**" -> pow
 
-
-bitws_binop : "&" -> bwand      | "|" -> bwor   | "^" -> bwxor
+bitws_binop : "&" -> bwand      | "^" -> bwxor  | "|" -> bwor
             | "<<" -> bwlshift  | ">>" -> bwrshift
 
 uniop : "not" -> not | "~" -> bwnot
