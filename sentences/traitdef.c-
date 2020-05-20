@@ -47,7 +47,7 @@ class Button contains (Int _x, Int _y, Int _width, Int _height):
             self._height = int(value)
 
         def place (Button self):
-            # protend canvas, and palette are global variables
+            # pretend canvas, and palette are global variables
             canvas.rect(self.x, self.y, self.width, self.height, palette.fill)
             canvas.centertext(self.x + (self.width // 2), self.y + (self.height // 2), "button text")
 

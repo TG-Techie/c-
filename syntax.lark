@@ -73,9 +73,12 @@ by_pair   : "by" expr
 assign_stmt : varname("." varname)* "=" expr NEWLINE
 return_stmt : "return" expr NEWLINE | "return" NEWLINE
 
-funcdec  : "dec" ("get" | "set")? varname "(" typelist ")" ("returns" typename)? NEWLINE
+funcdec  : "dec" (get | set)? varname "(" typelist ")" ("returns" typename)? NEWLINE
+funcdef  : "def" (get | set)? varname "(" typelist ")" ("returns" typename)? stmt_block
 
-funcdef  : "def" ("get" | "set")? varname "(" typelist ")" ("returns" typename)? stmt_block
+get: "get"
+set: "set"
+
 classdef : "class" TYPENAME ("contains" "(" typelist ")")? class_block
          | "class" TYPENAME ("extends" typename "with" "(" typelist ")")? class_block
 traitdef : "trait" TYPENAME traitdef_block
