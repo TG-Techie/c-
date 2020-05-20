@@ -21,7 +21,7 @@ start
       stmt
         return_stmt
           expr
-            funccall_expr
+            call_expr
               identifr
                 varname	a
                 varname	__add__
@@ -55,7 +55,7 @@ start
       stmt
         return_stmt
           expr
-            funccall_expr
+            call_expr
               identifr
                 varname	addints
               paramlist

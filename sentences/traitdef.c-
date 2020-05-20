@@ -4,6 +4,8 @@ trait Indice:
 
 trait Widget:
 
+    trait Indice
+
     dec get x (Self self) returns Int
     dec set x (Self self, Intable other)
 
@@ -49,7 +51,7 @@ class Button contains (Int _x, Int _y, Int _width, Int _height):
         def place (Button self):
             # pretend canvas, and palette are global variables
             canvas.rect(self.x, self.y, self.width, self.height, palette.fill)
-            canvas.centertext(self.x + (self.width // 2), self.y + (self.height // 2), "button text")
+            canvas.centertext(self.x + self.width // 2, self.y + (self.height // 2), "button text")
 
         def pickup(Button self):
-            canvas.rect(self.x, self.y, self.width, self.height, palette.black)
+            canvas.rect(self.x, self.y, self.width, self.height, palette.background)

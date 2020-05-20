@@ -16,15 +16,23 @@ start
               expr
                 binop_expr
                   expr
-                    var_expr
-                      identifr
-                        varname	a
+                    binop_expr
+                      expr
+                        var_expr
+                          identifr
+                            varname	a
+                      binop
+                        add
+                      expr
+                        var_expr
+                          identifr
+                            varname	b
                   binop
                     add
                   expr
                     var_expr
                       identifr
-                        varname	b
+                        varname	c
               binop
                 add
               expr
@@ -32,21 +40,13 @@ start
                   expr
                     var_expr
                       identifr
-                        varname	c
+                        varname	d
                   binop
                     add
                   expr
-                    binop_expr
-                      expr
-                        var_expr
-                          identifr
-                            varname	d
-                      binop
-                        add
-                      expr
-                        var_expr
-                          identifr
-                            varname	e
+                    var_expr
+                      identifr
+                        varname	e
           
 
 

@@ -90,7 +90,7 @@ start
             literal
               arraylitrl
                 expr
-                  funccall_expr
+                  call_expr
                     identifr
                       varname	int
                     paramlist

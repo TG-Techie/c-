@@ -11,7 +11,7 @@ start
         varname	__to_indice__
         typelist
           typename
-            selfstype
+            selftype
           varname	self
         typename
           int
@@ -26,21 +26,28 @@ start
 
     
           
+      traitdec
+        Indice
+        
+
+    
       funcdec
+        get
         varname	x
         typelist
           typename
-            selfstype
+            selftype
           varname	self
         typename
           int
         
     
       funcdec
+        set
         varname	x
         typelist
           typename
-            selfstype
+            selftype
           varname	self
           comma
           typename	Intable
@@ -49,20 +56,22 @@ start
 
     
       funcdec
+        get
         varname	y
         typelist
           typename
-            selfstype
+            selftype
           varname	self
         typename
           int
         
     
       funcdec
+        set
         varname	y
         typelist
           typename
-            selfstype
+            selftype
           varname	self
           comma
           typename	Intable
@@ -71,20 +80,22 @@ start
 
     
       funcdec
+        get
         varname	width
         typelist
           typename
-            selfstype
+            selftype
           varname	self
         typename
           int
         
     
       funcdec
+        set
         varname	width
         typelist
           typename
-            selfstype
+            selftype
           varname	self
           comma
           typename	Intable
@@ -93,20 +104,22 @@ start
 
     
       funcdec
+        get
         varname	height
         typelist
           typename
-            selfstype
+            selftype
           varname	self
         typename
           int
         
     
       funcdec
+        set
         varname	height
         typelist
           typename
-            selfstype
+            selftype
           varname	self
           comma
           typename	Intable
@@ -118,7 +131,7 @@ start
         varname	place
         typelist
           typename
-            selfstype
+            selftype
           varname	self
         
     
@@ -126,7 +139,7 @@ start
         varname	pickip
         typelist
           typename
-            selfstype
+            selftype
           varname	self
         
 
@@ -162,6 +175,7 @@ start
         
                   
           funcdef
+            get
             varname	x
             typelist
               typename	Button
@@ -184,13 +198,14 @@ start
         
                       
           funcdef
+            set
             varname	x
             typelist
               typename	Button
               varname	self
               comma
               typename	Intable
-              varname	other
+              varname	value
             stmt_block
               
             
@@ -200,20 +215,73 @@ start
                   varname	self
                   varname	_x
                   expr
-                    funccall_expr
+                    call_expr
                       identifr
                         varname	int
                       paramlist
                         expr
                           var_expr
                             identifr
-                              varname	other
+                              varname	value
                   
-        # also for y
 
         
                       
           funcdef
+            get
+            varname	y
+            typelist
+              typename	Button
+              varname	self
+            typename
+              int
+            stmt_block
+              
+            
+                          
+              stmt
+                return_stmt
+                  expr
+                    var_expr
+                      identifr
+                        varname	self
+                        varname	_y
+                  
+
+        
+                      
+          funcdef
+            set
+            varname	y
+            typelist
+              typename	Button
+              varname	self
+              comma
+              typename	Intable
+              varname	value
+            stmt_block
+              
+            
+                          
+              stmt
+                assign_stmt
+                  varname	self
+                  varname	_y
+                  expr
+                    call_expr
+                      identifr
+                        varname	int
+                      paramlist
+                        expr
+                          var_expr
+                            identifr
+                              varname	value
+                  
+
+        
+                      
+          funcdef
+            get
             varname	width
             typelist
               typename	Button
@@ -236,13 +304,14 @@ start
         
                       
           funcdef
+            set
             varname	width
             typelist
               typename	Button
               varname	self
               comma
               typename	Intable
-              varname	other
+              varname	value
             stmt_block
               
             
@@ -252,16 +321,229 @@ start
                   varname	self
                   varname	_width
                   expr
-                    funccall_expr
+                    call_expr
                       identifr
                         varname	int
                       paramlist
                         expr
                           var_expr
                             identifr
-                              varname	other
+                              varname	value
                   
-        # also for height
+
+        
+                      
+          funcdef
+            get
+            varname	height
+            typelist
+              typename	Button
+              varname	self
+            typename
+              int
+            stmt_block
+              
+            
+                          
+              stmt
+                return_stmt
+                  expr
+                    var_expr
+                      identifr
+                        varname	self
+                        varname	_height
+                  
+
+        
+                      
+          funcdef
+            set
+            varname	height
+            typelist
+              typename	Button
+              varname	self
+              comma
+              typename	Intable
+              varname	value
+            stmt_block
+              
+            
+                          
+              stmt
+                assign_stmt
+                  varname	self
+                  varname	_height
+                  expr
+                    call_expr
+                      identifr
+                        varname	int
+                      paramlist
+                        expr
+                          var_expr
+                            identifr
+                              varname	value
+                  
+
+        
+                      
+          funcdef
+            varname	place
+            typelist
+              typename	Button
+              varname	self
+            stmt_block
+              
+            # pretend canvas, and palette are global variables
+            
+                          
+              stmt
+                expr_stmt
+                  expr
+                    call_expr
+                      identifr
+                        varname	canvas
+                        varname	rect
+                      paramlist
+                        expr
+                          var_expr
+                            identifr
+                              varname	self
+                              varname	x
+                        comma
+                        expr
+                          var_expr
+                            identifr
+                              varname	self
+                              varname	y
+                        comma
+                        expr
+                          var_expr
+                            identifr
+                              varname	self
+                              varname	width
+                        comma
+                        expr
+                          var_expr
+                            identifr
+                              varname	self
+                              varname	height
+                        comma
+                        expr
+                          var_expr
+                            identifr
+                              varname	palette
+                              varname	fill
+                  
+            
+              stmt
+                expr_stmt
+                  expr
+                    call_expr
+                      identifr
+                        varname	canvas
+                        varname	centertext
+                      paramlist
+                        expr
+                          binop_expr
+                            expr
+                              binop_expr
+                                expr
+                                  var_expr
+                                    identifr
+                                      varname	self
+                                      varname	x
+                                binop
+                                  add
+                                expr
+                                  var_expr
+                                    identifr
+                                      varname	self
+                                      varname	width
+                            binop
+                              floordiv
+                            expr
+                              literal
+                                number
+                                  integer	2
+                        comma
+                        expr
+                          binop_expr
+                            expr
+                              var_expr
+                                identifr
+                                  varname	self
+                                  varname	y
+                            binop
+                              add
+                            expr
+                              expr
+                                binop_expr
+                                  expr
+                                    var_expr
+                                      identifr
+                                        varname	self
+                                        varname	height
+                                  binop
+                                    floordiv
+                                  expr
+                                    literal
+                                      number
+                                        integer	2
+                        comma
+                        expr
+                          literal
+                            string	"button text"
+                  
+
+        
+                      
+          funcdef
+            varname	pickup
+            typelist
+              typename	Button
+              varname	self
+            stmt_block
+              
+            
+                          
+              stmt
+                expr_stmt
+                  expr
+                    call_expr
+                      identifr
+                        varname	canvas
+                        varname	rect
+                      paramlist
+                        expr
+                          var_expr
+                            identifr
+                              varname	self
+                              varname	x
+                        comma
+                        expr
+                          var_expr
+                            identifr
+                              varname	self
+                              varname	y
+                        comma
+                        expr
+                          var_expr
+                            identifr
+                              varname	self
+                              varname	width
+                        comma
+                        expr
+                          var_expr
+                            identifr
+                              varname	self
+                              varname	height
+                        comma
+                        expr
+                          var_expr
+                            identifr
+                              varname	palette
+                              varname	background
+                  
 
               
           

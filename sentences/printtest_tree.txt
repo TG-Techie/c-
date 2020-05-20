@@ -11,7 +11,7 @@ start
       stmt
         expr_stmt
           expr
-            funccall_expr
+            call_expr
               identifr
                 varname	print
               paramlist

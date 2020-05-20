@@ -27,25 +27,6 @@ LINECOMMENT  : /#[^\n]*/
 COMMENT : LONGCOMMENT | LINECOMMENT | BREAKCOMMENT
 NEWLINE : ( COMMENT? /\r?\n[\t \f]*/ )+
 
-
-binop: bitws_binop | arith_binop | compr_binop | logcl_binop
-logcl_binop : "is" "not" -> isnot   | "is" -> is    | "not" "in" -> notin
-            | "in" -> in            | "and" -> and  | "or" -> or
-            | "xor" -> xor
-
-compr_binop : "!=" -> noteq     | "==" -> eq    | ">=" -> grtreq
-            | "<=" -> lesseq    | ">" -> gr     | "<" -> ls
-
-arith_binop : "//" -> floordiv  | "**" -> pow   | "+" -> add
-            | "-" -> sub        | "*" -> mul    | "/" -> div
-            | "%" -> mod
-
-bitws_binop : "&" -> bwand      | "|" -> bwor   | "^" -> bwxor
-            | "<<" -> bwlshift  | ">>" -> bwrshift
-
-uniop       : "not" -> not | "-" -> negate | bwuniop
-bwuniop     : "~" -> bwnot
-
 typelist: (typename varname (comma typename varname)*)?  comma?
         | NEWLINE INDENT (typename varname (comma typename varname)*)?  (comma | NEWLINE) DEDENT
 //arglist: (varname (comma varname)*)? comma?
@@ -81,8 +62,9 @@ set: "set"
 
 classdef : "class" TYPENAME ("contains" "(" typelist ")")? class_block
          | "class" TYPENAME ("extends" typename "with" "(" typelist ")")? class_block
-traitdef : "trait" TYPENAME traitdef_block
 
+traitdec : "trait" TYPENAME NEWLINE
+traitdef : "trait" TYPENAME traitdef_block
 traitimpl : "trait" TYPENAME traitimpl_block
 
 // block, ie indented sections fo code
@@ -93,26 +75,49 @@ class_block : ":" NEWLINE INDENT (funcdef | traitimpl | pass_stmt)+ DEDENT
             | ":" pass_stmt
             //| NEWLINE
 
-traitdef_block : ":" NEWLINE INDENT (funcdec | pass_stmt)+ DEDENT
+traitdef_block : ":" NEWLINE INDENT (funcdec | traitdec | pass_stmt)+ DEDENT
             | ":" pass_stmt
 
 traitimpl_block : ":" NEWLINE INDENT (funcdef | pass_stmt)+ DEDENT
             | ":" pass_stmt
             //| NEWLINE
 
-expr: literal | funccall_expr | var_expr | binop_expr | uniop_expr
-funccall_expr   : identifr "(" paramlist ")" // determine if method or __call__ at model time
-var_expr        : identifr
-uniop_expr      : uniop expr
-binop_expr      : expr binop expr
+expr: literal       | call_expr     | var_expr
+    | binop_expr    | uniop_expr    | "(" expr ")"
+    | negop_expr
+call_expr   : identifr "(" paramlist ")" // determine if method or __call__ at model time
+var_expr    : identifr
+uniop_expr  : uniop expr
+binop_expr  : expr binop expr
+negop_expr  : negop expr
+
+binop: bitws_binop | arith_binop | compr_binop | logcl_binop
+logcl_binop : "is" "not" -> isnot   | "is"  -> is
+            | "or"  -> or           | "xor" -> xor
+            | "and" -> and
+
+compr_binop : "!=" -> noteq     | "==" -> eq    | ">=" -> grtreq
+            | "<=" -> lesseq    | ">" -> gr     | "<" -> ls
+            | "not" "in" -> notin   | "in"  -> in
+
+arith_binop : "+" -> add        | "-" -> sub    | "*" -> mul
+            | "//" -> floordiv  | "/" -> div    | "%" -> mod
+            | "**" -> pow
+
+
+bitws_binop : "&" -> bwand      | "|" -> bwor   | "^" -> bwxor
+            | "<<" -> bwlshift  | ">>" -> bwrshift
+
+uniop : "not" -> not | "~" -> bwnot
+negop : "-" -> negate
 
 typename : builtintype | TYPENAME
 identifr  : varname ("." varname)*  // identifier
 varname  : VARNAME
 
 builtintype: "Int" -> int | "Bool" -> bool | "Str" -> str
-           | "Float" -> float | "NoneType" -> nonestype
-           | "SomeType" -> selfstype | "Self" -> selfstype
+           | "Float" -> float | "NoneType" -> nonetype
+           | "SomeType" -> selftype | "Self" -> selftype
            | "<" typename ">" -> arrtype
            | "{" typename ":" typename "}" -> maptype
 

@@ -12,7 +12,7 @@ start
         assign_stmt
           varname	strin
           expr
-            funccall_expr
+            call_expr
               identifr
                 varname	input
               paramlist
@@ -24,7 +24,7 @@ start
       stmt
         expr_stmt
           expr
-            funccall_expr
+            call_expr
               identifr
                 varname	print
               paramlist
@@ -36,7 +36,7 @@ start
       stmt
         expr_stmt
           expr
-            funccall_expr
+            call_expr
               identifr
                 varname	print
               paramlist

@@ -126,7 +126,7 @@ start
     varname	main
     typelist
     typename
-      nonestype
+      nonetype
     stmt_block
       
     
