@@ -450,25 +450,25 @@ start
                         expr
                           binop_expr
                             expr
-                              var_expr
-                                identifr
-                                  varname	self
-                                  varname	x
-                            binop
-                              add
-                            expr
                               binop_expr
                                 expr
                                   var_expr
                                     identifr
                                       varname	self
-                                      varname	width
+                                      varname	x
                                 binop
-                                  floordiv
+                                  add
                                 expr
-                                  literal
-                                    number
-                                      integer	2
+                                  var_expr
+                                    identifr
+                                      varname	self
+                                      varname	width
+                            binop
+                              floordiv
+                            expr
+                              literal
+                                number
+                                  integer	2
                         comma
                         expr
                           binop_expr

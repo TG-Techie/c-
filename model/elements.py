@@ -52,7 +52,7 @@ class NameSpace():
 class Function():
 
     def __init__(self, space, lineno, name, tree, outname=None):
-        assert isinstance(space, (NameSpace)), "'outer' must be of type 'NameSpace' or value 'None'"
+        assert isinstance(space, (NameSpace, NoneType)), "'space' must be of type 'NameSpace' or value 'None'"
         assert isinstance(name, str) and len(name)\
             and name.isidentifier(), "'name' must be of type 'str' and length >= 1"
 
@@ -79,7 +79,7 @@ class Function():
 class Type(NameSpace):
 
     def __init__(self, space, lineno, name, tree, outname=None):
-        assert isinstance(space, (NameSpace)), "'outer' must be of type 'NameSpace' or value 'None'"
+        assert isinstance(space, (NameSpace, NoneType)), "'space' must be of type 'NameSpace' or value 'None'"
         assert isinstance(name, str) and len(name)\
             and name.isidentifier(), "'name' must be of type 'str' and length >= 1"
 
@@ -117,6 +117,9 @@ class Type(NameSpace):
         else:
             return self is other
 
+    def initialise(self):
+        pass # parses the given tree and asserts its own type
+
 class Trait(Type):
 
     def __eq__(self, other):
@@ -125,4 +128,54 @@ class Trait(Type):
         else:
             return True in [self == trait for trait in other.traits.values()]
 
-class 
+
+
+
+
+# evaluatuation time model elements
+
+class Scope():
+
+    def __init__(self, space, outer):
+        assert isinstance(space, (NameSpace, NoneType)), "'space' must be of type 'NameSpace' or value 'None'"
+        assert isinstance(outer, (Scope, NoneType)), "'outer' must be of type 'Scope' or value 'None'"
+        if outname is None:
+            outname = f"{space.prefix}_{name}"
+
+        assert isinstance(outname, str) and len(outname.strip('_')) >= 3\
+            and outname.isidentifier(), "'outname' must be of type 'str' and length >= 1"
+
+        self._locals = {}
+
+    @property
+    def locals(self):
+        return self._locals
+
+    @property
+    def all(self):
+        if self.outer is not None:
+            return {**self.locals, **self.outer.all}
+        else:
+            return self.locals
+
+    def new_var(self, var):
+        assert isinstance(var, Var), "'var' must be of type 'Var'"
+        if var.name in self.locals:
+            self._locals[var.name] = var
+        elif (self.outer is not None) and (var.name in self.outer.all):
+            if var.type == self.outer.all[var.name].type:
+                self._locals[var.name] = var
+            else:
+                SHIT
+        else:
+            self._locals[var.name] = var
+
+class Stmt():
+
+    def __init__(self, scope, lineno, tree):
+
+        self._tree = tree
+        self.lineno = lineno
+        self.scope = scope
+
+class
