@@ -119,6 +119,7 @@ varname  : VARNAME
 
 builtintype: "Int" -> int | "Bool" -> bool | "Str" -> str
            | "Float" -> float | "NoneType" -> nonetype
+           | "Regex" ->regex
            | "SomeType" -> selftype | "Self" -> selftype
            | "<" typename ">" -> arrtype
            | "[" typename ":" typename "]" -> maptype
@@ -133,9 +134,9 @@ string: STRING | LONG_STRING
 //string: single_string | double_string //| ling_single_string | long_double_string
 bool: TRUE | FALSE
 none: NONE
+regex: "/"/^((?:(?:[^?+*{}()[\]\\|]+|\\.|\[(?:\^?\\.|\^[^\\]|[^\\^])(?:[^\]\\]+|\\.)*\]|\((?:\?[:=!]|\?<[=!]|\?>)?(?1)??\)|\(\?(?:R|[+-]?\d+)\))(?:(?:[?+*]|\{\d+(?:,\d*)?\})[?+]?)?|\|)*)$/"/"
 arraylitrl: "<" expr ("," expr)* ","? ">"
 maplitrl: "[" expr ":" expr ("," expr ":" expr)* ","? "]"
-
 
 %ignore /[\t \f]+/  // WS
 %ignore /\\/ NEWLINE  // LINE_CONT

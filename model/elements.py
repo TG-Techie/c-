@@ -117,10 +117,12 @@ class Type(NameSpace):
         else:
             return self is other
 
-def Trait(Type):
+class Trait(Type):
 
     def __eq__(self, other):
         if isinstance(other, Trait) and self is other:
             return True
         else:
             return True in [self == trait for trait in other.traits.values()]
+
+class 
