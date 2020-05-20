@@ -45,7 +45,8 @@ start
           
       stmt
         assign_stmt
-          varname	a
+          identifr
+            varname	a
           expr
             literal
               number

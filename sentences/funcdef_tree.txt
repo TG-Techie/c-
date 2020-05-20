@@ -43,7 +43,8 @@ start
           
       stmt
         assign_stmt
-          varname	baz
+          identifr
+            varname	baz
           expr
             literal
               number
@@ -52,7 +53,8 @@ start
     
       stmt
         assign_stmt
-          varname	baz
+          identifr
+            varname	baz
           expr
             literal
               string	"baz"

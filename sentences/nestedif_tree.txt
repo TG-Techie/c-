@@ -8,7 +8,8 @@ start
            
       stmt
         assign_stmt
-          varname	x
+          identifr
+            varname	x
           expr
             literal
               string	'5'
@@ -50,7 +51,8 @@ start
                                
                   stmt
                     assign_stmt
-                      varname	x
+                      identifr
+                        varname	x
                       expr
                         literal
                           string	'56'

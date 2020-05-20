@@ -5,7 +5,8 @@ start
     stmt_block
       stmt
         assign_stmt
-          varname	x
+          identifr
+            varname	x
           expr
             literal
               number
@@ -27,7 +28,8 @@ start
           
       stmt
         assign_stmt
-          varname	rootvar
+          identifr
+            varname	rootvar
           expr
             literal
               number
@@ -53,7 +55,8 @@ start
                     
             stmt
               assign_stmt
-                varname	bluevar
+                identifr
+                  varname	bluevar
                 expr
                   literal
                     number
@@ -85,7 +88,8 @@ start
                     
             stmt
               assign_stmt
-                varname	redvar
+                identifr
+                  varname	redvar
                 expr
                   literal
                     number
@@ -94,7 +98,8 @@ start
         
             stmt
               assign_stmt
-                varname	redvar
+                identifr
+                  varname	redvar
                 expr
                   literal
                     string	"3"
@@ -133,7 +138,8 @@ start
           
       stmt
         assign_stmt
-          varname	answer
+          identifr
+            varname	answer
           expr
             literal
               number

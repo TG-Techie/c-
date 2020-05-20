@@ -9,7 +9,8 @@ start
           
       stmt
         assign_stmt
-          varname	x
+          identifr
+            varname	x
           expr
             literal
               number
@@ -45,7 +46,8 @@ start
                               
                   stmt
                     assign_stmt
-                      varname	x
+                      identifr
+                        varname	x
                       expr
                         binop_expr
                           expr

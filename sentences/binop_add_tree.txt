@@ -3,12 +3,14 @@ start
     varname	main
     typelist
     stmt_block
-      
-    
-          
+
+
+
+
       stmt
         assign_stmt
-          varname	x
+          identifr
+            varname	x
           expr
             binop_expr
               expr
@@ -21,12 +23,166 @@ start
                 literal
                   number
                     integer	7
-          
-    ###
-    y = 5 - 7
-    z = 5 * 7
-    foo = 5 / 7
-    bar = 5 // 7
-    ###
 
-      
+
+      stmt
+        assign_stmt
+          identifr
+            varname	y
+          expr
+            binop_expr
+              expr
+                literal
+                  number
+                    integer	5
+              binop
+                sub
+              expr
+                literal
+                  number
+                    integer	7
+
+
+      stmt
+        assign_stmt
+          identifr
+            varname	z
+          expr
+            binop_expr
+              expr
+                literal
+                  number
+                    integer	5
+              binop
+                mul
+              expr
+                literal
+                  number
+                    integer	7
+
+
+      stmt
+        assign_stmt
+          identifr
+            varname	foo
+          expr
+            binop_expr
+              expr
+                literal
+                  number
+                    integer	5
+              binop
+                div
+              expr
+                literal
+                  number
+                    integer	7
+
+    #
+
+      stmt
+        assign_stmt
+          identifr
+            varname	bar
+          expr
+            binop_expr
+              expr
+                binop_expr
+                  expr
+                    literal
+                      number
+                        integer	5
+                  binop
+                    add
+                  expr
+                    literal
+                      number
+                        integer	6
+              binop
+                floordiv
+              expr
+                literal
+                  number
+                    integer	7
+          # 5 + (6 // 7)
+
+      stmt
+        assign_stmt
+          identifr
+            varname	baz
+          expr
+            binop_expr
+              expr
+                negop_expr
+                  expr
+                    literal
+                      number
+                        integer	4
+              binop
+                sub
+              expr
+                literal
+                  number
+                    integer	5
+
+
+      stmt
+        assign_stmt
+          identifr
+            varname	qux
+          expr
+            binop_expr
+              expr
+                literal
+                  number
+                    integer	4
+              binop
+                sub
+              expr
+                literal
+                  number
+                    integer	5
+
+
+      stmt
+        assign_stmt
+          identifr
+            varname	qoox
+          expr
+            binop_expr
+              expr
+                negop_expr
+                  expr
+                    literal
+                      number
+                        integer	4
+              binop
+                sub
+              expr
+                negop_expr
+                  expr
+                    literal
+                      number
+                        integer	5
+
+
+      stmt
+        assign_stmt
+          identifr
+            varname	quuz
+          expr
+            binop_expr
+              expr
+                negop_expr
+                  expr
+                    literal
+                      number
+                        integer	4
+              binop
+                add
+              expr
+                negop_expr
+                  expr
+                    literal
+                      number
+                        integer	5

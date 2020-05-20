@@ -69,8 +69,9 @@ start
                   
           stmt
             assign_stmt
-              varname	self
-              varname	x
+              identifr
+                varname	self
+                varname	x
               expr
                 var_expr
                   identifr
@@ -79,8 +80,9 @@ start
         
           stmt
             assign_stmt
-              varname	self
-              varname	y
+              identifr
+                varname	self
+                varname	y
               expr
                 var_expr
                   identifr
@@ -89,8 +91,9 @@ start
         
           stmt
             assign_stmt
-              varname	self
-              varname	width
+              identifr
+                varname	self
+                varname	width
               expr
                 var_expr
                   identifr
@@ -99,8 +102,9 @@ start
         
           stmt
             assign_stmt
-              varname	self
-              varname	height
+              identifr
+                varname	self
+                varname	height
               expr
                 var_expr
                   identifr

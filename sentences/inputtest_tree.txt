@@ -10,7 +10,8 @@ start
           
       stmt
         assign_stmt
-          varname	strin
+          identifr
+            varname	strin
           expr
             call_expr
               identifr

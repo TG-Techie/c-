@@ -212,8 +212,9 @@ start
                           
               stmt
                 assign_stmt
-                  varname	self
-                  varname	_x
+                  identifr
+                    varname	self
+                    varname	_x
                   expr
                     call_expr
                       identifr
@@ -265,8 +266,9 @@ start
                           
               stmt
                 assign_stmt
-                  varname	self
-                  varname	_y
+                  identifr
+                    varname	self
+                    varname	_y
                   expr
                     call_expr
                       identifr
@@ -318,8 +320,9 @@ start
                           
               stmt
                 assign_stmt
-                  varname	self
-                  varname	_width
+                  identifr
+                    varname	self
+                    varname	_width
                   expr
                     call_expr
                       identifr
@@ -371,8 +374,9 @@ start
                           
               stmt
                 assign_stmt
-                  varname	self
-                  varname	_height
+                  identifr
+                    varname	self
+                    varname	_height
                   expr
                     call_expr
                       identifr
@@ -446,25 +450,25 @@ start
                         expr
                           binop_expr
                             expr
+                              var_expr
+                                identifr
+                                  varname	self
+                                  varname	x
+                            binop
+                              add
+                            expr
                               binop_expr
                                 expr
                                   var_expr
                                     identifr
                                       varname	self
-                                      varname	x
-                                binop
-                                  add
-                                expr
-                                  var_expr
-                                    identifr
-                                      varname	self
                                       varname	width
-                            binop
-                              floordiv
-                            expr
-                              literal
-                                number
-                                  integer	2
+                                binop
+                                  floordiv
+                                expr
+                                  literal
+                                    number
+                                      integer	2
                         comma
                         expr
                           binop_expr
