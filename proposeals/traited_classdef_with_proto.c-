@@ -1,15 +1,17 @@
 from math import sin, cos, arctan
 
-proto class PolarCoord contains (flaot theta, float radius): pass
-proto class CartesianCoord contains (int x, int y): pass
-
+rescls PolarCoord contains (float theta, float radius): pass
+rescls class CartesianCoord contains (int x, int y): pass
+ 
 trait polarizable(Self):
-    proto def _to_polar_(Self self) returns CartesianCoord: pass
+    dec _to_polar_(Self self) returns CartesianCoord
 
 trait cartesianable(Self):
-    proto def _to_cartesian_(Self self) returns CartesianCoord: pass
+    res fn _to_cartesian_(Self self) returns CartesianCoord: pass
 
-
+# dec, res, proto
+# resfn, rescls
+# or just precalculate protos
 
 def polar(polarizable inst) returns PolarCoord:
     # using the polar trait as the type means that whatever object is passed

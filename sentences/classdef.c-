@@ -1,13 +1,14 @@
 class Widget contains (
-    int x,
-    int y, # the horizontal and vertical coordinates of the widget
-    int width, int height, # the horizontal and vertical dimentions fothe widget
-    # for later, maybe add kwargs #{strtype: int} kwarg # optional configureation
+    INT x,
+    INT y, # the horizontal and vertical coordinates of the widget
+    INT width, INT height, ### the horizontal and vertical dimentions fothe widget
+    #maybe for later, maybe add kwargs #{strtype: int} kwarg optional configureation
+    ###
 ):
     def place(Widget self):
         pass
 
-    constructor (Widget self, int x, int y, int width, int height):
+    def constructor (Widget self, Int x, Int y, Int width, Int height):
         # documetnation comments go here
         self.x = x
         self.y = y

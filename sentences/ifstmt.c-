@@ -1,6 +1,6 @@
 def block_align_test(): x = 5
 
-def the_question(str prompt) returns bool:
+def the_question(Str prompt) returns Bool:
     rootvar = 1
     if prompt == "blue":
         bluevar = 2
@@ -13,5 +13,5 @@ def the_question(str prompt) returns bool:
 
     return False
 
-def main() returns nonetype:
+def main() returns NoneType:
     answer = 5

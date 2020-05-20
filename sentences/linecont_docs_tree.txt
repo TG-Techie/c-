@@ -1,0 +1,180 @@
+start
+  
+
+  funcdef
+    varname	foo
+    typelist
+    stmt_block
+      
+    
+          
+      stmt
+        assign_stmt
+          varname	x
+          expr
+            binop_expr
+              expr
+                var_expr
+                  identifr
+                    varname	a
+              binop
+                add
+              expr
+                binop_expr
+                  expr
+                    var_expr
+                      identifr
+                        varname	b
+                  binop
+                    add
+                  expr
+                    binop_expr
+                      expr
+                        binop_expr
+                          expr
+                            var_expr
+                              identifr
+                                varname	c
+                          binop
+                            add
+                          expr
+                            var_expr
+                              identifr
+                                varname	d
+                      binop
+                        add
+                      expr
+                        var_expr
+                          identifr
+                            varname	e
+          
+
+
+      
+  funcdef
+    varname	doc0
+    typelist
+      typename
+        int
+      varname	a
+      comma
+      typename
+        int
+      varname	b
+      comma
+      typename
+        int
+      varname	c
+    stmt_block
+      
+    
+          
+      stmt
+        pass_stmt	
+
+
+      
+  funcdef
+    varname	doc0
+    typelist
+      
+    
+          
+      typename
+        int
+      varname	a
+      comma	# this is a docs comment regarding the input a
+    
+      typename
+        int
+      varname	b
+      comma	# this is a docs comment regarding the input b
+    
+      typename
+        int
+      varname	c
+      
+
+      
+    typename
+      int
+    stmt_block
+      
+    
+          
+      stmt
+        pass_stmt	
+
+
+      
+  funcdef
+    varname	doc1
+    typelist
+      
+    
+          
+      typename
+        int
+      varname	a
+      comma
+      typename
+        int
+      varname	b
+      comma	
+    
+      typename
+        int
+      varname	c
+      comma	# this is a docs comment regarding the input c
+    
+      typename
+        int
+      varname	d
+      comma	###
+    this is a multiline doc comment
+    ###
+    
+      typename
+        int
+      varname	e
+      
+
+      
+    stmt_block
+      
+    
+          
+      stmt
+        pass_stmt	
+
+
+      
+  funcdef
+    varname	doc2
+    typelist
+      
+    
+          
+      typename
+        int
+      varname	a
+      comma
+      typename
+        int
+      varname	b
+      comma	
+    
+      typename
+        int
+      varname	c
+      comma	# this is a docs comment regarding the input c
+
+      
+    stmt_block
+      
+    
+          
+      stmt
+        pass_stmt	
+
+      

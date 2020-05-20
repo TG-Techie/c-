@@ -1,0 +1,268 @@
+start
+  
+
+  traitdef
+    Indice
+    traitdef_block
+      
+    
+          
+      funcdec
+        varname	__to_indice__
+        typelist
+          typename
+            selfstype
+          varname	self
+        typename
+          int
+        
+
+
+      
+  traitdef
+    Widget
+    traitdef_block
+      
+
+    
+          
+      funcdec
+        varname	x
+        typelist
+          typename
+            selfstype
+          varname	self
+        typename
+          int
+        
+    
+      funcdec
+        varname	x
+        typelist
+          typename
+            selfstype
+          varname	self
+          comma
+          typename	Intable
+          varname	other
+        
+
+    
+      funcdec
+        varname	y
+        typelist
+          typename
+            selfstype
+          varname	self
+        typename
+          int
+        
+    
+      funcdec
+        varname	y
+        typelist
+          typename
+            selfstype
+          varname	self
+          comma
+          typename	Intable
+          varname	other
+        
+
+    
+      funcdec
+        varname	width
+        typelist
+          typename
+            selfstype
+          varname	self
+        typename
+          int
+        
+    
+      funcdec
+        varname	width
+        typelist
+          typename
+            selfstype
+          varname	self
+          comma
+          typename	Intable
+          varname	other
+        
+
+    
+      funcdec
+        varname	height
+        typelist
+          typename
+            selfstype
+          varname	self
+        typename
+          int
+        
+    
+      funcdec
+        varname	height
+        typelist
+          typename
+            selfstype
+          varname	self
+          comma
+          typename	Intable
+          varname	other
+        
+
+    
+      funcdec
+        varname	place
+        typelist
+          typename
+            selfstype
+          varname	self
+        
+    
+      funcdec
+        varname	pickip
+        typelist
+          typename
+            selfstype
+          varname	self
+        
+
+
+      
+  classdef
+    Button
+    typelist
+      typename
+        int
+      varname	_x
+      comma
+      typename
+        int
+      varname	_y
+      comma
+      typename
+        int
+      varname	_width
+      comma
+      typename
+        int
+      varname	_height
+    class_block
+      
+
+    
+          
+      traitimpl
+        Widget
+        traitimpl_block
+          
+        
+                  
+          funcdef
+            varname	x
+            typelist
+              typename	Button
+              varname	self
+            typename
+              int
+            stmt_block
+              
+            
+                          
+              stmt
+                return_stmt
+                  expr
+                    var_expr
+                      identifr
+                        varname	self
+                        varname	_x
+                  
+
+        
+                      
+          funcdef
+            varname	x
+            typelist
+              typename	Button
+              varname	self
+              comma
+              typename	Intable
+              varname	other
+            stmt_block
+              
+            
+                          
+              stmt
+                assign_stmt
+                  varname	self
+                  varname	_x
+                  expr
+                    funccall_expr
+                      identifr
+                        varname	int
+                      paramlist
+                        expr
+                          var_expr
+                            identifr
+                              varname	other
+                  
+        # also for y
+
+        
+                      
+          funcdef
+            varname	width
+            typelist
+              typename	Button
+              varname	self
+            typename
+              int
+            stmt_block
+              
+            
+                          
+              stmt
+                return_stmt
+                  expr
+                    var_expr
+                      identifr
+                        varname	self
+                        varname	_width
+                  
+
+        
+                      
+          funcdef
+            varname	width
+            typelist
+              typename	Button
+              varname	self
+              comma
+              typename	Intable
+              varname	other
+            stmt_block
+              
+            
+                          
+              stmt
+                assign_stmt
+                  varname	self
+                  varname	_width
+                  expr
+                    funccall_expr
+                      identifr
+                        varname	int
+                      paramlist
+                        expr
+                          var_expr
+                            identifr
+                              varname	other
+                  
+        # also for height
+
+              
+          
+      

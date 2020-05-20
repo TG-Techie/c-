@@ -1,23 +1,32 @@
 // SECTION lark entry point
 //start: (funcdef | classdef | assign_stmt | NEWLINE)*
-start: (funcdef | classdef | stmt | NEWLINE)*
+start: (funcdef | traitdef | classdef | stmt | NEWLINE)*
 
-// SECTION Token defs (exclude indent and dedent)
+//tokens
 
-//symbols
-//"(" : "("
-//")" : ")"
-LBRACK : "["
-RBRACK : "]"
-LBRACE : "{"
-RBRACE : "}"
+TRUE: "True"
+FALSE: "False"
+NONE: "None"
 
-//"."    : "."
-//":"  : ":"
-//"=" : "="
-//","  : ","
+STRING      : /("(?!"").*?(?<!\\)(\\\\)*?"|'(?!'').*?(?<!\\)(\\\\)*?')/i
+LONG_STRING : /(""".*?(?<!\\)(\\\\)*?"""|'''.*?(?<!\\)(\\\\)*?''')/is
 
-// x = <1,2,3>; g = x@1
+DEC_NUMBER  : /[0-9]\d*/i
+HEX_NUMBER  : /0x[\da-f]*/i
+OCT_NUMBER  : /0o[0-7]*/i
+QUAD_NUMBER : /0q[0-3]*/i
+BIN_NUMBER  : /0b[0-1]*/i
+FLOAT_NUMBER: /((\d+\.\d*|\.\d+)(e[-+]?\d+)?|\d+(e[-+]?\d+))/i
+
+TYPENAME: /_*[A-Z][a-zA-Z_0-9]{2,}/
+VARNAME:  /_*[a-z][a-zA-Z_0-9]*/
+
+LONGCOMMENT  : /###[^#]*###/
+BREAKCOMMENT : /##[^#\n]*##/
+LINECOMMENT  : /#[^\n]*/
+COMMENT : LONGCOMMENT | LINECOMMENT | BREAKCOMMENT
+NEWLINE : ( COMMENT? /\r?\n[\t \f]*/ )+
+
 
 binop: bitws_binop | arith_binop | compr_binop | logcl_binop
 logcl_binop : "is" "not" -> isnot   | "is" -> is    | "not" "in" -> notin
@@ -37,64 +46,74 @@ bitws_binop : "&" -> bwand      | "|" -> bwor   | "^" -> bwxor
 uniop       : "not" -> not | "-" -> negate | bwuniop
 bwuniop     : "~" -> bwnot
 
-
-
-// SECTION grammar def
-
-funcdef: "def" name "(" typelist ")" ("returns" typename)? stmt_block
-classdef: "class" TYPENAME ("contains" "(" typelist ")")? class_block
-constrdef: "constructor" "(" typelist ")" stmt_block
-
-
-typelist: (typename name (comma typename name)*)?  comma?
-        | NEWLINE INDENT (typename name (comma typename name)*)?  comma? DEDENT?
-//arglist: (name (comma name)*)? comma?
+typelist: (typename varname (comma typename varname)*)?  comma?
+        | NEWLINE INDENT (typename varname (comma typename varname)*)?  (comma | NEWLINE) DEDENT
+//arglist: (varname (comma varname)*)? comma?
 paramlist: (expr (comma expr)*)? comma?
-comma: "," (COMMENT? NEWLINE)?
+comma: "," COMMENT? NEWLINE?
 
-//stmts: stmt | stmts stmt
+// statement
 stmt: pass_stmt     | del_stmt      | continue_stmt | break_stmt
     | if_stmt       | while_stmt    | count_stmt    | for_stmt
     | return_stmt                   | assign_stmt   | expr_stmt
 
-pass_stmt: PASS NEWLINE
+pass_stmt: "pass" NEWLINE
 continue_stmt: "continue" NEWLINE
 break_stmt: "break" NEWLINE
 expr_stmt: expr NEWLINE
-
 if_stmt : "if" expr stmt_block ("elif" expr stmt_block)* ("else" stmt_block)//? //require else for all ifs (test)
-
-del_stmt : "del" name (comma name)* NEWLINE
-
+del_stmt : "del" varname (comma varname)* NEWLINE
 while_stmt : "while" expr stmt_block
-
-for_stmt   : "for" "each" name "in" expr stmt_block
-
+for_stmt   : "for" "each" varname "in" expr stmt_block
 count_stmt   : "count" (to_pair|from_pair|by_pair)* stmt_block
 to_pair   : "to" expr
 from_pair : "from" expr
 by_pair   : "by" expr
 
-assign_stmt : name("." name)* "=" expr NEWLINE
+assign_stmt : varname("." varname)* "=" expr NEWLINE
 return_stmt : "return" expr NEWLINE | "return" NEWLINE
 
+funcdec  : "dec" ("get" | "set")? varname "(" typelist ")" ("returns" typename)? NEWLINE
 
-stmt_block : ":" NEWLINE INDENT stmt+ DEDENT | ":" stmt
-//func_block : ":" NEWLINE INDENT (funcdef | pass_stmt)+ DEDENT | ":" pass_stmt
-class_block: ":" NEWLINE INDENT (constrdef | funcdef | pass_stmt)* DEDENT | ":" pass_stmt
-//class_block: ":" NEWLINE INDENT (funcdef | constrdef | trait_impl | pass_stmt)* DEDENT | ":" pass_stmt
+funcdef  : "def" ("get" | "set")? varname "(" typelist ")" ("returns" typename)? stmt_block
+classdef : "class" TYPENAME ("contains" "(" typelist ")")? class_block
+         | "class" TYPENAME ("extends" typename "with" "(" typelist ")")? class_block
+traitdef : "trait" TYPENAME traitdef_block
 
-expr           : literal | funccall_expr | methodcall_expr | attrget_expr | name | binop_expr | uniop_expr
-funccall_expr  : name "(" paramlist ")"
-methodcall_expr: expr "." name "(" paramlist ")"
-attrget_expr   : expr "." name
-uniop_expr     : uniop expr
-binop_expr     : expr binop expr
+traitimpl : "trait" TYPENAME traitimpl_block
+
+// block, ie indented sections fo code
+stmt_block  : ":" NEWLINE INDENT stmt+ DEDENT
+            | ":" stmt
+
+class_block : ":" NEWLINE INDENT (funcdef | traitimpl | pass_stmt)+ DEDENT
+            | ":" pass_stmt
+            //| NEWLINE
+
+traitdef_block : ":" NEWLINE INDENT (funcdec | pass_stmt)+ DEDENT
+            | ":" pass_stmt
+
+traitimpl_block : ":" NEWLINE INDENT (funcdef | pass_stmt)+ DEDENT
+            | ":" pass_stmt
+            //| NEWLINE
+
+expr: literal | funccall_expr | var_expr | binop_expr | uniop_expr
+funccall_expr   : identifr "(" paramlist ")" // determine if method or __call__ at model time
+var_expr        : identifr
+uniop_expr      : uniop expr
+binop_expr      : expr binop expr
 
 typename : builtintype | TYPENAME
-name     : VARNAME
+identifr  : varname ("." varname)*  // identifier
+varname  : VARNAME
 
-literal : number | string | bool | none | arraylitrl | dictlitrl
+builtintype: "Int" -> int | "Bool" -> bool | "Str" -> str
+           | "Float" -> float | "NoneType" -> nonestype
+           | "SomeType" -> selfstype | "Self" -> selfstype
+           | "<" typename ">" -> arrtype
+           | "{" typename ":" typename "}" -> maptype
+
+literal : number | string | bool | none | arraylitrl | maplitrl
 
 // SECTION postlex declares and ignores
 number: integer | float
@@ -103,46 +122,14 @@ float: FLOAT_NUMBER
 string: STRING | LONG_STRING
 //string: single_string | double_string //| ling_single_string | long_double_string
 bool: TRUE | FALSE
-pass: PASS
 none: NONE
 arraylitrl: "<" expr ("," expr)* ","? ">"
-dictlitrl: "{" expr ":" expr ("," expr ":" expr)* ","? "}"
-//list: "[" expr ("," expr)* ","? "]"
+maplitrl: "{" expr ":" expr ("," expr ":" expr)* ","? "}"
 
-// Tokens
-builtintype : "int" -> int | "bool" -> bool | "str" -> str
-            | "float" -> float | "nonetype" -> nonetype
-            | "<" typename ">" -> arrtype
-            | "{" typename ":" typename "}" -> dicttype
-TYPENAME    : /_*[A-Z][a-zA-Z_0-9]*/
-VARNAME     : /[a-z_][a-zA-Z_0-9]*/
-
-COMMENT : /###[^#]*###/ | /[c\t]*#[^\n]*/
-NEWLINE : ( /\r?\n[\t ]*/ | COMMENT )+
-// mine NEWLINE: /[\r\n]+[\t ]*/
-
-TRUE: "True"
-FALSE: "False"
-NONE: "None"
-PASS: "pass"
-
-//ADD \() string literals
-//single_string: "\'" ("\\(" expr ")"| _STRINGINNNER) "\'"
-//double_string: "\""  "\""
-//_STRINGINNNER
-STRING      : /("(?!"").*?(?<!\\)(\\\\)*?"|'(?!'').*?(?<!\\)(\\\\)*?')/i
-LONG_STRING : /(""".*?(?<!\\)(\\\\)*?"""|'''.*?(?<!\\)(\\\\)*?''')/is
-
-DEC_NUMBER  : /[0-9]\d*/i
-HEX_NUMBER  : /0x[\da-f]*/i
-OCT_NUMBER  : /0o[0-7]*/i
-QUAD_NUMBER : /0q[0-3]*/i
-BIN_NUMBER  : /0b[0-1]*/i
-FLOAT_NUMBER: /((\d+\.\d*|\.\d+)(e[-+]?\d+)?|\d+(e[-+]?\d+))/i
-//IMAG_NUMBER: /\d+j/i | FLOAT_NUMBER "j"i
 
 %ignore /[\t \f]+/  // WS
-//%ignore /\\[\t \f]*\r?\n/   // LINE_CONT
+%ignore /\\/ NEWLINE  // LINE_CONT
 %ignore COMMENT
 
+// for indenter post processing
 %declare INDENT DEDENT

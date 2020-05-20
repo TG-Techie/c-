@@ -1,0 +1,32 @@
+start
+  funcdef
+    varname	main
+    typelist
+    stmt_block
+      
+    
+          
+      stmt
+        assign_stmt
+          varname	x
+          expr
+            binop_expr
+              expr
+                literal
+                  number
+                    integer	5
+              binop
+                add
+              expr
+                literal
+                  number
+                    integer	7
+          
+    ###
+    y = 5 - 7
+    z = 5 * 7
+    foo = 5 / 7
+    bar = 5 // 7
+    ###
+
+      

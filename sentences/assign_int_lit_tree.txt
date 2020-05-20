@@ -1,0 +1,35 @@
+start
+  funcdef
+    varname	main
+    typelist
+    stmt_block
+      # fofod
+    
+          
+      stmt
+        assign_stmt
+          varname	foo
+          expr
+            literal
+              number
+                integer	5
+          
+    
+      stmt
+        assign_stmt
+          varname	foo
+          expr
+            literal
+              number
+                integer	7
+          
+    
+      stmt
+        assign_stmt
+          varname	foo
+          expr
+            literal
+              string	'teststr'
+          
+
+      

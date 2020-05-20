@@ -1,0 +1,103 @@
+start
+  funcdef
+    varname	addints
+    typelist
+      typename
+        int
+      varname	a
+      comma
+      typename
+        int
+      varname	b
+    typename
+      int
+    stmt_block
+      
+    
+          
+      stmt
+        return_stmt
+          expr
+            literal
+              number
+                integer	5
+          
+
+
+      
+  funcdef
+    varname	addstr
+    typelist
+      typename
+        str
+      varname	a
+      comma
+      typename
+        str
+      varname	b
+    typename
+      str
+    stmt_block
+      
+    
+          
+      stmt
+        assign_stmt
+          varname	baz
+          expr
+            literal
+              number
+                integer	0
+          
+    
+      stmt
+        assign_stmt
+          varname	baz
+          expr
+            literal
+              string	"baz"
+          
+    
+      stmt
+        return_stmt
+          expr
+            var_expr
+              identifr
+                varname	baz
+          
+
+
+      
+  funcdef
+    varname	bar
+    typelist
+      typename	Intable
+      varname	foo
+    typename
+      arrtype
+        typename
+          int
+    stmt_block
+      ##this returns and array of ints##
+    ###
+    this is a multi -line comment
+    ###
+    
+          
+      stmt
+        return_stmt
+          expr
+            literal
+              arraylitrl
+                expr
+                  funccall_expr
+                    identifr
+                      varname	int
+                    paramlist
+                      expr
+                        var_expr
+                          identifr
+                            varname	foo
+          
+
+      

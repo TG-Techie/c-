@@ -1,0 +1,31 @@
+
+def foo():
+    x = a + b\
+        + c + d\
+        + e
+
+def doc0(Int a, Int b, Int c):
+    pass
+
+def doc0(
+    Int a,  # this is a docs comment regarding the input a
+    Int b,  # this is a docs comment regarding the input b
+    Int c
+) returns Int:
+    pass
+
+def doc1(
+    Int a, Int b,
+    Int c, # this is a docs comment regarding the input c
+    Int d, ###
+    this is a multiline doc comment
+    ###
+    Int e
+):
+    pass
+
+def doc2(
+    Int a, Int b,
+    Int c, # this is a docs comment regarding the input c
+):
+    pass

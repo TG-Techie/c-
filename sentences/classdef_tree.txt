@@ -1,0 +1,124 @@
+start
+  classdef
+    Widget
+    typelist
+      
+    
+          
+      typename	INT
+      varname	x
+      comma	
+    
+      typename	INT
+      varname	y
+      comma	# the horizontal and vertical coordinates of the widget
+    
+      typename	INT
+      varname	width
+      comma
+      typename	INT
+      varname	height
+      comma	### the horizontal and vertical dimentions fothe widget
+    #maybe for later, maybe add kwargs #{strtype: int} kwarg optional configureation
+    ###
+
+      
+    class_block
+      
+    
+          
+      funcdef
+        varname	place
+        typelist
+          typename	Widget
+          varname	self
+        stmt_block
+          
+        
+                  
+          stmt
+            pass_stmt	
+
+    
+              
+      funcdef
+        varname	constructor
+        typelist
+          typename	Widget
+          varname	self
+          comma
+          typename
+            int
+          varname	x
+          comma
+          typename
+            int
+          varname	y
+          comma
+          typename
+            int
+          varname	width
+          comma
+          typename
+            int
+          varname	height
+        stmt_block
+          
+        # documetnation comments go here
+        
+                  
+          stmt
+            assign_stmt
+              varname	self
+              varname	x
+              expr
+                var_expr
+                  identifr
+                    varname	x
+              
+        
+          stmt
+            assign_stmt
+              varname	self
+              varname	y
+              expr
+                var_expr
+                  identifr
+                    varname	y
+              
+        
+          stmt
+            assign_stmt
+              varname	self
+              varname	width
+              expr
+                var_expr
+                  identifr
+                    varname	width
+              
+        
+          stmt
+            assign_stmt
+              varname	self
+              varname	height
+              expr
+                var_expr
+                  identifr
+                    varname	height
+              
+
+
+          
+      
+  funcdef
+    varname	foo
+    typelist
+    stmt_block
+      
+    # a function to test the indenting syntax
+    
+          
+      stmt
+        pass_stmt	
+
+      

@@ -1,0 +1,23 @@
+start
+  
+
+  funcdef
+    varname	main
+    typelist
+    stmt_block
+      
+    
+          
+      stmt
+        expr_stmt
+          expr
+            funccall_expr
+              identifr
+                varname	print
+              paramlist
+                expr
+                  literal
+                    string	"can you see me?"
+          
+
+      

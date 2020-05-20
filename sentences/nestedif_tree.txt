@@ -1,0 +1,69 @@
+start
+  funcdef
+    varname	main
+    typelist
+    stmt_block
+      
+     
+           
+      stmt
+        assign_stmt
+          varname	x
+          expr
+            literal
+              string	'5'
+          
+     
+      stmt
+        if_stmt
+          expr
+            binop_expr
+              expr
+                var_expr
+                  identifr
+                    varname	x
+              binop
+                eq
+              expr
+                literal
+                  string	'5'
+          stmt_block
+            
+         
+                     
+            stmt
+              if_stmt
+                expr
+                  literal
+                    bool	True
+                stmt_block
+                  
+             
+                               
+                  stmt
+                    return_stmt	
+         
+                           
+                stmt_block
+                  
+             
+                               
+                  stmt
+                    assign_stmt
+                      varname	x
+                      expr
+                        literal
+                          string	'56'
+                      
+     
+                       
+                 
+          stmt_block
+            
+         
+                     
+            stmt
+              pass_stmt	
+
+            
+      
