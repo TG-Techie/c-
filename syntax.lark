@@ -80,15 +80,16 @@ class_block : ":" NEWLINE INDENT (funcdef | traitimpl | pass_stmt)+ DEDENT
             //| NEWLINE
 
 traitdef_block : ":" NEWLINE INDENT (funcdec | traitdec | pass_stmt)+ DEDENT
-            | ":" pass_stmt
+               | ":" pass_stmt
 
 traitimpl_block : ":" NEWLINE INDENT (funcdef | pass_stmt)+ DEDENT
-            | ":" pass_stmt
+                | ":" pass_stmt
             //| NEWLINE
 
-expr: literal       | call_expr     | var_expr
-    | binop_expr    | uniop_expr    | "(" expr ")"
-    | negop_expr
+expr: literal       | new_expr      | call_expr
+    | var_expr      | binop_expr    | uniop_expr
+    | "(" expr ")"  | negop_expr
+new_expr : typename "(" paramlist ")"
 call_expr   : identifr "(" paramlist ")" // determine if method or __call__ at model time
 var_expr    : identifr
 uniop_expr  : uniop expr
@@ -113,7 +114,7 @@ bitws_binop : "&" -> bwand      | "^" -> bwxor  | "|" -> bwor
 
 uniop : "not" -> not | "~" -> bwnot
 
-typename : builtintype | TYPENAME
+typename : builtintype | (identifr ".")? TYPENAME
 identifr  : varname ("." varname)*  // identifier
 varname  : VARNAME
 
