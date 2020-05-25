@@ -235,11 +235,11 @@ class Scope:
 
 
 class Stmt:
-    def __init__(self, scope, lineno, tree):
+    def __init__(self, scope, lineno):
 
-        self._tree = tree
         self.lineno = lineno
         self.scope = scope
+
 
 
 class StmtBlock:
@@ -252,6 +252,8 @@ class StmtBlock:
         self.scope = Scope(
             outer.space, outer
         )  # make the scope for the indented block (differes from python)
+
+        self.stmts = []
 
 
 class Expr:
@@ -292,3 +294,11 @@ class Attr(Pair):
 
         if outname is None:
             outname = self.name + "_attr"
+
+class Identifier():
+
+    def __(self, scope, lineno, var, attrs):
+        assert isinstance(varm Var), "'var' must be of type 'Var'"
+        assert all(isinstance(attr, Attr) for attr in attrs), f"'attrs' be of type 'list' or of type 'tuple' conatining only objects of type 'Attr'"
+        self.vars = vars
+        self.attrs = attrs
