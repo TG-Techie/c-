@@ -1,0 +1,38 @@
+start
+  funcdef
+    varname	main
+    typelist
+    stmt_block
+      # fofod
+    
+          
+      stmt
+        ident_assign_stmt
+          ident
+            varname	foo
+          expr
+            literal
+              number
+                integer	5
+          
+    
+      stmt
+        ident_assign_stmt
+          ident
+            varname	foo
+          expr
+            literal
+              number
+                integer	7
+          
+    
+      stmt
+        ident_assign_stmt
+          ident
+            varname	foo
+          expr
+            literal
+              string	'teststr'
+          
+
+      

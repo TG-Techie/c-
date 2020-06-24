@@ -1,0 +1,4 @@
+import std
+from std import math
+from std.math import sin as sine_func
+from std.types import Str

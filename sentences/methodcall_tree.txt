@@ -1,0 +1,78 @@
+start
+  
+
+  funcdef
+    varname	addints
+    typelist
+      typeident
+        int
+      varname	a
+      comma
+      typeident
+        int
+      varname	b
+    typeident
+      int
+    stmt_block
+      
+    #x = a.__smoosh__(b, b, 5)
+    
+          
+      stmt
+        return_stmt
+          expr
+            call_expr
+              expr
+                var_expr
+                  ident
+                    varname	a
+                    varname	__add__
+              paramlist
+                expr
+                  var_expr
+                    ident
+                      varname	b
+          
+
+
+      
+  funcdef
+    varname	retint
+    typelist
+    typeident
+      int
+    stmt_block
+      
+    
+          
+      stmt
+        ident_assign_stmt
+          ident
+            varname	a
+          expr
+            literal
+              number
+                integer	100
+          #+ "20"
+    
+      stmt
+        return_stmt
+          expr
+            call_expr
+              expr
+                var_expr
+                  ident
+                    varname	addints
+              paramlist
+                expr
+                  var_expr
+                    ident
+                      varname	a
+                comma
+                expr
+                  literal
+                    number
+                      integer	9999
+          
+
+      

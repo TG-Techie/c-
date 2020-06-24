@@ -1,0 +1,10 @@
+
+def foo() returns <Int>:
+    return <3, 2, 1>
+
+def bar() returns {Str : Int}:
+    return {'a' : 2, 'b' : 7}
+
+def main():
+    foo()
+    bar()

@@ -1,0 +1,4 @@
+def main():
+    x = <1.0, 2.0, 3.0> # make an array of floats
+    y = x[0] # assigns y to the value at index 0
+    x[1] = 6.0 # change value at index 1 to 6.0

@@ -1,0 +1,108 @@
+start
+  funcdef
+    varname	addints
+    typelist
+      typeident
+        int
+      varname	a
+      comma
+      typeident
+        int
+      varname	b
+    typeident
+      int
+    stmt_block
+      
+    
+          
+      stmt
+        return_stmt
+          expr
+            literal
+              number
+                integer	5
+          
+
+
+      
+  funcdef
+    varname	addstr
+    typelist
+      typeident
+        str
+      varname	a
+      comma
+      typeident
+        str
+      varname	b
+    typeident
+      str
+    stmt_block
+      
+    
+          
+      stmt
+        ident_assign_stmt
+          ident
+            varname	baz
+          expr
+            literal
+              number
+                integer	0
+          
+    
+      stmt
+        ident_assign_stmt
+          ident
+            varname	baz
+          expr
+            literal
+              string	"baz"
+          
+    
+      stmt
+        return_stmt
+          expr
+            var_expr
+              ident
+                varname	baz
+          
+
+
+      
+  funcdef
+    varname	bar
+    typelist
+      typeident
+        typename	Intable
+      varname	foo
+    typeident
+      arrtype
+        typeident
+          int
+    stmt_block
+      ##this returns and array of ints##
+    ###
+    this is a multi -line comment
+    ###
+    
+          
+      stmt
+        return_stmt
+          expr
+            literal
+              arraylitrl
+                expr
+                  call_expr
+                    expr
+                      var_expr
+                        ident
+                          varname	int
+                    paramlist
+                      expr
+                        var_expr
+                          ident
+                            varname	foo
+          
+
+      

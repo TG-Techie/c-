@@ -1,0 +1,56 @@
+start
+  
+
+  funcdef
+    varname	main
+    typelist
+    stmt_block
+      
+    
+          
+      stmt
+        ident_assign_stmt
+          ident
+            varname	strin
+          expr
+            call_expr
+              expr
+                var_expr
+                  ident
+                    varname	input
+              paramlist
+                expr
+                  literal
+                    string	"input your name"
+          
+    
+      stmt
+        expr_stmt
+          expr
+            call_expr
+              expr
+                var_expr
+                  ident
+                    varname	print
+              paramlist
+                expr
+                  literal
+                    string	"your name is:"
+          
+    
+      stmt
+        expr_stmt
+          expr
+            call_expr
+              expr
+                var_expr
+                  ident
+                    varname	print
+              paramlist
+                expr
+                  var_expr
+                    ident
+                      varname	strin
+          
+
+      

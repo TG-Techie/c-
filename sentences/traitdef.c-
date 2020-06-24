@@ -1,0 +1,13 @@
+
+trait Printable:
+
+    dec __repr__(Self self) returns Str
+
+class Coord contains (
+    Float x,
+    Float y,
+):
+    trait Printable:
+
+        def __repr__(Coord self) returns Str:
+            return "<Coord x:"+str(self.x)+" y:"+str(self.y)+">"

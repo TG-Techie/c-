@@ -1,0 +1,38 @@
+start
+  import_dec
+    import_aliases
+      import_alias
+        ident
+          varname	std
+    
+
+  import_dec
+    ident
+      varname	std
+    import_aliases
+      import_alias
+        ident
+          varname	math
+    
+
+  import_dec
+    ident
+      varname	std
+      varname	math
+    import_aliases
+      import_alias
+        ident
+          varname	sin
+        varname	sine_func
+    
+
+  import_dec
+    ident
+      varname	std
+      varname	types
+    import_aliases
+      import_alias
+        typeident
+          str
+    
+

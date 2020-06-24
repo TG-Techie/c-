@@ -1,0 +1,181 @@
+start
+  
+
+  funcdef
+    varname	foo
+    typelist
+    stmt_block
+      
+    
+          
+      stmt
+        ident_assign_stmt
+          ident
+            varname	x
+          expr
+            binop_expr
+              expr
+                binop_expr
+                  expr
+                    binop_expr
+                      expr
+                        var_expr
+                          ident
+                            varname	a
+                      binop
+                        add
+                      expr
+                        var_expr
+                          ident
+                            varname	b
+                  binop
+                    add
+                  expr
+                    var_expr
+                      ident
+                        varname	c
+              binop
+                add
+              expr
+                binop_expr
+                  expr
+                    var_expr
+                      ident
+                        varname	d
+                  binop
+                    add
+                  expr
+                    var_expr
+                      ident
+                        varname	e
+          
+
+
+      
+  funcdef
+    varname	doc0
+    typelist
+      typeident
+        int
+      varname	a
+      comma
+      typeident
+        int
+      varname	b
+      comma
+      typeident
+        int
+      varname	c
+    stmt_block
+      
+    
+          
+      stmt
+        pass_stmt	
+
+
+      
+  funcdef
+    varname	doc0
+    typelist
+      
+    
+          
+      typeident
+        int
+      varname	a
+      comma	# this is a docs comment regarding the input a
+    
+      typeident
+        int
+      varname	b
+      comma	# this is a docs comment regarding the input b
+    
+      typeident
+        int
+      varname	c
+      
+
+      
+    typeident
+      int
+    stmt_block
+      
+    
+          
+      stmt
+        pass_stmt	
+
+
+      
+  funcdef
+    varname	doc1
+    typelist
+      
+    
+          
+      typeident
+        int
+      varname	a
+      comma
+      typeident
+        int
+      varname	b
+      comma	
+    
+      typeident
+        int
+      varname	c
+      comma	# this is a docs comment regarding the input c
+    
+      typeident
+        int
+      varname	d
+      comma	###
+    this is a multiline doc comment
+    ###
+    
+      typeident
+        int
+      varname	e
+      
+
+      
+    stmt_block
+      
+    
+          
+      stmt
+        pass_stmt	
+
+
+      
+  funcdef
+    varname	doc2
+    typelist
+      
+    
+          
+      typeident
+        int
+      varname	a
+      comma
+      typeident
+        int
+      varname	b
+      comma	
+    
+      typeident
+        int
+      varname	c
+      comma	# this is a docs comment regarding the input c
+
+      
+    stmt_block
+      
+    
+          
+      stmt
+        pass_stmt	
+
+      

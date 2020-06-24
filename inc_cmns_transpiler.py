@@ -7,7 +7,12 @@ from cmns_model import *
 ######TODO: add traits? get, set,
 
 
-def name_and_line_from_tree(nametree):
+#OPTIMIZE: switch to jai like contexts for memory mamngemnt at a c level.
+#allocatiors are argument based
+
+def name_and_line_from_identifr(nametree):
+    #print("a;fkljbasdflkjansdflkjanskjdfnaksdjfnkj")
+    nametree = nametree.children[0]
     #FIXME: make work for dotting and such
     if len(nametree.children) == 1:
         tok = nametree.children[0]
@@ -43,7 +48,7 @@ def trans_literal(litrl):
 
 def trans_function_call(scope, name, params, lineno):
     func = None
-    for fn in scope.types:
+    for fn in scope.functions:
         if name == fn.name:
             func = fn
             break
@@ -105,22 +110,19 @@ def trans_expr(scope, tree, lineno):
         print(tree.pretty())
         target_expr, nametree, params = tree.children
         params = trans_paramlist(scope, params, lineno)
-        name, namelineno = name_and_line_from_tree(nametree)
+        name, namelineno = name_and_line_from_identifr(nametree)
         print('filtered name', name)
         print('filtered params', params)
         return trans_method_call(scope,
             trans_expr(scope, target_expr, lineno),
-            name,
-            params,
-            lineno
+            name, params, lineno
         )
     elif tree.data == 'funccall_expr':
         nametree, params = tree.children
-        name, lineno = name_and_line_from_tree(nametree)
+        name, lineno = name_and_line_from_identifr(nametree)
         params = trans_paramlist(scope, params, lineno)
         return trans_function_call(scope, name, params, lineno)
-    #else:
-    raise NotImplementedError(f"unimplemented expr '{tree.data}'")
+    raise NotImplementedError(f"line {lineno}: unimplemented expr '{tree.data}'")
 
 def comment(cmnt):
     if enable_comments:
@@ -143,7 +145,7 @@ def trans_stmt(scope, tree, rettype):
         stmtmdl.lineno = lineno_from_newline(newline)
 
         expr = trans_expr(scope, expr, stmtmdl.lineno)
-        varname, lineno = name_and_line_from_tree(nametree)
+        varname, lineno = name_and_line_from_identifr(nametree)
         var = Var(scope, varname, expr.type)
         stmtmdl.lines.append(comment(f"line {lineno}: assign '{varname}'"))
         if var.name in scope:
@@ -202,8 +204,8 @@ def trans_stmt(scope, tree, rettype):
         #FIXME: add line comment in output
         children = stmt.children
         #print(children[0].children[0], children[1].data, children[-1].data)
-        toplines, lineno = trans_stmt_block(scope, children[1], rettype)
-        elselines, elselineno = trans_stmt_block(scope, children[-1], rettype)
+        toplines, lineno, blockscope = trans_stmt_block(scope, children[1], rettype)
+        elselines, elselineno, elsescope = trans_stmt_block(scope, children[-1], rettype)
         topexpr = trans_expr(scope, children[0], lineno)
         if topexpr.type != booltype:
             #FURTURE: use a cast attempt
@@ -217,7 +219,7 @@ def trans_stmt(scope, tree, rettype):
         elifs = children[2:-1]
         while len(elifs):
 
-            eliflines, eliflineno = trans_stmt_block(scope, elifs[1], rettype)
+            eliflines, eliflineno, elifscope = trans_stmt_block(scope, elifs[1], rettype)
             elifexpr = trans_expr(scope, elifs[0], eliflineno)
             #remove first two items form list
             elifs = elifs[2:]
@@ -236,7 +238,7 @@ def trans_stmt(scope, tree, rettype):
         return stmtmdl
     elif stmt.data == 'while_stmt':
         children = stmt.children
-        blocklines, lineno = trans_stmt_block(scope, children[1], rettype)
+        blocklines, lineno, blockscope = trans_stmt_block(scope, children[1], rettype)
         whileexpr = trans_expr(scope, children[0], lineno)
 
         if whileexpr.type != booltype:
@@ -246,6 +248,15 @@ def trans_stmt(scope, tree, rettype):
         stmtmdl.lines.append(f"while (({whileexpr.outstr})->value)"+"{")
         stmtmdl.lines += ['    '+line for line in blocklines]
         stmtmdl.lines.append("}")
+        return stmtmdl
+    elif stmt.data == 'expr_stmt':
+        print(stmt.children)
+        exprtree, newline = stmt.children
+        lineno = lineno_from_newline(newline)
+        expr = trans_expr(scope, exprtree, lineno)
+        print(expr)
+        stmtmdl.lines.append(comment(f"line {lineno}: expression as statement"))
+        stmtmdl.lines.append(expr.outstr + ';')
         return stmtmdl
     elif stmt.data == 'pass_stmt':
         stmtmdl.lines.append(comment(f'line {stmt.children[-1].line}: pass'))
@@ -270,6 +281,11 @@ def trans_stmt(scope, tree, rettype):
         pretty = ''
     raise NotImplementedError(f"unsupported stmt '{stmt.data}' found at newline {lineno}:\n\n\ntree w/ unknown statement:\n{pretty}\nSee above for error")
 
+def trans_class(scope, tree):
+    nametok, typelisttok, clsblock = tree.children
+    name, lineno = name_and_line_from_identifr(nametok)
+    typelist = trans_typelist(typelisttok)
+    raise NotImplementedError("class defniitions are not implemted")
 
 def trans_func(scope, tree, prefix='', prototype = False):
     funcscope = Scope()
@@ -297,7 +313,7 @@ def trans_func(scope, tree, prefix='', prototype = False):
     else:
         lines.append('    '+comment('no arguments passed'))
     lines += ['    '+f"refto({arg.outstr});" for arg in params]
-    blocklines, blocklineno = trans_stmt_block(funcscope, stmt_block, rettype)
+    blocklines, blocklineno, blockscope = trans_stmt_block(funcscope, stmt_block, rettype)
     lines += ['    '+line for line in blocklines]
     #[print(arg.type, arg.outstr) for arg in params]
     if not prototype:
@@ -311,9 +327,10 @@ def trans_func(scope, tree, prefix='', prototype = False):
                 #lines.append('    '+comment("automatically returning none"))
                 #stmtmdl.lines.append(f'anytype retval = refto(nonelitrl);')
                 #lines.append('    '+comment("return type validated at compile time"))
-                for varname, var in funcscope.all:
+                print('funcscope.all', funcscope.all)
+                for varname, var in blockscope.all:
                     #print(varname, var)
-                    stmtmdl.lines.append('    '+f"deref({var.outstr});")
+                    lines.append('    '+f"deref({var.outstr});")
                 lines.append('    '+'_cmns_gc();')
                 #if retexpr is not None:
                 lines.append('    '+f'refreturn(nonelitrl);')
@@ -396,7 +413,7 @@ def trans_stmt_block(scope, tree, rettype):
                 finallineno = newstmt.lineno
                 ls += newstmt.lines
 
-    return ls, lineno
+    return ls, lineno, scope
 
 def trans_module(foo):
     scope = Scope()
@@ -412,8 +429,12 @@ def trans_module(foo):
         elif foo.data == 'funcdef':
             #print('FUNCDEF!')
             func = trans_func(scope, foo)
-            scope.types.append(func)
+            scope.functions.append(func)
             contents.append(func)
+        elif foo.data == 'classdef':
+            cls = trans_class(scope, foo)
+            scope.types.append(cls)
+            contents.append(cls)
         else:
             raise NotImplementedError(f"unsupported sentence '{foo.data}'")
     return contents
@@ -430,7 +451,10 @@ def test():
                 './sentences/ifstmt.c-',
                 './sentences/nestedif.c-',
                 './sentences/whileloop.c-',
-                './sentences/methodcall.c-'
+                './sentences/methodcall.c-',
+                './sentences/printtest.c-',
+                './sentences/inputtest.c-',
+                #'./sentences/classdef.c-',
                 )
     error_paths =  ('./sentences/casterror.c-',
                     )

@@ -1,0 +1,60 @@
+start
+  funcdef
+    varname	main
+    typelist
+    stmt_block
+      
+    
+          
+      stmt
+        ident_assign_stmt
+          ident
+            varname	x
+          expr
+            literal
+              arraylitrl
+                expr
+                  literal
+                    number
+                      float	1.0
+                expr
+                  literal
+                    number
+                      float	2.0
+                expr
+                  literal
+                    number
+                      float	3.0
+          # make an array of floats
+    
+      stmt
+        ident_assign_stmt
+          ident
+            varname	y
+          expr
+            item_get_expr
+              expr
+                var_expr
+                  ident
+                    varname	x
+              expr
+                literal
+                  number
+                    integer	0
+          # assigns y to the value at index 0
+    
+      stmt
+        item_assign_stmt
+          ident
+            varname	x
+          expr
+            literal
+              number
+                integer	1
+          expr
+            literal
+              number
+                float	6.0
+          # change value at index 1 to 6.0
+
+      

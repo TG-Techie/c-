@@ -1,4 +1,4 @@
-def main():
+def main(): # fofod
     foo = 5
     foo = 7
     foo = 'teststr'

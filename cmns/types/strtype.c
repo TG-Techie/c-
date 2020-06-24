@@ -1,1 +1,0 @@
-#include "strtype.h"

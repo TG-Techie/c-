@@ -1,0 +1,74 @@
+start
+  funcdef
+    varname	main
+    typelist
+    stmt_block
+      
+
+    
+          
+      stmt
+        ident_assign_stmt
+          ident
+            varname	x
+          expr
+            literal
+              number
+                integer	1
+          
+    
+      stmt
+        while_stmt
+          expr
+            literal
+              bool	True
+          stmt_block
+            
+        
+                    
+            stmt
+              if_stmt
+                expr
+                  binop_expr
+                    expr
+                      var_expr
+                        ident
+                          varname	x
+                    binop
+                      ls
+                    expr
+                      literal
+                        number
+                          integer	10
+                stmt_block
+                  
+            
+                              
+                  stmt
+                    ident_assign_stmt
+                      ident
+                        varname	x
+                      expr
+                        binop_expr
+                          expr
+                            var_expr
+                              ident
+                                varname	x
+                          binop
+                            add
+                          expr
+                            literal
+                              number
+                                integer	1
+                      
+            
+                  stmt
+                    continue_stmt	
+        
+                          
+                stmt_block
+                  stmt
+                    break_stmt	
+
+            
+      

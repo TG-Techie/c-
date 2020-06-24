@@ -1,7 +1,13 @@
-def addints(int a, int b) returns int:
+def addints(Int a, Int b) returns Int:
     return 5
 
-def addstr(str a, str b) returns str:
+def addstr(Str a, Str b) returns Str:
     baz = 0
     baz = "baz"
     return baz
+
+def bar(Intable foo) returns <Int>: ##this returns and array of ints##
+    ###
+    this is a multi -line comment
+    ###
+    return <int(foo)>

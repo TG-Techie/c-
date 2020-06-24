@@ -1,0 +1,60 @@
+from math import sin, cos, arctan
+
+class PolarCoord contains (
+    float theta, # the angle around the unit circle
+    float radius, # the distance from the center of the origin cirle
+    ): pass
+
+class CartesianCoord contains (
+    float x, # a horizontal location relative to the origin
+    float y, # a horizontal location relative to the origin
+    ): pass
+    # we will leave this constructor to the default one
+
+trait polarizable(Self):
+    # proto may not be needed ? but makes it more clear
+    proto def _to_polar_(Self self) returns CartesianCoord: pass
+
+trait cartesianable(Self):
+    proto def _to_cartesian_(Self self) returns CartesianCoord: pass
+
+
+def polar(polarizable inst) returns PolarCoord:
+    # using the polar trait as the type means that whatever object is passed
+    # must have the polar trait
+    return inst._to_polar_()
+
+def cartesian(cartesianable inst) returns CartesianCoord:
+    return inst._to_cartesian_()
+
+
+# in this proposal you can implemtn more on a class if it is
+#   already defined, that way prototypes need not exits
+class PolarCoord: # re-enters PolarCoord class's anemspace
+
+    constructor (PolarCoord self, float theta, float radius):
+        # documetnation comments go here
+        self.theta = theta
+        self.radius = radius
+
+    trait polarizable(PolarCoord):
+        def _to_polar_(PolarCoord self) returns CartesianCoord:
+            return PolarCoord(self.theta, self.radius)
+
+    trait cartesianable(PolarCoord):
+        def _to_cartesian_(PolarCoord) returns CartesianCoord:
+            x = self.radius * cos(self.theta)
+            y = self.radius * sin(self.theta)
+            return CartesianCoord(x, y)
+
+class CartesianCoord:
+
+    trait polarizable(CartesianCoord):
+        def _to_polar_(CartesianCoord self) returns PolarCoord:
+            theta = arctan(self.y / self.x)
+            radius = sqrt(self.y**2 + self.x**2)
+            return PolarCoord(theta, radius)
+
+    trait cartesianable(CartesianCoord):
+        def _to_cartesian_(CartesianCoord self) returna CartesianCoord:
+            return CartesianCoord(self.x, self.y)

@@ -1,0 +1,149 @@
+start
+  funcdef
+    varname	block_align_test
+    typelist
+    stmt_block
+      stmt
+        ident_assign_stmt
+          ident
+            varname	x
+          expr
+            literal
+              number
+                integer	5
+          
+
+
+  funcdef
+    varname	the_question
+    typelist
+      typeident
+        str
+      varname	prompt
+    typeident
+      bool
+    stmt_block
+      
+    
+          
+      stmt
+        ident_assign_stmt
+          ident
+            varname	rootvar
+          expr
+            literal
+              number
+                integer	1
+          
+    
+      stmt
+        if_stmt
+          expr
+            binop_expr
+              expr
+                var_expr
+                  ident
+                    varname	prompt
+              binop
+                eq
+              expr
+                literal
+                  string	"blue"
+          stmt_block
+            
+        
+                    
+            stmt
+              ident_assign_stmt
+                ident
+                  varname	bluevar
+                expr
+                  literal
+                    number
+                      integer	2
+                
+        
+            stmt
+              return_stmt
+                expr
+                  literal
+                    bool	True
+                
+    
+                
+          expr
+            binop_expr
+              expr
+                var_expr
+                  ident
+                    varname	prompt
+              binop
+                eq
+              expr
+                literal
+                  string	"red"
+          stmt_block
+            
+        
+                    
+            stmt
+              ident_assign_stmt
+                ident
+                  varname	redvar
+                expr
+                  literal
+                    number
+                      integer	3
+                
+        
+            stmt
+              ident_assign_stmt
+                ident
+                  varname	redvar
+                expr
+                  literal
+                    string	"3"
+                ###implicit cast###
+        
+            stmt
+              return_stmt
+                expr
+                  literal
+                    bool	True
+                
+    
+                
+          stmt_block
+            stmt
+              pass_stmt	
+
+    
+      stmt
+        return_stmt
+          expr
+            literal
+              bool	False
+          
+
+
+      
+  funcdef
+    varname	main
+    typelist
+    typeident
+      nonetype
+    stmt_block
+      
+    
+          
+      stmt
+        ident_assign_stmt
+          ident
+            varname	answer
+          expr
+            literal
+              number
+                integer	5
+          
+
+      

@@ -1,0 +1,219 @@
+start
+  
+
+  traitdef
+    typename	Widget
+    traitdef_block
+      
+
+    
+          
+      funcdec
+        get
+        varname	base
+        typelist
+          typeident
+            selftype
+          varname	self
+        typeident
+          typename	_WidgetBase
+        
+
+    
+      funcdef
+        get
+        varname	x
+        typelist
+          typeident
+            selftype
+          varname	self
+        typeident
+          int
+        stmt_block
+          
+        
+                  
+          stmt
+            return_stmt
+              expr
+                var_expr
+                  ident
+                    varname	self
+                    varname	base
+                    varname	x
+              
+
+    
+              
+      funcdef
+        get
+        varname	y
+        typelist
+          typeident
+            selftype
+          varname	self
+        typeident
+          int
+        stmt_block
+          
+        
+                  
+          stmt
+            return_stmt
+              expr
+                var_expr
+                  ident
+                    varname	self
+                    varname	base
+                    varname	y
+              
+
+    
+              
+      funcdef
+        get
+        varname	width
+        typelist
+          typeident
+            selftype
+          varname	self
+        typeident
+          int
+        stmt_block
+          
+        
+                  
+          stmt
+            return_stmt
+              expr
+                var_expr
+                  ident
+                    varname	self
+                    varname	base
+                    varname	width
+              
+
+    
+              
+      funcdef
+        get
+        varname	height
+        typelist
+          typeident
+            selftype
+          varname	self
+        typeident
+          int
+        stmt_block
+          
+        
+                  
+          stmt
+            return_stmt
+              expr
+                var_expr
+                  ident
+                    varname	self
+                    varname	base
+                    varname	height
+              
+
+
+          
+      
+  classdef
+    typename	_WidgetBase
+    typelist
+      
+    
+          
+      typeident
+        int
+      varname	x
+      comma
+      typeident
+        int
+      varname	y
+      comma	
+    
+      typeident
+        int
+      varname	width
+      comma
+      typeident
+        int
+      varname	height
+      comma	
+    
+      typeident
+        bool
+      varname	on_screen
+      
+
+      
+    class_block
+      pass_stmt	
+
+
+
+  classdef
+    typename	Button
+    typelist
+      
+    
+          
+      typeident
+        int
+      varname	x
+      comma	
+    
+      typeident
+        int
+      varname	y
+      comma	# the horizontal and vertical coordinates of the widget
+    
+      typeident
+        int
+      varname	width
+      comma
+      typeident
+        int
+      varname	height
+      comma	### the horizontal and vertical dimentions fothe widget
+    #maybe for later, maybe add kwargs #{strtype: int} kwarg optional configureation
+    ###
+
+      
+    class_block
+      
+    
+          
+      funcdef
+        varname	place
+        typelist
+          typeident
+            typename	Button
+          varname	self
+        stmt_block
+          
+        
+                  
+          stmt
+            pass_stmt	# actually place it on screen
+
+
+
+          
+      
+  funcdef
+    varname	foo
+    typelist
+    stmt_block
+      
+    # a function to test the indenting syntax
+    
+          
+      stmt
+        pass_stmt	
+
+      

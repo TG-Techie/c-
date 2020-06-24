@@ -1,0 +1,118 @@
+start
+  
+
+  traitdef
+    typename	Printable
+    traitdef_block
+      
+
+    
+          
+      funcdec
+        varname	__repr__
+        typelist
+          typeident
+            selftype
+          varname	self
+        typeident
+          str
+        
+
+
+      
+  classdef
+    typename	Coord
+    typelist
+      
+    
+          
+      typeident
+        float
+      varname	x
+      comma	
+    
+      typeident
+        float
+      varname	y
+      comma	
+
+      
+    class_block
+      
+    
+          
+      traitimpl
+        typename	Printable
+        traitimpl_block
+          
+
+        
+                  
+          funcdef
+            varname	__repr__
+            typelist
+              typeident
+                typename	Coord
+              varname	self
+            typeident
+              str
+            stmt_block
+              
+            
+                          
+              stmt
+                return_stmt
+                  expr
+                    binop_expr
+                      expr
+                        binop_expr
+                          expr
+                            call_expr
+                              expr
+                                binop_expr
+                                  expr
+                                    literal
+                                      string	"<Coord x:"
+                                  binop
+                                    add
+                                  expr
+                                    var_expr
+                                      ident
+                                        varname	str
+                              paramlist
+                                expr
+                                  var_expr
+                                    ident
+                                      varname	self
+                                      varname	x
+                          binop
+                            add
+                          expr
+                            literal
+                              string	" y:"
+                      binop
+                        add
+                      expr
+                        binop_expr
+                          expr
+                            call_expr
+                              expr
+                                var_expr
+                                  ident
+                                    varname	str
+                              paramlist
+                                expr
+                                  var_expr
+                                    ident
+                                      varname	self
+                                      varname	y
+                          binop
+                            add
+                          expr
+                            literal
+                              string	">"
+                  
+
+              
+          
+      

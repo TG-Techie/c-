@@ -1,0 +1,37 @@
+
+trait Widget:
+
+    dec get base (Self self) returns WidgetBase;
+
+    def get x (Self self) returns Int:
+        return self.base.x
+
+    def get y (Self self) returns Int:
+        return self.base.y
+
+    def get width (Self self) returns Int:
+        return self.base.width
+
+    def get height (Self self) returns Int:
+        return self.base.height
+
+class WidgetBase contains (
+    Int x,
+    Int y, # the horizontal and vertical coordinates of the widget
+    Int width, Int height, ### the horizontal and vertical dimentions fothe widget
+    #maybe for later, maybe add kwargs #{strtype: int} kwarg optional configureation
+    ###
+    Bool on_screen
+): pass
+
+
+class Button contains (
+    WidgetBase base,
+):
+    def place(Button self):
+        pass # actually place it on screen
+
+
+def foo():
+    # a function to test the indenting syntax
+    pass
