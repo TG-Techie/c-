@@ -2,6 +2,10 @@ from lark.tree import Tree
 from lark import Token
 from cmns_parse import parse
 
+def model_module(tree):
+    for item in tree.children:
+        print(item.data)
+
 def test():
     """
     desc: a test of the transpiler on a bunch of sentences;
@@ -21,7 +25,7 @@ def test():
                 './sentences/traitdef.c-',
                 './sentences/itemized.c-',
                 './sentences/comptypes.c-',
-                './sentences/imports.c-',
+                #'./sentences/imports.c-',
                 )
     error_paths =  ('./sentences/casterror.c-',
                     )
@@ -41,6 +45,11 @@ def test():
             with open(path.replace('.c-', '_tree.txt'), 'w') as file:
                 file.truncate(0)
                 file.write(tree.pretty())
+                try:
+                    model_module(tree)
+                except:
+                    print(f"error modeling module {path}")
+                    raise
 
 
 if __name__ == '__main__':

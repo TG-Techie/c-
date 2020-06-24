@@ -16,7 +16,7 @@ start
             selftype
           varname	self
         typeident
-          typename	_WidgetBase
+          typename	WidgetBase
         
 
     
@@ -122,42 +122,7 @@ start
           
       
   classdef
-    typename	_WidgetBase
-    typelist
-      
-    
-          
-      typeident
-        int
-      varname	x
-      comma
-      typeident
-        int
-      varname	y
-      comma	
-    
-      typeident
-        int
-      varname	width
-      comma
-      typeident
-        int
-      varname	height
-      comma	
-    
-      typeident
-        bool
-      varname	on_screen
-      
-
-      
-    class_block
-      pass_stmt	
-
-
-
-  classdef
-    typename	Button
+    typename	WidgetBase
     typelist
       
     
@@ -182,6 +147,28 @@ start
       comma	### the horizontal and vertical dimentions fothe widget
     #maybe for later, maybe add kwargs #{strtype: int} kwarg optional configureation
     ###
+    
+      typeident
+        bool
+      varname	on_screen
+      
+
+      
+    class_block
+      pass_stmt	
+
+
+
+  classdef
+    typename	Button
+    typelist
+      
+    
+          
+      typeident
+        typename	WidgetBase
+      varname	base
+      comma	
 
       
     class_block

@@ -9,7 +9,7 @@ start
     
           
       funcdec
-        varname	__repr__
+        varname	__display__
         typelist
           typeident
             selftype
@@ -49,7 +49,7 @@ start
         
                   
           funcdef
-            varname	__repr__
+            varname	__display__
             typelist
               typeident
                 typename	Coord
@@ -65,52 +65,52 @@ start
                   expr
                     binop_expr
                       expr
-                        binop_expr
+                        call_expr
                           expr
-                            call_expr
+                            binop_expr
+                              expr
+                                literal
+                                  string	"<Coord x:"
+                              binop
+                                add
                               expr
                                 binop_expr
                                   expr
-                                    literal
-                                      string	"<Coord x:"
+                                    call_expr
+                                      expr
+                                        var_expr
+                                          ident
+                                            varname	str
+                                      paramlist
+                                        expr
+                                          var_expr
+                                            ident
+                                              varname	self
+                                              varname	x
                                   binop
                                     add
                                   expr
-                                    var_expr
-                                      ident
-                                        varname	str
-                              paramlist
-                                expr
-                                  var_expr
-                                    ident
-                                      varname	self
-                                      varname	x
-                          binop
-                            add
-                          expr
-                            literal
-                              string	" y:"
+                                    binop_expr
+                                      expr
+                                        literal
+                                          string	" y:"
+                                      binop
+                                        add
+                                      expr
+                                        var_expr
+                                          ident
+                                            varname	str
+                          paramlist
+                            expr
+                              var_expr
+                                ident
+                                  varname	self
+                                  varname	y
                       binop
                         add
                       expr
-                        binop_expr
-                          expr
-                            call_expr
-                              expr
-                                var_expr
-                                  ident
-                                    varname	str
-                              paramlist
-                                expr
-                                  var_expr
-                                    ident
-                                      varname	self
-                                      varname	y
-                          binop
-                            add
-                          expr
-                            literal
-                              string	">"
+                        literal
+                          string	">"
                   
 
               
