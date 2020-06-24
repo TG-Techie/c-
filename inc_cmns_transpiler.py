@@ -10,7 +10,9 @@ from cmns_model import *
 #OPTIMIZE: switch to jai like contexts for memory mamngemnt at a c level.
 #allocatiors are argument based
 
-def name_and_line_from_tree(nametree):
+def name_and_line_from_identifr(nametree):
+    #print("a;fkljbasdflkjansdflkjanskjdfnaksdjfnkj")
+    nametree = nametree.children[0]
     #FIXME: make work for dotting and such
     if len(nametree.children) == 1:
         tok = nametree.children[0]
@@ -108,7 +110,7 @@ def trans_expr(scope, tree, lineno):
         print(tree.pretty())
         target_expr, nametree, params = tree.children
         params = trans_paramlist(scope, params, lineno)
-        name, namelineno = name_and_line_from_tree(nametree)
+        name, namelineno = name_and_line_from_identifr(nametree)
         print('filtered name', name)
         print('filtered params', params)
         return trans_method_call(scope,
@@ -117,7 +119,7 @@ def trans_expr(scope, tree, lineno):
         )
     elif tree.data == 'funccall_expr':
         nametree, params = tree.children
-        name, lineno = name_and_line_from_tree(nametree)
+        name, lineno = name_and_line_from_identifr(nametree)
         params = trans_paramlist(scope, params, lineno)
         return trans_function_call(scope, name, params, lineno)
     raise NotImplementedError(f"line {lineno}: unimplemented expr '{tree.data}'")
@@ -143,7 +145,7 @@ def trans_stmt(scope, tree, rettype):
         stmtmdl.lineno = lineno_from_newline(newline)
 
         expr = trans_expr(scope, expr, stmtmdl.lineno)
-        varname, lineno = name_and_line_from_tree(nametree)
+        varname, lineno = name_and_line_from_identifr(nametree)
         var = Var(scope, varname, expr.type)
         stmtmdl.lines.append(comment(f"line {lineno}: assign '{varname}'"))
         if var.name in scope:
@@ -281,7 +283,7 @@ def trans_stmt(scope, tree, rettype):
 
 def trans_class(scope, tree):
     nametok, typelisttok, clsblock = tree.children
-    name, lineno = name_and_line_from_tree(nametok)
+    name, lineno = name_and_line_from_identifr(nametok)
     typelist = trans_typelist(typelisttok)
     raise NotImplementedError("class defniitions are not implemted")
 

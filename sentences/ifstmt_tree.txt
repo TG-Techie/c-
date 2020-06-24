@@ -4,8 +4,8 @@ start
     typelist
     stmt_block
       stmt
-        assign_stmt
-          identifr
+        ident_assign_stmt
+          ident
             varname	x
           expr
             literal
@@ -17,18 +17,18 @@ start
   funcdef
     varname	the_question
     typelist
-      typename
+      typeident
         str
       varname	prompt
-    typename
+    typeident
       bool
     stmt_block
       
     
           
       stmt
-        assign_stmt
-          identifr
+        ident_assign_stmt
+          ident
             varname	rootvar
           expr
             literal
@@ -42,7 +42,7 @@ start
             binop_expr
               expr
                 var_expr
-                  identifr
+                  ident
                     varname	prompt
               binop
                 eq
@@ -54,8 +54,8 @@ start
         
                     
             stmt
-              assign_stmt
-                identifr
+              ident_assign_stmt
+                ident
                   varname	bluevar
                 expr
                   literal
@@ -75,7 +75,7 @@ start
             binop_expr
               expr
                 var_expr
-                  identifr
+                  ident
                     varname	prompt
               binop
                 eq
@@ -87,8 +87,8 @@ start
         
                     
             stmt
-              assign_stmt
-                identifr
+              ident_assign_stmt
+                ident
                   varname	redvar
                 expr
                   literal
@@ -97,8 +97,8 @@ start
                 
         
             stmt
-              assign_stmt
-                identifr
+              ident_assign_stmt
+                ident
                   varname	redvar
                 expr
                   literal
@@ -130,15 +130,15 @@ start
   funcdef
     varname	main
     typelist
-    typename
+    typeident
       nonetype
     stmt_block
       
     
           
       stmt
-        assign_stmt
-          identifr
+        ident_assign_stmt
+          ident
             varname	answer
           expr
             literal

@@ -8,8 +8,8 @@ start
     
           
       stmt
-        assign_stmt
-          identifr
+        ident_assign_stmt
+          ident
             varname	x
           expr
             binop_expr
@@ -26,8 +26,8 @@ start
           
     
       stmt
-        assign_stmt
-          identifr
+        ident_assign_stmt
+          ident
             varname	y
           expr
             binop_expr
@@ -44,8 +44,8 @@ start
           
     
       stmt
-        assign_stmt
-          identifr
+        ident_assign_stmt
+          ident
             varname	z
           expr
             binop_expr
@@ -62,8 +62,8 @@ start
           
     
       stmt
-        assign_stmt
-          identifr
+        ident_assign_stmt
+          ident
             varname	foo
           expr
             binop_expr
@@ -81,34 +81,34 @@ start
     #
     
       stmt
-        assign_stmt
-          identifr
+        ident_assign_stmt
+          ident
             varname	bar
           expr
             binop_expr
-              expr
-                literal
-                  number
-                    integer	5
-              binop
-                add
               expr
                 binop_expr
                   expr
                     literal
                       number
-                        integer	6
+                        integer	5
                   binop
-                    floordiv
+                    add
                   expr
                     literal
                       number
-                        integer	7
+                        integer	6
+              binop
+                floordiv
+              expr
+                literal
+                  number
+                    integer	7
           # 5 + (6 // 7)
     
       stmt
-        assign_stmt
-          identifr
+        ident_assign_stmt
+          ident
             varname	baz
           expr
             binop_expr
@@ -127,8 +127,8 @@ start
           
     
       stmt
-        assign_stmt
-          identifr
+        ident_assign_stmt
+          ident
             varname	qux
           expr
             binop_expr
@@ -145,8 +145,8 @@ start
           
     
       stmt
-        assign_stmt
-          identifr
+        ident_assign_stmt
+          ident
             varname	qoox
           expr
             binop_expr
@@ -167,8 +167,8 @@ start
           
     
       stmt
-        assign_stmt
-          identifr
+        ident_assign_stmt
+          ident
             varname	quuz
           expr
             binop_expr

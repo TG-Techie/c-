@@ -9,13 +9,15 @@ start
     
           
       stmt
-        assign_stmt
-          identifr
+        ident_assign_stmt
+          ident
             varname	strin
           expr
             call_expr
-              identifr
-                varname	input
+              expr
+                var_expr
+                  ident
+                    varname	input
               paramlist
                 expr
                   literal
@@ -26,8 +28,10 @@ start
         expr_stmt
           expr
             call_expr
-              identifr
-                varname	print
+              expr
+                var_expr
+                  ident
+                    varname	print
               paramlist
                 expr
                   literal
@@ -38,12 +42,14 @@ start
         expr_stmt
           expr
             call_expr
-              identifr
-                varname	print
+              expr
+                var_expr
+                  ident
+                    varname	print
               paramlist
                 expr
                   var_expr
-                    identifr
+                    ident
                       varname	strin
           
 

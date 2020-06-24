@@ -1,6 +1,6 @@
 // SECTION lark entry point
 //start: (funcdef | classdef | assign_stmt | NEWLINE)*
-start: (funcdef | traitdef | classdef | stmt | NEWLINE)*
+start: (funcdef | traitdef | classdef | import_dec | stmt | NEWLINE)*
 
 //tokens
 
@@ -27,16 +27,23 @@ LINECOMMENT  : /#[^\n]*/
 COMMENT : LONGCOMMENT | LINECOMMENT | BREAKCOMMENT
 NEWLINE : ( COMMENT? /\r?\n[\t \f]*/ )+
 
-typelist: (typename varname (comma typename varname)*)?  comma?
-        | NEWLINE INDENT (typename varname (comma typename varname)*)?  (comma | NEWLINE) DEDENT
+typelist: (typeident varname (comma typeident varname)*)?  comma?
+        | NEWLINE INDENT (typeident varname (comma typeident varname)*)?  (comma | NEWLINE) DEDENT
 //arglist: (varname (comma varname)*)? comma?
 paramlist: (expr (comma expr)*)? comma?
 comma: "," COMMENT? NEWLINE?
 
+// FIXME: make sure you cannot import <Str>, etc
+import_dec  : "import" (import_aliases | "*") NEWLINE
+            | "from" ident "import" (import_aliases | "*") NEWLINE
+import_aliases  : import_alias ("," import_alias)* ","?
+import_alias : (ident ( "as" varname )?) | (typeident ( "as" typename )?)
+
 // statement
 stmt: pass_stmt     | del_stmt      | continue_stmt | break_stmt
     | if_stmt       | while_stmt    | count_stmt    | for_stmt
-    | return_stmt                   | assign_stmt   | expr_stmt
+    | return_stmt                   | item_assign_stmt
+    | ident_assign_stmt             | expr_stmt
 
 pass_stmt: "pass" NEWLINE
 continue_stmt: "continue" NEWLINE
@@ -55,21 +62,22 @@ to_pair   : "to" expr
 from_pair : "from" expr
 by_pair   : "by" expr
 
-assign_stmt : identifr "=" expr NEWLINE
+ident_assign_stmt : ident "=" expr NEWLINE
+item_assign_stmt : ident "[" expr "]" "=" expr NEWLINE
 return_stmt : "return" expr NEWLINE | "return" NEWLINE
 
-funcdec  : "dec" (get | set)? varname "(" typelist ")" ("returns" typename)? NEWLINE
-funcdef  : "def" (get | set)? varname "(" typelist ")" ("returns" typename)? stmt_block
+funcdec  : "dec" (get | set)? varname "(" typelist ")" ("returns" typeident)? ";"? NEWLINE?
+funcdef  : "def" (get | set)? varname "(" typelist ")" ("returns" typeident)? stmt_block
 
 get: "get"
 set: "set"
 
-classdef : "class" TYPENAME ("contains" "(" typelist ")")? class_block
-         | "class" TYPENAME ("extends" typename "with" "(" typelist ")")? class_block
+classdef : "class" typename ("contains" "(" typelist ")")? class_block
+         | "class" typename ("extends" typeident "with" "(" typelist ")")? class_block
 
-traitdec : "trait" TYPENAME NEWLINE
-traitdef : "trait" TYPENAME traitdef_block
-traitimpl : "trait" TYPENAME traitimpl_block
+traitdec : "trait" typename ";"? NEWLINE?
+traitdef : "trait" typename traitdef_block
+traitimpl : "trait" typename traitimpl_block
 
 // block, ie indented sections fo code
 stmt_block  : ":" NEWLINE INDENT stmt+ DEDENT
@@ -79,19 +87,19 @@ class_block : ":" NEWLINE INDENT (funcdef | traitimpl | pass_stmt)+ DEDENT
             | ":" pass_stmt
             //| NEWLINE
 
-traitdef_block : ":" NEWLINE INDENT (funcdec | traitdec | pass_stmt)+ DEDENT
+traitdef_block : ":" NEWLINE INDENT (funcdec | funcdef | traitdec | pass_stmt)+ DEDENT
                | ":" pass_stmt
 
 traitimpl_block : ":" NEWLINE INDENT (funcdef | pass_stmt)+ DEDENT
                 | ":" pass_stmt
-            //| NEWLINE
 
-expr: literal       | new_expr      | call_expr
-    | var_expr      | binop_expr    | uniop_expr
-    | "(" expr ")"  | negop_expr
-new_expr : typename "(" paramlist ")"
-call_expr   : identifr "(" paramlist ")" // determine if method or __call__ at model time
-var_expr    : identifr
+expr: literal       | item_get_expr | new_expr
+    | call_expr     | var_expr      | binop_expr
+    | uniop_expr    | "(" expr ")"  | negop_expr
+new_expr : typeident "(" paramlist ")"
+call_expr   : expr "(" paramlist ")" // determine if method or __call__ at model time
+var_expr    : ident
+item_get_expr : expr "[" expr "]"
 uniop_expr  : uniop expr
 binop_expr  : expr binop expr
 negop_expr  : "-" expr
@@ -114,16 +122,17 @@ bitws_binop : "&" -> bwand      | "^" -> bwxor  | "|" -> bwor
 
 uniop : "not" -> not | "~" -> bwnot
 
-typename : builtintype | (identifr ".")? TYPENAME
-identifr  : varname ("." varname)*  // identifier
-varname  : VARNAME
+typeident   : builtintype | (ident ".")? typename
+ident       : varname ("." varname)*  // identifier
+typename    : TYPENAME
+varname     : VARNAME
 
 builtintype: "Int" -> int | "Bool" -> bool | "Str" -> str
            | "Float" -> float | "NoneType" -> nonetype
            | "Regex" ->regex
            | "SomeType" -> selftype | "Self" -> selftype
-           | "<" typename ">" -> arrtype
-           | "[" typename ":" typename "]" -> maptype
+           | "<" typeident ">" -> arrtype
+           | "{" typeident ":" typeident "}" -> maptype
 
 literal : number | string | bool | none | arraylitrl | maplitrl
 
@@ -137,7 +146,7 @@ bool: TRUE | FALSE
 none: NONE
 regex: "/"/^((?:(?:[^?+*{}()[\]\\|]+|\\.|\[(?:\^?\\.|\^[^\\]|[^\\^])(?:[^\]\\]+|\\.)*\]|\((?:\?[:=!]|\?<[=!]|\?>)?(?1)??\)|\(\?(?:R|[+-]?\d+)\))(?:(?:[?+*]|\{\d+(?:,\d*)?\})[?+]?)?|\|)*)$/"/"
 arraylitrl: "<" expr ("," expr)* ","? ">"
-maplitrl: "[" expr ":" expr ("," expr ":" expr)* ","? "]"
+maplitrl: "{" expr ":" expr ("," expr ":" expr)* ","? "}"
 
 %ignore /[\t \f]+/  // WS
 %ignore /\\/ NEWLINE  // LINE_CONT

@@ -7,8 +7,8 @@ start
      
            
       stmt
-        assign_stmt
-          identifr
+        ident_assign_stmt
+          ident
             varname	x
           expr
             literal
@@ -21,7 +21,7 @@ start
             binop_expr
               expr
                 var_expr
-                  identifr
+                  ident
                     varname	x
               binop
                 eq
@@ -50,8 +50,8 @@ start
              
                                
                   stmt
-                    assign_stmt
-                      identifr
+                    ident_assign_stmt
+                      ident
                         varname	x
                       expr
                         literal

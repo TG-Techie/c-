@@ -1,0 +1,101 @@
+start
+  
+
+  funcdef
+    varname	foo
+    typelist
+    typeident
+      arrtype
+        typeident
+          int
+    stmt_block
+      
+    
+          
+      stmt
+        return_stmt
+          expr
+            literal
+              arraylitrl
+                expr
+                  literal
+                    number
+                      integer	3
+                expr
+                  literal
+                    number
+                      integer	2
+                expr
+                  literal
+                    number
+                      integer	1
+          
+
+
+      
+  funcdef
+    varname	bar
+    typelist
+    typeident
+      maptype
+        typeident
+          str
+        typeident
+          int
+    stmt_block
+      
+    
+          
+      stmt
+        return_stmt
+          expr
+            literal
+              maplitrl
+                expr
+                  literal
+                    string	'a'
+                expr
+                  literal
+                    number
+                      integer	2
+                expr
+                  literal
+                    string	'b'
+                expr
+                  literal
+                    number
+                      integer	7
+          
+
+
+      
+  funcdef
+    varname	main
+    typelist
+    stmt_block
+      
+    
+          
+      stmt
+        expr_stmt
+          expr
+            call_expr
+              expr
+                var_expr
+                  ident
+                    varname	foo
+              paramlist
+          
+    
+      stmt
+        expr_stmt
+          expr
+            call_expr
+              expr
+                var_expr
+                  ident
+                    varname	bar
+              paramlist
+          
+
+      

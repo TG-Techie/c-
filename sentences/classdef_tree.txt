@@ -1,22 +1,183 @@
 start
+  
+
+  traitdef
+    typename	Widget
+    traitdef_block
+      
+
+    
+          
+      funcdec
+        get
+        varname	base
+        typelist
+          typeident
+            selftype
+          varname	self
+        typeident
+          typename	_WidgetBase
+        
+
+    
+      funcdef
+        get
+        varname	x
+        typelist
+          typeident
+            selftype
+          varname	self
+        typeident
+          int
+        stmt_block
+          
+        
+                  
+          stmt
+            return_stmt
+              expr
+                var_expr
+                  ident
+                    varname	self
+                    varname	base
+                    varname	x
+              
+
+    
+              
+      funcdef
+        get
+        varname	y
+        typelist
+          typeident
+            selftype
+          varname	self
+        typeident
+          int
+        stmt_block
+          
+        
+                  
+          stmt
+            return_stmt
+              expr
+                var_expr
+                  ident
+                    varname	self
+                    varname	base
+                    varname	y
+              
+
+    
+              
+      funcdef
+        get
+        varname	width
+        typelist
+          typeident
+            selftype
+          varname	self
+        typeident
+          int
+        stmt_block
+          
+        
+                  
+          stmt
+            return_stmt
+              expr
+                var_expr
+                  ident
+                    varname	self
+                    varname	base
+                    varname	width
+              
+
+    
+              
+      funcdef
+        get
+        varname	height
+        typelist
+          typeident
+            selftype
+          varname	self
+        typeident
+          int
+        stmt_block
+          
+        
+                  
+          stmt
+            return_stmt
+              expr
+                var_expr
+                  ident
+                    varname	self
+                    varname	base
+                    varname	height
+              
+
+
+          
+      
   classdef
-    Widget
+    typename	_WidgetBase
     typelist
       
     
           
-      typename	INT
+      typeident
+        int
+      varname	x
+      comma
+      typeident
+        int
+      varname	y
+      comma	
+    
+      typeident
+        int
+      varname	width
+      comma
+      typeident
+        int
+      varname	height
+      comma	
+    
+      typeident
+        bool
+      varname	on_screen
+      
+
+      
+    class_block
+      pass_stmt	
+
+
+
+  classdef
+    typename	Button
+    typelist
+      
+    
+          
+      typeident
+        int
       varname	x
       comma	
     
-      typename	INT
+      typeident
+        int
       varname	y
       comma	# the horizontal and vertical coordinates of the widget
     
-      typename	INT
+      typeident
+        int
       varname	width
       comma
-      typename	INT
+      typeident
+        int
       varname	height
       comma	### the horizontal and vertical dimentions fothe widget
     #maybe for later, maybe add kwargs #{strtype: int} kwarg optional configureation
@@ -30,86 +191,16 @@ start
       funcdef
         varname	place
         typelist
-          typename	Widget
+          typeident
+            typename	Button
           varname	self
         stmt_block
           
         
                   
           stmt
-            pass_stmt	
+            pass_stmt	# actually place it on screen
 
-    
-              
-      funcdef
-        varname	constructor
-        typelist
-          typename	Widget
-          varname	self
-          comma
-          typename
-            int
-          varname	x
-          comma
-          typename
-            int
-          varname	y
-          comma
-          typename
-            int
-          varname	width
-          comma
-          typename
-            int
-          varname	height
-        stmt_block
-          
-        # documetnation comments go here
-        
-                  
-          stmt
-            assign_stmt
-              identifr
-                varname	self
-                varname	x
-              expr
-                var_expr
-                  identifr
-                    varname	x
-              
-        
-          stmt
-            assign_stmt
-              identifr
-                varname	self
-                varname	y
-              expr
-                var_expr
-                  identifr
-                    varname	y
-              
-        
-          stmt
-            assign_stmt
-              identifr
-                varname	self
-                varname	width
-              expr
-                var_expr
-                  identifr
-                    varname	width
-              
-        
-          stmt
-            assign_stmt
-              identifr
-                varname	self
-                varname	height
-              expr
-                var_expr
-                  identifr
-                    varname	height
-              
 
 
           

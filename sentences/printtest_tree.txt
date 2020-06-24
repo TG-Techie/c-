@@ -12,8 +12,10 @@ start
         expr_stmt
           expr
             call_expr
-              identifr
-                varname	print
+              expr
+                var_expr
+                  ident
+                    varname	print
               paramlist
                 expr
                   literal

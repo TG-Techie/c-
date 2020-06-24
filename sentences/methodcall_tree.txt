@@ -4,14 +4,14 @@ start
   funcdef
     varname	addints
     typelist
-      typename
+      typeident
         int
       varname	a
       comma
-      typename
+      typeident
         int
       varname	b
-    typename
+    typeident
       int
     stmt_block
       
@@ -22,13 +22,15 @@ start
         return_stmt
           expr
             call_expr
-              identifr
-                varname	a
-                varname	__add__
+              expr
+                var_expr
+                  ident
+                    varname	a
+                    varname	__add__
               paramlist
                 expr
                   var_expr
-                    identifr
+                    ident
                       varname	b
           
 
@@ -37,15 +39,15 @@ start
   funcdef
     varname	retint
     typelist
-    typename
+    typeident
       int
     stmt_block
       
     
           
       stmt
-        assign_stmt
-          identifr
+        ident_assign_stmt
+          ident
             varname	a
           expr
             literal
@@ -57,12 +59,14 @@ start
         return_stmt
           expr
             call_expr
-              identifr
-                varname	addints
+              expr
+                var_expr
+                  ident
+                    varname	addints
               paramlist
                 expr
                   var_expr
-                    identifr
+                    ident
                       varname	a
                 comma
                 expr

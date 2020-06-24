@@ -7,8 +7,8 @@ start
     
           
       stmt
-        assign_stmt
-          identifr
+        ident_assign_stmt
+          ident
             varname	foo
           expr
             literal
@@ -17,8 +17,8 @@ start
           
     
       stmt
-        assign_stmt
-          identifr
+        ident_assign_stmt
+          ident
             varname	foo
           expr
             literal
@@ -27,8 +27,8 @@ start
           
     
       stmt
-        assign_stmt
-          identifr
+        ident_assign_stmt
+          ident
             varname	foo
           expr
             literal

@@ -19,6 +19,9 @@ def test():
                 './sentences/linecont_docs.c-',
                 './sentences/classdef.c-',
                 './sentences/traitdef.c-',
+                './sentences/itemized.c-',
+                './sentences/comptypes.c-',
+                './sentences/imports.c-',
                 )
     error_paths =  ('./sentences/casterror.c-',
                     )

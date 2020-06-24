@@ -2,14 +2,14 @@ start
   funcdef
     varname	addints
     typelist
-      typename
+      typeident
         int
       varname	a
       comma
-      typename
+      typeident
         int
       varname	b
-    typename
+    typeident
       int
     stmt_block
       
@@ -28,22 +28,22 @@ start
   funcdef
     varname	addstr
     typelist
-      typename
+      typeident
         str
       varname	a
       comma
-      typename
+      typeident
         str
       varname	b
-    typename
+    typeident
       str
     stmt_block
       
     
           
       stmt
-        assign_stmt
-          identifr
+        ident_assign_stmt
+          ident
             varname	baz
           expr
             literal
@@ -52,8 +52,8 @@ start
           
     
       stmt
-        assign_stmt
-          identifr
+        ident_assign_stmt
+          ident
             varname	baz
           expr
             literal
@@ -64,7 +64,7 @@ start
         return_stmt
           expr
             var_expr
-              identifr
+              ident
                 varname	baz
           
 
@@ -73,11 +73,12 @@ start
   funcdef
     varname	bar
     typelist
-      typename	Intable
+      typeident
+        typename	Intable
       varname	foo
-    typename
+    typeident
       arrtype
-        typename
+        typeident
           int
     stmt_block
       ##this returns and array of ints##
@@ -93,12 +94,14 @@ start
               arraylitrl
                 expr
                   call_expr
-                    identifr
-                      varname	int
+                    expr
+                      var_expr
+                        ident
+                          varname	int
                     paramlist
                       expr
                         var_expr
-                          identifr
+                          ident
                             varname	foo
           
 

@@ -9,8 +9,8 @@ start
     
           
       stmt
-        assign_stmt
-          identifr
+        ident_assign_stmt
+          ident
             varname	x
           expr
             binop_expr
@@ -20,34 +20,34 @@ start
                     binop_expr
                       expr
                         var_expr
-                          identifr
+                          ident
                             varname	a
                       binop
                         add
                       expr
                         var_expr
-                          identifr
+                          ident
                             varname	b
                   binop
                     add
                   expr
-                    binop_expr
-                      expr
-                        var_expr
-                          identifr
-                            varname	c
-                      binop
-                        add
-                      expr
-                        var_expr
-                          identifr
-                            varname	d
+                    var_expr
+                      ident
+                        varname	c
               binop
                 add
               expr
-                var_expr
-                  identifr
-                    varname	e
+                binop_expr
+                  expr
+                    var_expr
+                      ident
+                        varname	d
+                  binop
+                    add
+                  expr
+                    var_expr
+                      ident
+                        varname	e
           
 
 
@@ -55,15 +55,15 @@ start
   funcdef
     varname	doc0
     typelist
-      typename
+      typeident
         int
       varname	a
       comma
-      typename
+      typeident
         int
       varname	b
       comma
-      typename
+      typeident
         int
       varname	c
     stmt_block
@@ -81,23 +81,23 @@ start
       
     
           
-      typename
+      typeident
         int
       varname	a
       comma	# this is a docs comment regarding the input a
     
-      typename
+      typeident
         int
       varname	b
       comma	# this is a docs comment regarding the input b
     
-      typename
+      typeident
         int
       varname	c
       
 
       
-    typename
+    typeident
       int
     stmt_block
       
@@ -114,28 +114,28 @@ start
       
     
           
-      typename
+      typeident
         int
       varname	a
       comma
-      typename
+      typeident
         int
       varname	b
       comma	
     
-      typename
+      typeident
         int
       varname	c
       comma	# this is a docs comment regarding the input c
     
-      typename
+      typeident
         int
       varname	d
       comma	###
     this is a multiline doc comment
     ###
     
-      typename
+      typeident
         int
       varname	e
       
@@ -156,16 +156,16 @@ start
       
     
           
-      typename
+      typeident
         int
       varname	a
       comma
-      typename
+      typeident
         int
       varname	b
       comma	
     
-      typename
+      typeident
         int
       varname	c
       comma	# this is a docs comment regarding the input c
