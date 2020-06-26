@@ -23,17 +23,11 @@ start
               expr
                 binop_expr
                   expr
-                    var_expr
-                      ident
-                        varname	b
-                  binop
-                    add
-                  expr
                     binop_expr
                       expr
                         var_expr
                           ident
-                            varname	c
+                            varname	b
                       binop
                         add
                       expr
@@ -41,19 +35,25 @@ start
                           expr
                             var_expr
                               ident
-                                varname	d
+                                varname	c
                           binop
                             add
                           expr
                             var_expr
                               ident
-                                varname	e
+                                varname	d
+                  binop
+                    add
+                  expr
+                    var_expr
+                      ident
+                        varname	e
           
 
 
       
   funcdef
-    varname	doc0
+    varname	doc
     typelist
       typeident
         int

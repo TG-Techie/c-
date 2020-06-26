@@ -1,4 +1,4 @@
-from elements import *
+from . elements import *
 
 class CMNSTypeError(CMNSCompileTimeError):
     pass

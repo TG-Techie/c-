@@ -16,12 +16,11 @@ trait Widget:
         return self.base.height
 
 class WidgetBase contains (
+    WidgetBase base, 
     Int x,
     Int y, # the horizontal and vertical coordinates of the widget
-    Int width, Int height, ### the horizontal and vertical dimentions fothe widget
-    #maybe for later, maybe add kwargs #{strtype: int} kwarg optional configureation
-    ###
-    Bool on_screen
+    Int width, Int height, # the horizontal and vertical dimentions fothe widget
+    Bool on_screen,
 ): pass
 
 

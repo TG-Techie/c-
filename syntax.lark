@@ -28,10 +28,12 @@ COMMENT : LONGCOMMENT | LINECOMMENT | BREAKCOMMENT
 NEWLINE : ( COMMENT? /\r?\n[\t \f]*/ )+
 
 typelist: (typeident varname (comma typeident varname)*)?  comma?
-        | NEWLINE INDENT (typeident varname (comma typeident varname)*)?  (comma | NEWLINE) DEDENT
+        | (NEWLINE INDENT)? (typeident varname (comma typeident varname)*)?  (comma | NEWLINE)? (DEDENT|INDENT)?
 //arglist: (varname (comma varname)*)? comma?
 paramlist: (expr (comma expr)*)? comma?
-comma: "," COMMENT? NEWLINE?
+//comma: "," COMMENT? NEWLINE?
+comma: "," NEWLINE?
+//comma: "," COMMENT? "\r"? "\n"?
 
 // FIXME: make sure you cannot import <Str>, etc
 import_dec  : "import" (import_aliases | "*") NEWLINE
@@ -73,30 +75,31 @@ get: "get"
 set: "set"
 
 classdef : "class" typename ("contains" "(" typelist ")")? class_block
-         | "class" typename ("extends" typeident "with" "(" typelist ")")? class_block
+         | "subclass" typename ("from" typeident "with" "(" typelist ")")? class_block
 
-traitdec : "trait" typename ";"? NEWLINE?
+traitdec : "trait" typename ";"? NEWLINE
 traitdef : "trait" typename traitdef_block
 traitimpl : "trait" typename traitimpl_block
 
 // block, ie indented sections fo code
-stmt_block  : ":" NEWLINE INDENT stmt+ DEDENT
+stmt_block  : ":" NEWLINE (INDENT|DEDENT) stmt+ DEDENT
             | ":" stmt
 
-class_block : ":" NEWLINE INDENT (funcdef | traitimpl | pass_stmt)+ DEDENT
+class_block : ":" NEWLINE (INDENT|DEDENT) (funcdef | traitimpl | pass_stmt)+ DEDENT
             | ":" pass_stmt
             //| NEWLINE
 
-traitdef_block : ":" NEWLINE INDENT (funcdec | funcdef | traitdec | pass_stmt)+ DEDENT
+traitdef_block : ":" NEWLINE (INDENT|DEDENT) (funcdec | funcdef | traitdec | pass_stmt)+ DEDENT
                | ":" pass_stmt
 
-traitimpl_block : ":" NEWLINE INDENT (funcdef | pass_stmt)+ DEDENT
+traitimpl_block : ":" NEWLINE (INDENT|DEDENT) (funcdef | pass_stmt)+ DEDENT
                 | ":" pass_stmt
 
-expr: literal       | item_get_expr | new_expr
+expr: literal       | attr_expr     | item_get_expr | new_expr
     | call_expr     | var_expr      | binop_expr
     | uniop_expr    | "(" expr ")"  | negop_expr
 new_expr : typeident "(" paramlist ")"
+attr_expr   : expr "." ident
 call_expr   : expr "(" paramlist ")" // determine if method or __call__ at model time
 var_expr    : ident
 item_get_expr : expr "[" expr "]"
@@ -122,8 +125,8 @@ bitws_binop : "&" -> bwand      | "^" -> bwxor  | "|" -> bwor
 
 uniop : "not" -> not | "~" -> bwnot
 
-typeident   : builtintype | (ident ".")? typename
-ident       : varname ("." varname)*  // identifier
+typeident   : builtintype | (ident ".")* typename
+ident       : varname //("." varname)*  // identifier
 typename    : TYPENAME
 varname     : VARNAME
 

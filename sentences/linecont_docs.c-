@@ -4,7 +4,7 @@ def foo():
         + c + d\
         + e
 
-def doc0(Int a, Int b, Int c):
+def doc(Int a, Int b, Int c):
     pass
 
 def doc0(

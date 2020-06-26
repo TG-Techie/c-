@@ -1,0 +1,16 @@
+
+class Point contains (
+    Float x,
+    Float y,
+        ):
+    def scale(Self self, Float factor) returns Point:
+        return Point(self.x * factor, self.y * factor)
+
+    def foo(
+        Self self,
+        Int x,
+        Int y
+    ) returns Int:
+        return fiz(y, x)
+
+def fiz(Int x, Int y): return 5

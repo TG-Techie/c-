@@ -1,0 +1,17 @@
+## Immediate things to do:
+- Convert `lineno` arguments to class that contains file path,
+    line number, and maybe column number, along with other sanitization info
+- add subclassing
+
+## Longer term things:
+- make atom syntax highlighting
+- make `cmns` python file to act as compiler for the terminal. look into the click module
+    for the cli. but don't to be limited to it as it does some odd
+    directory scoping stuff. (talk to TG-Techie about behavior if havn't already)
+
+## language features to think about:
+- adding generic in a sensible syntax / application
+
+
+## Logged Things finished:
+-

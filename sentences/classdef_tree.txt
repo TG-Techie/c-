@@ -36,10 +36,16 @@ start
           stmt
             return_stmt
               expr
-                var_expr
+                attr_expr
+                  expr
+                    attr_expr
+                      expr
+                        var_expr
+                          ident
+                            varname	self
+                      ident
+                        varname	base
                   ident
-                    varname	self
-                    varname	base
                     varname	x
               
 
@@ -61,10 +67,16 @@ start
           stmt
             return_stmt
               expr
-                var_expr
+                attr_expr
+                  expr
+                    attr_expr
+                      expr
+                        var_expr
+                          ident
+                            varname	self
+                      ident
+                        varname	base
                   ident
-                    varname	self
-                    varname	base
                     varname	y
               
 
@@ -86,10 +98,16 @@ start
           stmt
             return_stmt
               expr
-                var_expr
+                attr_expr
+                  expr
+                    attr_expr
+                      expr
+                        var_expr
+                          ident
+                            varname	self
+                      ident
+                        varname	base
                   ident
-                    varname	self
-                    varname	base
                     varname	width
               
 
@@ -111,10 +129,16 @@ start
           stmt
             return_stmt
               expr
-                var_expr
+                attr_expr
+                  expr
+                    attr_expr
+                      expr
+                        var_expr
+                          ident
+                            varname	self
+                      ident
+                        varname	base
                   ident
-                    varname	self
-                    varname	base
                     varname	height
               
 
@@ -127,6 +151,11 @@ start
       
     
           
+      typeident
+        typename	WidgetBase
+      varname	base
+      comma	
+    
       typeident
         int
       varname	x
@@ -144,14 +173,12 @@ start
       typeident
         int
       varname	height
-      comma	### the horizontal and vertical dimentions fothe widget
-    #maybe for later, maybe add kwargs #{strtype: int} kwarg optional configureation
-    ###
+      comma	# the horizontal and vertical dimentions fothe widget
     
       typeident
         bool
       varname	on_screen
-      
+      comma	
 
       
     class_block

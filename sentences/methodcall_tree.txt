@@ -23,9 +23,12 @@ start
           expr
             call_expr
               expr
-                var_expr
+                attr_expr
+                  expr
+                    var_expr
+                      ident
+                        varname	a
                   ident
-                    varname	a
                     varname	__add__
               paramlist
                 expr

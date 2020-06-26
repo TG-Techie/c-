@@ -1,4 +1,4 @@
-from elements import *
+from . elements import *
 from types import *
 
 class PassStmt(Stmt):

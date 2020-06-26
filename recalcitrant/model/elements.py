@@ -6,21 +6,17 @@ class CMNSCompileTimeError(Exception):
         super().__init__(f"line {lineno}: {message}")
 
 
-class CMNSRedefinitionError:
+class CMNSRedefinitionError(CMNSCompileTimeError):
     pass
 
 
-class NameSpace:
+class NameSpace():
     def __init__(self, outer, lineno, name, tree):
         """
         desc:
         """
-        assert isinstance(
-            outer, (NameSpace, NoneType)
-        ), "'outer' must be of type 'NameSpace' or value 'None'"
-        assert (
-            isinstance(name, str) and len(name) and name.isidentifier()
-        ), "'name' must be of type 'str' and length >= 1"
+        assert isinstance(outer, (NameSpace, NoneType)), "'outer' must be of type 'NameSpace' or value 'None'"
+        assert isinstance(name, str) and len(name) and name.isidentifier(), "'name' must be of type 'str' and length >= 1"
 
         self._tree = tree
         self.lineno = lineno
@@ -60,19 +56,15 @@ class NameSpace:
 
 class Function:
     def __init__(self, space, lineno, name, tree, outname=None):
-        assert isinstance(
-            space, (NameSpace, NoneType)
-        ), "'space' must be of type 'NameSpace' or value 'None'"
-        assert (
-            isinstance(name, str) and len(name) and name.isidentifier()
-        ), "'name' must be of type 'str' and length >= 1"
+        assert isinstance(space, (NameSpace, NoneType)), "'space' must be of type 'NameSpace' or value 'None'"
+        assert isinstance(name, str) and len(name) and name.isidentifier(), "'name' must be of type 'str' and length >= 1"
 
         if outname is None:
             outname = f"{space.prefix}_{name}"
 
-        assert (
-            isinstance(outname, str) and len(outname) and outname.isidentifier()
-        ), "'outname' must be of type 'str' and length >= 1"
+        assert isinstance(outname, str), f"argument 'outname' must be of type 'str', got type '{type(outname).__name__}'"
+        assert len(outname), f"argument 'outname' must be of length >= 1, got length '{len(outname)}'"
+        assert outname.isidentifier(), f"argument 'outname' must be of an identifier"
 
         self._tree = tree
         self.lineno = lineno
@@ -119,10 +111,6 @@ class Type(NameSpace):
     # change add_funtion into add_method
     add_method = NameSpace.add_function
 
-    @property
-    def add_function(self, *args, **kwargs):
-        raise AttributeError("types don't have functions, they have methods")
-
     functions = add_function
 
     # change types to triats
@@ -166,12 +154,6 @@ class Trait(NameSpace):
     # change add_funtion into add_method
     add_method = NameSpace.add_function
 
-    @property
-    def add_function(self, *args, **kwargs):
-        raise AttributeError("types don't have functions, they have methods")
-
-    functions = add_function
-
     # change types to triats
     add_trait = NameSpace.add_type
 
@@ -193,12 +175,8 @@ class Trait(NameSpace):
 
 class Scope:
     def __init__(self, space, outer):
-        assert isinstance(
-            space, (NameSpace, NoneType)
-        ), "'space' must be of type 'NameSpace' or value 'None'"
-        assert isinstance(
-            outer, (Scope, NoneType)
-        ), "'outer' must be of type 'Scope' or value 'None'"
+        assert isinstance(space, (NameSpace, NoneType)), "'space' must be of type 'NameSpace' or value 'None'"
+        assert isinstance(outer, (Scope, NoneType)), "'outer' must be of type 'Scope' or value 'None'"
         if outname is None:
             outname = f"{space.prefix}_{name}"
 
@@ -298,7 +276,7 @@ class Attr(Pair):
 class Identifier():
 
     def __(self, scope, lineno, var, attrs):
-        assert isinstance(varm Var), "'var' must be of type 'Var'"
+        assert isinstance(var, Var), "'var' must be of type 'Var'"
         assert all(isinstance(attr, Attr) for attr in attrs), f"'attrs' be of type 'list' or of type 'tuple' conatining only objects of type 'Attr'"
         self.vars = vars
         self.attrs = attrs
