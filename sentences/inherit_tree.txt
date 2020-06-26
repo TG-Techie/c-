@@ -1,0 +1,196 @@
+start
+  
+
+  classdef
+    typename	XYPoint
+    typelist
+      
+    
+          
+      typeident
+        float
+      varname	x
+      comma	# the horizontal offset from the origin
+    
+      typeident
+        float
+      varname	y
+      comma	# the vertical offset from the origin
+
+      
+    class_block
+      
+    
+          
+      funcdef
+        varname	scale
+        typelist
+          typeident
+            selftype
+          varname	self
+          comma
+          typeident
+            float
+          varname	factor
+        typeident
+          selftype
+        stmt_block
+          
+        
+                  
+          stmt
+            return_stmt
+              expr
+                new_expr
+                  typeident
+                    selftype
+                  paramlist
+                    expr
+                      attr_expr
+                        expr
+                          binop_expr
+                            expr
+                              var_expr
+                                ident
+                                  varname	factor
+                            binop
+                              mul
+                            expr
+                              var_expr
+                                ident
+                                  varname	self
+                        ident
+                          varname	x
+                    comma
+                    expr
+                      attr_expr
+                        expr
+                          binop_expr
+                            expr
+                              var_expr
+                                ident
+                                  varname	factor
+                            binop
+                              mul
+                            expr
+                              var_expr
+                                ident
+                                  varname	self
+                        ident
+                          varname	y
+              
+
+    #def scale(XYPoint self, Float factor):
+        #self.x = factor * self.x
+        #later #self.x *= factor
+        #self.y = factor * self.y
+        #later #self.y *= factor
+
+
+          
+      
+  classdef
+    typename	XYZPoint
+    typeident
+      typename	XYPoint
+    typelist
+      
+    
+          
+      typeident
+        float
+      varname	z
+      
+
+      
+    class_block
+      
+    
+          
+      funcdef
+        varname	scale
+        typelist
+          typeident
+            selftype
+          varname	self
+          comma
+          typeident
+            float
+          varname	factor
+        stmt_block
+          
+        
+                  
+          stmt
+            return_stmt
+              expr
+                new_expr
+                  typeident
+                    selftype
+                  paramlist
+                    expr
+                      attr_expr
+                        expr
+                          binop_expr
+                            expr
+                              var_expr
+                                ident
+                                  varname	factor
+                            binop
+                              mul
+                            expr
+                              var_expr
+                                ident
+                                  varname	self
+                        ident
+                          varname	x
+                    comma
+                    expr
+                      attr_expr
+                        expr
+                          binop_expr
+                            expr
+                              var_expr
+                                ident
+                                  varname	factor
+                            binop
+                              mul
+                            expr
+                              var_expr
+                                ident
+                                  varname	self
+                        ident
+                          varname	y
+                    comma
+                    expr
+                      attr_expr
+                        expr
+                          binop_expr
+                            expr
+                              var_expr
+                                ident
+                                  varname	factor
+                            binop
+                              mul
+                            expr
+                              var_expr
+                                ident
+                                  varname	self
+                        ident
+                          varname	z
+              
+
+
+          
+      
+  classdef
+    typename	FooPoint
+    typeident
+      typename	XYPoint
+    class_block
+      
+    
+          
+      pass_stmt	
+
+      

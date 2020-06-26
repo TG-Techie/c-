@@ -1,0 +1,16 @@
+#from plainclass import XYPoint as PolarCoord
+# but for now:
+
+trait Vectorable:
+
+    dec __to_vector__(SomeType self) returns VectorCoord
+
+class VectorCoord contains (
+    Float length,
+    Float angle,
+):
+    pass
+
+    trait Vectorable:
+        def __to_vector__(Self self) returns VectorCoord:
+            pass

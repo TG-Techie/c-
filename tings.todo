@@ -1,10 +1,10 @@
-## Immediate things to do:
-- Convert `lineno` arguments to class that contains file path,
-    line number, and maybe column number, along with other sanitization info
-- add subclassing
+## __Immediate__ things to do:
+- switch `CMNSModelTimeError` to only take `Location`s not, `int` or `str` or `Location`
+
 
 ## Longer term things:
 - make atom syntax highlighting
+- make a snippets package for atom
 - make `cmns` python file to act as compiler for the terminal. look into the click module
     for the cli. but don't to be limited to it as it does some odd
     directory scoping stuff. (talk to TG-Techie about behavior if havn't already)
@@ -14,4 +14,5 @@
 
 
 ## Logged Things finished:
--
+- __Immediate__: Convert `lineno` arguments to class that contains file path,
+    line number, and maybe column number, along with other sanitization info

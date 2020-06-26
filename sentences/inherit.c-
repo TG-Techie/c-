@@ -1,0 +1,22 @@
+
+class XYPoint contains (
+    Float x, # the horizontal offset from the origin
+    Float y, # the vertical offset from the origin
+):
+    def scale(SomeType self, Float factor) returns SomeType:
+        return SomeType(factor * self.x, factor * self.y)
+
+    #def scale(XYPoint self, Float factor):
+        #self.x = factor * self.x
+        #later #self.x *= factor
+        #self.y = factor * self.y
+        #later #self.y *= factor
+
+class XYZPoint subclasses XYPoint with (
+    Float z
+):
+    def scale(Self self, Float factor):
+        return Self(factor * self.x, factor * self.y, factor * self.z)
+
+class FooPoint subclasses XYPoint:
+    pass

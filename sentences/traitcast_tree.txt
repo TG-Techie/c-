@@ -1,0 +1,73 @@
+start
+  #from plainclass import XYPoint as PolarCoord
+# but for now:
+
+
+  traitdef
+    typename	Vectorable
+    traitdef_block
+      
+
+    
+          
+      funcdec
+        varname	__to_vector__
+        typelist
+          typeident
+            selftype
+          varname	self
+        typeident
+          typename	VectorCoord
+        
+
+
+      
+  classdef
+    typename	VectorCoord
+    typelist
+      
+    
+          
+      typeident
+        float
+      varname	length
+      comma	
+    
+      typeident
+        float
+      varname	angle
+      comma	
+
+      
+    class_block
+      
+    
+          
+      pass_stmt	
+
+    
+      traitimpl
+        typeident
+          typename	Vectorable
+        traitimpl_block
+          
+        
+                  
+          funcdef
+            varname	__to_vector__
+            typelist
+              typeident
+                selftype
+              varname	self
+            typeident
+              typename	VectorCoord
+            stmt_block
+              
+            
+                          
+              stmt
+                pass_stmt	
+
+              
+          
+      

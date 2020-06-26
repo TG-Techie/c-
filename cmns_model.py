@@ -16,22 +16,24 @@ class Location():
 
 class CMNSModelTimeError(Exception):
 
-    def __init__(self, line_info, message):
-        assert isinstance(line_info, (int, Location, Tree)), f"argument 'line_info' must be one of types {', '.join([repr(typ.__name__) for typ in (int, Location)])}, or 'Tree', got type '{type(line_info).__name__}'"
+    def __init__(self, lineinfo, message):
+        assert isinstance(lineinfo, (int, Location, Tree)), f"argument 'lineinfo' must be one of types {', '.join([repr(typ.__name__) for typ in (int, Location)])}, or 'Tree', got type '{type(lineinfo).__name__}'"
 
-        if isinstance(line_info, Tree):
-            line_info = extract_lineno(line_info)
+        if isinstance(lineinfo, Tree):
+            lineinfo = extract_lineno(line_info)
 
-        if line_info is None:
-            line_msg = 'UNKNOW/UNDEFINED'
-
-        elif isinstance(line_info, Location):
-            line_msg = f"in file '{line_info.file}' on line {line_info.lineno}"
+        if lineinfo is None:
+            linemsg = 'UNKNOWN/UNDEFINED'
+        elif isinstance(lineinfo, Location):
+            linemsg = f"in file '{lineinfo.file}' on line {lineinfo.lineno}"
 
         else:
-            line_msg = f"on line {line_info}"
+            linemsg = f"on line {lineinfo}"
 
-        super().__init__(f"{line_msg}, {message}")
+        self.lineinfo = lineinfo
+        self.message = message
+
+        super().__init__(f"{linemsg}, {message}")
 
 class CMNSRedefinitionError(CMNSModelTimeError):
     pass
@@ -40,6 +42,9 @@ class CMNSFeatureError(CMNSModelTimeError):
     pass
 
 class CMNSModelNotImplementedError(CMNSModelTimeError):
+    pass
+
+class CMNSItemNotFound(CMNSModelTimeError):
     pass
 
 # TODO: switch to breadth first? not sure if is a good
@@ -65,8 +70,17 @@ def extract_name(tree):
     else:
         raise CMNSModelNotImplementedError(location, f"unknown name of kind '{tree.data}'")
 
+def find_item_by_ident(location, space, typeident):
+    names = [extract_name(tree) for tree in typeident.children]
+    for name in names:
+        try:
+            next_space = space[name]
+        except:
+            raise CMNSItemNotFound(location, f"unable to find item '{'.'.join(names)}' in '{space.location.file}'")
+        assert isinstance(next_space, NameSpace)
 
 def model_func(path, tree, outer):
+    kind = tree.data
     children = list(tree.children)
 
     location = Location(path, extract_lineno(tree))
@@ -87,12 +101,16 @@ def model_func(path, tree, outer):
     else:
         ret_type = None
 
-    if tree.data == 'funcdef':
-        lineno = extract_lineno(tree)
-        return Func(Location(path, lineno), name, outer, ret_type, children[0])
+
+    if kind == 'funcdef':
+        model_to_make = Func
+    elif kind == 'funcdec':
+        model_to_make = FuncDec
     else:
         raise CMNSModelNotImplementedError(location, f"'{tree.data}' support not yet added")
-    SHIT
+
+    lineno = extract_lineno(tree)
+    return model_to_make(Location(path, lineno), name, outer, ret_type, children[0])
 
 def model_trait(path, tree, outer):
     # TODO: make traits more rigorous
@@ -101,7 +119,7 @@ def model_trait(path, tree, outer):
     location = Location(path, extract_lineno(tree))
 
     if len(children) == 1:
-        name = childen[0]
+        name = children[0]
     elif len(children) == 2:
         name, block = children
     else:
@@ -120,15 +138,24 @@ def model_trait(path, tree, outer):
 
 def model_class(path, tree, outer):
     children = tree.children
+    location = Location(path, extract_lineno(tree))
     if len(children) == 3:
-        typename, typelist, class_block = children
-        superclass = None
-    # TODO: add subclassing to model
-    #elif len(children) == 4:
-    #    typename, base_typename, typelist, class_block = children
-    #    is_subclass = True
+        typename, something, class_block = children
+        if something.data == 'typeident':
+            typelist = None
+            base_typename = something
+        else:
+            typelist = something
+            base_typename = None
+    elif len(children) == 4:
+        typename, base_typename, typelist, class_block = children
     else:
         raise CMNSFeatureError(location, "unsupported class feature found, currently only supporting plain classes w/out subclassing")
+
+    if base_typename is not None:
+        superclass = find_item_by_ident(location, outer, base_typename)
+    else:
+        superclass = None
 
     name = extract_name(typename)
     lineno = extract_lineno(tree)
@@ -136,9 +163,22 @@ def model_class(path, tree, outer):
 
     cls_mdl = CMNSClass(Location(path, lineno), outer, name, superclass, typelist)
 
-    model_item_block(class_block, cls_mdl)
+    model_item_block(path, class_block, cls_mdl)
 
     return cls_mdl
+
+def model_trait_impl(path, tree, outer):
+
+    typeident, block = tree.children
+
+    location = Location(path, extract_lineno(typeident))
+
+    model_item_block(path, block, outer)
+
+    trt_mdl = find_item_by_ident(location, outer, typeident)
+
+    trt_impl = TraitImpl(location, outer, trt_mdl)
+
 
 def model_item_block(path, tree, into):
     location = Location(path, extract_lineno(tree))
@@ -168,7 +208,7 @@ def model_item_block(path, tree, into):
             into[trt_dec.name] = trt_dec
         '''
         elif kind == 'traitimpl':
-            trt_impl = model_trait_impl(item, into)
+            trt_impl = model_trait_impl(path, item, into)
             into[trt_impl.name] = trt_impl
         elif kind == 'pass_stmt':
             pass
@@ -374,7 +414,18 @@ class Module(NameSpace):
 
         super().__init__(location, name, None)
 
+class TraitImpl(Item):
 
+    def __self__(self, location, outer, trait):
+        super().__init__(location, f"[implement '{trait.name}']", outer)
+        assert isinstance(trait, Trait), f"argument 'trait' must be of type 'Trait', got type '{type(trait).__name__}'"
+        self._spec = trait
+
+class Declaration(Item):
+    pass
+
+class FuncDec(Func, Declaration):
+    pass
 
 def test():
     """
@@ -397,6 +448,8 @@ def test():
         #"./sentences/itemized.c-",
         "./sentences/comptypes.c-",
         #'./sentences/imports.c-',
+        "./sentences/inherit.c-",
+        "./sentences/traitcast.c-",
     )
     #paths = ("./sentences/plainclass.c-",)
     error_paths = ("./sentences/casterror.c-",)

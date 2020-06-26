@@ -19,7 +19,7 @@ BIN_NUMBER  : /0b[0-1]*/i
 FLOAT_NUMBER: /((\d+\.\d*|\.\d+)(e[-+]?\d+)?|\d+(e[-+]?\d+))/i
 
 TYPENAME: /_*[A-Z][a-zA-Z_0-9]{2,}/
-VARNAME:  /_*[a-z][a-zA-Z_0-9]*/
+VARNAME:  /_*[a-z][a-z_0-9]*/ ///_*[a-z][a-zA-Z_0-9]*/
 
 LONGCOMMENT  : /###[^#]*###/
 BREAKCOMMENT : /##[^#\n]*##/
@@ -54,18 +54,18 @@ del_stmt : "del" varname (comma varname)* NEWLINE
 
 expr_stmt: expr NEWLINE
 
-if_stmt : "if" expr stmt_block ("elif" expr stmt_block)* ("else" stmt_block)//? //require else for all ifs (test)
+if_stmt : "if" expr stmt_block ("elif" expr stmt_block)* ("else" stmt_block)?
 
 while_stmt : "while" expr stmt_block
-for_stmt   : "for" "each" varname "in" expr stmt_block
+for_stmt   : ("for" "each")("foreach") varname "in" expr stmt_block
 count_stmt   : "count" (to_pair|from_pair|by_pair)* stmt_block
 
 to_pair   : "to" expr
 from_pair : "from" expr
 by_pair   : "by" expr
 
-ident_assign_stmt : ident "=" expr NEWLINE
-item_assign_stmt : ident "[" expr "]" "=" expr NEWLINE
+ident_assign_stmt : (expr ".")? ident "=" expr NEWLINE
+item_assign_stmt : expr "[" expr "]" "=" expr NEWLINE
 return_stmt : "return" expr NEWLINE | "return" NEWLINE
 
 funcdec  : "dec" (get | set)? varname "(" typelist ")" ("returns" typeident)? ";"? NEWLINE?
@@ -75,11 +75,12 @@ get: "get"
 set: "set"
 
 classdef : "class" typename ("contains" "(" typelist ")")? class_block
-         | "subclass" typename ("from" typeident "with" "(" typelist ")")? class_block
+         //| "subclass" typename ("from" typeident "with" "(" typelist ")")? class_block
+         | "class" typename "subclasses" typeident ("with" "(" typelist ")")? class_block
 
 traitdec : "trait" typename ";"? NEWLINE
 traitdef : "trait" typename traitdef_block
-traitimpl : "trait" typename traitimpl_block
+traitimpl : "trait" typeident traitimpl_block
 
 // block, ie indented sections fo code
 stmt_block  : ":" NEWLINE (INDENT|DEDENT) stmt+ DEDENT
