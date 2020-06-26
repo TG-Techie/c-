@@ -3,7 +3,6 @@ from dataclasses import dataclass
 
 from lark.tree import Tree
 from lark import Token
-from cmns_parse import parse
 
 # fight me
 NoneType = type(None)

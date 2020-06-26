@@ -1,7 +1,7 @@
 import os
 
-import cmns_parse as parser
-import cmns_model as space_modelr
+import lexer_parser
+import item_space_modeler
 
 
 def test():
@@ -46,7 +46,7 @@ def test():
 
             # parse the file
             try:
-                tree = parser.parse(text)
+                tree = lexer_parser.parse(text)
                 #print(tree.pretty())
             except:
                 print(f"!parse error while parsing file: '{path}'")
@@ -59,7 +59,7 @@ def test():
 
             try:
                 name = path.split('/')[-1][0:-3]
-                module = space_modelr.model_module(path, tree, name)
+                module = item_space_modeler.model_module(path, tree, name)
             except:
                 print(f"error modeling module {path}")
                 raise
