@@ -45,8 +45,10 @@ start
     
       stmt
         item_assign_stmt
-          ident
-            varname	x
+          expr
+            var_expr
+              ident
+                varname	x
           expr
             literal
               number

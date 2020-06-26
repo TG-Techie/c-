@@ -1,0 +1,2 @@
+<Module item 'assign_int_lit'>
+	<Func item 'main'>

@@ -1,0 +1,4 @@
+<Module item 'funcdef'>
+	<Func item 'addints'>
+	<Func item 'addstr'>
+	<Func item 'bar'>

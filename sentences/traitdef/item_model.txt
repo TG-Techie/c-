@@ -1,0 +1,8 @@
+<Module item 'traitdef'>
+	<Trait item 'Printable'>
+		<FuncDec item '__display__'>
+
+	<CMNSClass item 'Coord'>
+		<Func item '__display__'>
+		<TraitImpl item 'Coord'>
+

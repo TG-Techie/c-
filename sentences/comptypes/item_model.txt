@@ -1,0 +1,4 @@
+<Module item 'comptypes'>
+	<Func item 'foo'>
+	<Func item 'bar'>
+	<Func item 'main'>

@@ -1,3 +1,4 @@
+import os
 from dataclasses import dataclass
 
 from lark.tree import Tree
@@ -71,13 +72,15 @@ def extract_name(tree):
         raise CMNSModelNotImplementedError(location, f"unknown name of kind '{tree.data}'")
 
 def find_item_by_ident(location, space, typeident):
-    names = [extract_name(tree) for tree in typeident.children]
-    for name in names:
+    ident_names = [extract_name(tree) for tree in typeident.children]
+    next = space
+    for name in ident_names:
         try:
-            next_space = space[name]
-        except:
-            raise CMNSItemNotFound(location, f"unable to find item '{'.'.join(names)}' in '{space.location.file}'")
-        assert isinstance(next_space, NameSpace)
+            next = next[name]
+        except KeyError:
+            raise CMNSItemNotFound(location, f"unable to find item '{name}' in '{next}'")
+        assert isinstance(next, NameSpace)
+    return next
 
 def model_func(path, tree, outer):
     kind = tree.data
@@ -100,8 +103,7 @@ def model_func(path, tree, outer):
         ret_type = children.pop(0)
     else:
         ret_type = None
-
-
+    
     if kind == 'funcdef':
         model_to_make = Func
     elif kind == 'funcdec':
@@ -130,7 +132,7 @@ def model_trait(path, tree, outer):
     trt_mdl = Trait(location, name, outer, block)
 
     if kind == 'traitdef':
-        model_item_block(path, block, trt_mdl)
+        model_item_block_into(path, block, trt_mdl)
     elif kind == 'traitdec':
         raise CMNSModelNotImplementedError(location, f"trait decs not yet implemented")
 
@@ -163,7 +165,7 @@ def model_class(path, tree, outer):
 
     cls_mdl = CMNSClass(Location(path, lineno), outer, name, superclass, typelist)
 
-    model_item_block(path, class_block, cls_mdl)
+    model_item_block_into(path, class_block, cls_mdl)
 
     return cls_mdl
 
@@ -173,14 +175,18 @@ def model_trait_impl(path, tree, outer):
 
     location = Location(path, extract_lineno(typeident))
 
-    model_item_block(path, block, outer)
+    model_item_block_into(path, block, outer)
 
-    trt_mdl = find_item_by_ident(location, outer, typeident)
+    space_ouside_of_cls = outer.outer
+
+    trt_mdl = find_item_by_ident(location, space_ouside_of_cls, typeident)
 
     trt_impl = TraitImpl(location, outer, trt_mdl)
 
+    return trt_impl
 
-def model_item_block(path, tree, into):
+
+def model_item_block_into(path, tree, into):
     location = Location(path, extract_lineno(tree))
 
     for item in tree.children:
@@ -221,108 +227,15 @@ def model_module(path, tree, name):
     mod = Module(name, location)
     location.lineno = "'{mod}'"
 
-    model_item_block(path, tree, mod)
+    model_item_block_into(path, tree, mod)
 
-    print(mod)
-
-class Pair():
-
-    def __init__(self, name, type):
-        assert isinstance(name, str)
-        assert isinstance(type, Type)
-        self.name = name
-        self.type = type
-
-    def __iter__(self):
-        return iter((self.name, self.type))
-
-class Var(Pair):
-
-    def __init__(self, scope, *args, **kwargs):
-        self.scope = scope
-        super().__init__(*args, **kwargs)
-        self.outstr = self.name+'_var'
-
-
-class Arg(Pair):
-
-    def __init__(self, scope, *args, **kwargs):
-        self.scope = scope
-        super().__init__(*args, **kwargs)
-        self.outstr = self.name+'_var'
-
-
-class Attr(Pair):
-
-    def __init__(self, *args, **kwargs):
-        super().__init__(*args, **kwargs)
-        self.outstr = self.name+'_attr'
-
-class Expr():
-
-    def __init__(self, lineno, type):
-        self.lineno = lineno
-        self.type = type
-
-    def get_attr(self, name):
-        '''
-        gets either an expression or a bound method w/ self in it
-        '''
-        pass
-
-    def iscallable(self):
-        return '__call__' in self.type
-
-    def call(self):
-        pass
-
-class Litrl(Expr):
-
-    def __init__(self, lineno, prefix, outstr):
-        super().__init__(lineno, prefix)
-        self.outstr = outstr
-
-class TypeList():
-
-    def __init__(self, pairs=None):
-
-        if pairs is None:
-            pairs = {}
-        else:
-            # TODO: ass assert for dict contents
-            assert isinstance(pairs, esc), f"argument 'pairs' must be of type 'esc', got type '{type(pairs).__name__}'"
-
-        self._pairs = pairs # dicts are ordered
-
-    def __iter__(self):
-        return iter(self._pairs.values())
-
-    def __contains__(self, target):
-        if isinstance(target, str):
-            return target in self._pairs
-        elif isinstance(target, pair):
-            tup = tuple(target)
-            return tup in [tuple(pair) for pait in self._pairs]
-        else:
-            raise ValueError("can only check if 'TypeList' contains a variable by c-name")
-
-    def __getitem__(self, name):
-        return self._pairs[name]
-
-    def __setitem__(self, name, var):
-        if name != var.name:
-            raise ValueError(f"key '{name}' does not match the name in the given variable, '{name}' != '{var.name}'")
-        else:
-            self._pairs[name] = var
-
-    def __len__(self):
-        return len(self._pairs)
+    return mod
 
 class Item():
 
     def __init__(self, location, name, outer):
-        assert isinstance(location, Location), f"argument 'location' must be of type 'Location', got type '{type(location).__name__}'"
-        assert isinstance(name, str), f"argument 'name' must be of type 'str', got type '{type(name).__name__}'"
+        assert isinstance(location, Location), f"argument 'location' must be of type 'Location', got type '{type(location).__name__}' from value {location}"
+        assert isinstance(name, str), f"argument 'name' must be of type 'str', got type '{type(name).__name__}' from {name} "
         assert isinstance(outer, (NameSpace, NoneType)), f"argument 'outer' must be one of types {', '.join([repr(typ.__name__) for typ in (NameSpace,)])}, or 'NoneType', got type '{type(tree).__name__}'"
 
         self.location = location
@@ -330,7 +243,10 @@ class Item():
         self.outer = outer
 
     def __str__(self):
-        return f"<{type(self).__name__} '{self.name}'>"
+        return f"<{type(self).__name__} item '{self.name}'>"
+
+    def _layout(self, indent=0):
+        return '\t'*indent + str(self)
 
 class NameSpace(Item):
 
@@ -364,6 +280,12 @@ class NameSpace(Item):
         else:
             return value in self._items
 
+    def _layout(self, indent=0):
+        string = '\t'*indent + str(self) + '\n'
+        for item in self._items.values():
+            string += item._layout(indent=indent+1) + '\n'
+        return string
+
     #def __str__(self):
         #return f"<{type(self).__name__} '{self.name}'>"#": {repr(tuple(self._items.keys()))[1:-1]}"
 
@@ -377,7 +299,7 @@ class Func(Item):
         self._stmt_block_tree = stmt_block_tree
 
 
-    def call(self, params : TypeList):
+    def call(self, params):
         pass
 
 class BoundMethod(Func):
@@ -416,8 +338,8 @@ class Module(NameSpace):
 
 class TraitImpl(Item):
 
-    def __self__(self, location, outer, trait):
-        super().__init__(location, f"[implement '{trait.name}']", outer)
+    def __init__(self, location, outer, trait):
+        super().__init__(location, outer.name, outer)
         assert isinstance(trait, Trait), f"argument 'trait' must be of type 'Trait', got type '{type(trait).__name__}'"
         self._spec = trait
 
@@ -457,24 +379,35 @@ def test():
         print(f"\ntesting: '{path}'")
         with open(path) as file:
             text = file.read()
-            print(text)
+            #print(text)
 
             try:
                 tree = parse(text)
-                print(tree.pretty())
+                #print(tree.pretty())
             except:
                 print(f"!parse error while parsing file: '{path}'")
                 raise
 
-            with open(path.replace(".c-", "_tree.txt"), "w") as file:
+            folder = path.replace('.c-', '')
+
+            if not os.path.exists(folder):
+                    os.makedirs(folder)
+
+            with open(folder+'/token_tree.txt', "w+") as file:
                 file.truncate(0)
                 file.write(tree.pretty())
-                try:
-                    name = path.split('/')[-1][0:-3]
-                    model_module(path, tree, name)
-                except:
-                    print(f"error modeling module {path}")
-                    raise
+
+            try:
+                name = path.split('/')[-1][0:-3]
+                module = model_module(path, tree, name)
+            except:
+                print(f"error modeling module {path}")
+                raise
+
+            with open(folder+'/item_model.txt', "w+") as file:
+                file.truncate(0)
+                file.write(module._layout())
+                print(module._layout())
 
 if __name__ == "__main__":
     test()

@@ -1,0 +1,2 @@
+<Module item 'printtest'>
+	<Func item 'main'>

@@ -1,0 +1,2 @@
+<Module item 'whileloop'>
+	<Func item 'main'>

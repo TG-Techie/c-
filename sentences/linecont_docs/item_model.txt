@@ -1,0 +1,6 @@
+<Module item 'linecont_docs'>
+	<Func item 'foo'>
+	<Func item 'doc'>
+	<Func item 'doc0'>
+	<Func item 'doc1'>
+	<Func item 'doc2'>

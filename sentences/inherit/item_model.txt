@@ -1,0 +1,9 @@
+<Module item 'inherit'>
+	<CMNSClass item 'XYPoint'>
+		<Func item 'scale'>
+
+	<CMNSClass item 'XYZPoint'>
+		<Func item 'scale'>
+
+	<CMNSClass item 'FooPoint'>
+

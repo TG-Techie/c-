@@ -42,7 +42,8 @@ start
     
           
       traitimpl
-        typename	Printable
+        typeident
+          typename	Printable
         traitimpl_block
           
 
@@ -69,12 +70,12 @@ start
                           expr
                             binop_expr
                               expr
-                                literal
-                                  string	"<Coord x:"
-                              binop
-                                add
-                              expr
                                 binop_expr
+                                  expr
+                                    literal
+                                      string	"<Coord x:"
+                                  binop
+                                    add
                                   expr
                                     binop_expr
                                       expr
@@ -97,12 +98,12 @@ start
                                       expr
                                         literal
                                           string	" y:"
-                                  binop
-                                    add
-                                  expr
-                                    var_expr
-                                      ident
-                                        varname	str
+                              binop
+                                add
+                              expr
+                                var_expr
+                                  ident
+                                    varname	str
                           paramlist
                             expr
                               attr_expr
