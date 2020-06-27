@@ -74,7 +74,8 @@ start
     varname	bar
     typelist
       typeident
-        typename	Intable
+        user_type_ident
+          typename	Intable
       varname	foo
     typeident
       arrtype

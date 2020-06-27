@@ -1,4 +1,4 @@
-<ModuleModel item 'ifstmt'>
-    <FuncModel item 'block_align_test'>
-    <FuncModel item 'the_question'>
-    <FuncModel item 'main'>
+<ModuleItem 'ifstmt'>
+    <FuncItem 'block_align_test'>
+    <FuncItem 'the_question'>
+    <FuncItem 'main'>

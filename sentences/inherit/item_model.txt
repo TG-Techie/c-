@@ -1,9 +1,9 @@
-<ModuleModel item 'inherit'>
-    <ClassModel item 'XYPoint'>
-        <FuncModel item 'scale'>
+<ModuleItem 'inherit'>
+    <ClassItem 'XYPoint'>
+        <FuncItem 'scale'>
 
-    <ClassModel item 'XYZPoint'>
-        <FuncModel item 'scale'>
+    <ClassItem 'XYZPoint'>
+        <FuncItem 'scale'>
 
-    <ClassModel item 'FooPoint'>
+    <ClassItem 'FooPoint'>
 

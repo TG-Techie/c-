@@ -1,4 +1,4 @@
-<ModuleModel item 'comptypes'>
-    <FuncModel item 'foo'>
-    <FuncModel item 'bar'>
-    <FuncModel item 'main'>
+<ModuleItem 'comptypes'>
+    <FuncItem 'foo'>
+    <FuncItem 'bar'>
+    <FuncItem 'main'>

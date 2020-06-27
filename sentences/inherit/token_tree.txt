@@ -92,7 +92,8 @@ start
   classdef
     typename	XYZPoint
     typeident
-      typename	XYPoint
+      user_type_ident
+        typename	XYPoint
     typelist
       
     
@@ -186,7 +187,8 @@ start
   classdef
     typename	FooPoint
     typeident
-      typename	XYPoint
+      user_type_ident
+        typename	XYPoint
     class_block
       
     

@@ -1,7 +1,10 @@
 import os
+import sys
+
+sys.path.append(os.path.abspath('.'))
 
 import lexer_parser
-from item_space_models import *
+from itemspaces import *
 
 
 test_files = (
@@ -59,7 +62,7 @@ def test():
 
             try:
                 name = path.split('/')[-1][0:-3]
-                module = ModuleModel.from_tree(path, tree, name)
+                module = ModuleItem.from_tree(path, tree, name)
             except:
                 print(f"error modeling module {path}")
                 raise
@@ -69,5 +72,41 @@ def test():
                 file.write(module._layout())
                 print(module._layout())
 
+def test2():
+    """
+    desc: a test of the transpiler on a bunch of sentences;
+    returns NoneType;
+    """
+
+    global test_files
+
+    # test each file
+    for path in test_files:
+        print(f"\ntesting: '{path}'")
+        with open(path) as file:
+
+            text = file.read()
+
+            # creat target directory for test debug files
+            folder = path.replace('.c-', '')
+            if not os.path.exists(folder):
+                    os.makedirs(folder)
+
+            tree = lexer_parser.parse(text)
+            print('Parsing complete')
+
+            with open(folder+'/token_tree.txt', "w+") as file:
+                file.truncate(0)
+                file.write(tree.pretty())
+
+            name = path.split('/')[-1][0:-3]
+            module = ModuleItem.from_tree(path, tree, name)
+            print('itemization complete')
+
+            with open(folder+'/item_model.txt', "w+") as file:
+                file.truncate(0)
+                file.write(module._layout())
+                print(module._layout())
+
 if __name__ == "__main__":
-    test()
+    test2()

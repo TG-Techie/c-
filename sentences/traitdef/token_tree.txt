@@ -43,7 +43,8 @@ start
           
       traitimpl
         typeident
-          typename	Printable
+          user_type_ident
+            typename	Printable
         traitimpl_block
           
 
@@ -53,7 +54,8 @@ start
             varname	__display__
             typelist
               typeident
-                typename	Coord
+                user_type_ident
+                  typename	Coord
               varname	self
             typeident
               str
@@ -70,40 +72,18 @@ start
                           expr
                             binop_expr
                               expr
-                                literal
-                                  string	"<Coord x:"
-                              binop
-                                add
-                              expr
-                                var_expr
-                                  ident
-                                    varname	str
-                          paramlist
-                            expr
-                              attr_expr
-                                expr
-                                  var_expr
-                                    ident
-                                      varname	self
-                                ident
-                                  varname	x
-                      binop
-                        add
-                      expr
-                        binop_expr
-                          expr
-                            literal
-                              string	" y:"
-                          binop
-                            add
-                          expr
-                            binop_expr
-                              expr
                                 call_expr
                                   expr
-                                    var_expr
-                                      ident
-                                        varname	str
+                                    binop_expr
+                                      expr
+                                        literal
+                                          string	"<Coord x:"
+                                      binop
+                                        add
+                                      expr
+                                        var_expr
+                                          ident
+                                            varname	str
                                   paramlist
                                     expr
                                       attr_expr
@@ -112,12 +92,34 @@ start
                                             ident
                                               varname	self
                                         ident
-                                          varname	y
+                                          varname	x
                               binop
                                 add
                               expr
-                                literal
-                                  string	">"
+                                binop_expr
+                                  expr
+                                    literal
+                                      string	" y:"
+                                  binop
+                                    add
+                                  expr
+                                    var_expr
+                                      ident
+                                        varname	str
+                          paramlist
+                            expr
+                              attr_expr
+                                expr
+                                  var_expr
+                                    ident
+                                      varname	self
+                                ident
+                                  varname	y
+                      binop
+                        add
+                      expr
+                        literal
+                          string	">"
                   
 
               

@@ -1,2 +1,2 @@
-<ModuleModel item 'whileloop'>
-    <FuncModel item 'main'>
+<ModuleItem 'whileloop'>
+    <FuncItem 'main'>

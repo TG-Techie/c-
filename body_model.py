@@ -25,6 +25,23 @@ inverse_binop_methodnames = {
     #'isnot':'__is__'
 }
 
+def _find_item_by_ident(location, outer, typeident):
+
+    # find the root module surounding the given outer item
+    # TODO: rename variables to make more clean
+    mod = outer
+    while mod.outer is not None:
+        mod = mod.outer
+    if not isinstance(mod, ModuleItem):
+        raise CMNSItemNotFound(location, f"found a non-module root, {mod}")
+
+    ident_names = [_extract_name(location.file, tree) for tree in typeident.children]
+
+    item = mod
+    for name in ident_names:
+        item = item[name]
+
+    return item
 
 class Pair():
 
