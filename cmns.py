@@ -3,37 +3,36 @@ import os
 import lexer_parser
 import item_space_modeler
 
+test_files = (
+    "./sentences/assign_int_lit.c-",
+    "./sentences/binop_add.c-",
+    "./sentences/funcdef.c-",
+    "./sentences/ifstmt.c-",
+    "./sentences/nestedif.c-",
+    "./sentences/whileloop.c-",
+    "./sentences/methodcall.c-",
+    "./sentences/printtest.c-",
+    "./sentences/inputtest.c-",
+    "./sentences/linecont_docs.c-",
+    #"./sentences/classdef.c-", # has getters and setters
+    "./sentences/traitdef.c-",
+    "./sentences/itemized.c-",
+    "./sentences/comptypes.c-",
+    #'./sentences/imports.c-', # just not there yet
+    "./sentences/inherit.c-",
+    "./sentences/traitcast.c-",
+)
 
 def test():
     """
     desc: a test of the transpiler on a bunch of sentences;
     returns NoneType;
     """
-    paths = (
-        "./sentences/assign_int_lit.c-",
-        "./sentences/binop_add.c-",
-        "./sentences/funcdef.c-",
-        "./sentences/ifstmt.c-",
-        "./sentences/nestedif.c-",
-        "./sentences/whileloop.c-",
-        "./sentences/methodcall.c-",
-        "./sentences/printtest.c-",
-        "./sentences/inputtest.c-",
-        "./sentences/linecont_docs.c-",
-        #"./sentences/classdef.c-", # has getters and setters
-        "./sentences/traitdef.c-",
-        "./sentences/itemized.c-",
-        "./sentences/comptypes.c-",
-        #'./sentences/imports.c-', # just not there yet
-        "./sentences/inherit.c-",
-        "./sentences/traitcast.c-",
-    )
-    #paths = ("./sentences/plainclass.c-",)
-    #error_paths = ("./sentences/casterror.c-",)
-
+    
+    global test_files
 
     # test each file
-    for path in paths:
+    for path in test_files:
         print(f"\ntesting: '{path}'")
         with open(path) as file:
 

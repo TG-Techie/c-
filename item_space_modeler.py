@@ -70,16 +70,23 @@ def extract_name(tree):
     else:
         raise CMNSModelNotImplementedError(location, f"unknown name of kind '{tree.data}'")
 
-def find_item_by_ident(location, space, typeident):
+def find_item_by_ident(location, outer, typeident):
+
+    # find the root module surounding the given outer item
+    # TODO: rename variables to make more clean
+    mod = outer
+    while mod.outer is not None:
+        mod = mod.outer
+    if not isinstance(mod, Module):
+        raise CMNSItemNotFound(location, f"found a non-module root, {mod}")
+
     ident_names = [extract_name(tree) for tree in typeident.children]
-    next = space
+
+    item = mod
     for name in ident_names:
-        try:
-            next = next[name]
-        except KeyError:
-            raise CMNSItemNotFound(location, f"unable to find item '{name}' in '{next}'")
-        assert isinstance(next, NameSpace)
-    return next
+        item = item[name]
+
+    return item
 
 def model_func(path, tree, outer):
     kind = tree.data
@@ -176,9 +183,7 @@ def model_trait_impl(path, tree, outer):
 
     model_item_block_into(path, block, outer)
 
-    space_ouside_of_cls = outer.outer
-
-    trt_mdl = find_item_by_ident(location, space_ouside_of_cls, typeident)
+    trt_mdl = find_item_by_ident(location, outer, typeident)
 
     trt_impl = TraitImpl(location, outer, trt_mdl)
 
