@@ -59,7 +59,7 @@ def test():
 
             try:
                 name = path.split('/')[-1][0:-3]
-                module = item_space_modeler.model_module(path, tree, name)
+                module = item_space_modeler.Module.from_tree(path, tree, name)
             except:
                 print(f"error modeling module {path}")
                 raise
