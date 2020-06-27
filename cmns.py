@@ -3,6 +3,7 @@ import os
 import lexer_parser
 import item_space_modeler
 
+
 test_files = (
     "./sentences/assign_int_lit.c-",
     "./sentences/binop_add.c-",
@@ -28,7 +29,7 @@ def test():
     desc: a test of the transpiler on a bunch of sentences;
     returns NoneType;
     """
-    
+
     global test_files
 
     # test each file

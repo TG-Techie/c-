@@ -66,34 +66,8 @@ start
                   expr
                     binop_expr
                       expr
-                        binop_expr
-                          expr
-                            literal
-                              string	"<Coord x:"
-                          binop
-                            add
-                          expr
-                            binop_expr
-                              expr
-                                call_expr
-                                  expr
-                                    var_expr
-                                      ident
-                                        varname	str
-                                  paramlist
-                                    expr
-                                      attr_expr
-                                        expr
-                                          var_expr
-                                            ident
-                                              varname	self
-                                        ident
-                                          varname	x
-                              binop
-                                add
-                              expr
-                                literal
-                                  string	" y:"
+                        literal
+                          string	"<Coord x:"
                       binop
                         add
                       expr
@@ -101,9 +75,35 @@ start
                           expr
                             call_expr
                               expr
-                                var_expr
-                                  ident
-                                    varname	str
+                                binop_expr
+                                  expr
+                                    binop_expr
+                                      expr
+                                        call_expr
+                                          expr
+                                            var_expr
+                                              ident
+                                                varname	str
+                                          paramlist
+                                            expr
+                                              attr_expr
+                                                expr
+                                                  var_expr
+                                                    ident
+                                                      varname	self
+                                                ident
+                                                  varname	x
+                                      binop
+                                        add
+                                      expr
+                                        literal
+                                          string	" y:"
+                                  binop
+                                    add
+                                  expr
+                                    var_expr
+                                      ident
+                                        varname	str
                               paramlist
                                 expr
                                   attr_expr

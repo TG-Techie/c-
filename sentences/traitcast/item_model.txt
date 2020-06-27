@@ -1,8 +1,8 @@
 <Module item 'traitcast'>
-	<Trait item 'Vectorable'>
-		<FuncDec item '__to_vector__'>
+    <Trait item 'Vectorable'>
+        <FuncDec item '__to_vector__'>
 
-	<CMNSClass item 'VectorCoord'>
-		<Func item '__to_vector__'>
-		<TraitImpl item 'VectorCoord'>
+    <CMNSClass item 'VectorCoord'>
+        <Func item '__to_vector__'>
+        <TraitImpl item 'VectorCoord'>
 

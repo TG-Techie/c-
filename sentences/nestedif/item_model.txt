@@ -1,2 +1,2 @@
 <Module item 'nestedif'>
-	<Func item 'main'>
+    <Func item 'main'>

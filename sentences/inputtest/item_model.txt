@@ -1,2 +1,2 @@
 <Module item 'inputtest'>
-	<Func item 'main'>
+    <Func item 'main'>

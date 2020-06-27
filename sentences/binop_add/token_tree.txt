@@ -87,23 +87,23 @@ start
           expr
             binop_expr
               expr
+                literal
+                  number
+                    integer	5
+              binop
+                add
+              expr
                 binop_expr
                   expr
                     literal
                       number
-                        integer	5
+                        integer	6
                   binop
-                    add
+                    floordiv
                   expr
                     literal
                       number
-                        integer	6
-              binop
-                floordiv
-              expr
-                literal
-                  number
-                    integer	7
+                        integer	7
           # 5 + (6 // 7)
     
       stmt

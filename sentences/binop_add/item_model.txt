@@ -1,2 +1,2 @@
 <Module item 'binop_add'>
-	<Func item 'main'>
+    <Func item 'main'>

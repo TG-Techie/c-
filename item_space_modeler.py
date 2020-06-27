@@ -225,13 +225,18 @@ def model_item_block_into(path, tree, into):
         else:
             raise CMNSFeatureError(location, f"unsupported feature: '{kind}'")
 
-def model_module(path, tree, name):
+
+def model_module(path, tree, name, outer=None):
 
     location = Location(path, '')
-    mod = Module(name, location)
+    mod = Module(name, location, outer=outer)
     location.lineno = "'{mod}'"
-
+    # is root if none
     model_item_block_into(path, tree, mod)
+
+    #if is a root module
+    if mod.outer is None:
+
 
     return mod
 
@@ -250,7 +255,7 @@ class Item():
         return f"<{type(self).__name__} item '{self.name}'>"
 
     def _layout(self, indent=0):
-        return '\t'*indent + str(self)
+        return '    '*indent + str(self)
 
 class NameSpace(Item):
 
@@ -285,7 +290,7 @@ class NameSpace(Item):
             return value in self._items
 
     def _layout(self, indent=0):
-        string = '\t'*indent + str(self) + '\n'
+        string = '    '*indent + str(self) + '\n'
         for item in self._items.values():
             string += item._layout(indent=indent+1) + '\n'
         return string
@@ -336,9 +341,9 @@ class CMNSClass(NameSpace):
 
 class Module(NameSpace):
 
-    def __init__(self, name, location):
-
-        super().__init__(location, name, None)
+    def __init__(self, name, location, outer=None):
+        # if None then is the root module
+        super().__init__(location, name, outer)
 
 class TraitImpl(Item):
 
