@@ -1,2 +1,2 @@
-<Module item 'assign_int_lit'>
-    <Func item 'main'>
+<ModuleModel item 'assign_int_lit'>
+    <FuncModel item 'main'>

@@ -1,2 +1,2 @@
-<Module item 'binop_add'>
-    <Func item 'main'>
+<ModuleModel item 'binop_add'>
+    <FuncModel item 'main'>

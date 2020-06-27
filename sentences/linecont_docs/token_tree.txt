@@ -31,23 +31,23 @@ start
               expr
                 binop_expr
                   expr
-                    var_expr
-                      ident
-                        varname	c
-                  binop
-                    add
-                  expr
                     binop_expr
                       expr
                         var_expr
                           ident
-                            varname	d
+                            varname	c
                       binop
                         add
                       expr
                         var_expr
                           ident
-                            varname	e
+                            varname	d
+                  binop
+                    add
+                  expr
+                    var_expr
+                      ident
+                        varname	e
           
 
 

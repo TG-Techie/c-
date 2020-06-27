@@ -1,2 +1,2 @@
-<Module item 'itemized'>
-    <Func item 'main'>
+<ModuleModel item 'itemized'>
+    <FuncModel item 'main'>

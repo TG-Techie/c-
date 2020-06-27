@@ -1,4 +1,4 @@
-<Module item 'funcdef'>
-    <Func item 'addints'>
-    <Func item 'addstr'>
-    <Func item 'bar'>
+<ModuleModel item 'funcdef'>
+    <FuncModel item 'addints'>
+    <FuncModel item 'addstr'>
+    <FuncModel item 'bar'>

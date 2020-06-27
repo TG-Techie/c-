@@ -1,7 +1,7 @@
 import os
 
 import lexer_parser
-import item_space_modeler
+from item_space_models import *
 
 
 test_files = (
@@ -59,7 +59,7 @@ def test():
 
             try:
                 name = path.split('/')[-1][0:-3]
-                module = item_space_modeler.Module.from_tree(path, tree, name)
+                module = ModuleModel.from_tree(path, tree, name)
             except:
                 print(f"error modeling module {path}")
                 raise

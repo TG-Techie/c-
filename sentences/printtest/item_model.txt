@@ -1,2 +1,2 @@
-<Module item 'printtest'>
-    <Func item 'main'>
+<ModuleModel item 'printtest'>
+    <FuncModel item 'main'>

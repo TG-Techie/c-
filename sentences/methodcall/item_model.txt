@@ -1,3 +1,3 @@
-<Module item 'methodcall'>
-    <Func item 'addints'>
-    <Func item 'retint'>
+<ModuleModel item 'methodcall'>
+    <FuncModel item 'addints'>
+    <FuncModel item 'retint'>
