@@ -1,0 +1,52 @@
+trait Floatable:
+
+    dec __to_float__(SomeType self) returns Float
+
+class Float:
+
+    trait _Addable_:
+        def __add__(Float self, Floatable other) returns Float:
+            pass
+    trait _Subtractable_:
+        def __sub__(Float self, Floatable other) returns Float:
+            pass
+
+    trait _Multipliable_:
+        def __mul__(Float self, Floatable other) returns Float:
+            pass
+
+    trait _Divisible_:
+        def __div__(Float self, Floatable other) returns Float:
+            pass
+
+    trait _Modable_:
+        def __mod__(Float self, Floatable other) returns Float:
+            pass
+
+    trait _Exponetiable_:
+        def __pow__(Float self, Floatable other) returns Float:
+            pass
+
+    trait _FloorDivisible_:
+        def __flrdiv__(Float self, Floatable other) returns Float:
+            pass
+
+    trait _EqualsComparable_:
+        def __equal_to__(Float self, Floatable other) returns Float:
+            pass
+
+    trait _LessThenComparable_:
+        def __less_than__(Float self, Floatable other) returns Float:
+            pass
+
+    trait _GreaterThanComparable_:
+        def __grtr_than__(Float self, Floatable other) returns Float:
+            pass
+
+    trait _LessThanEqualComparable_:
+        def __less_eqls__(Float self, Floatable other) returns Float:
+        pass
+
+    trait _GreaterThanEqualComparable_:
+        def __grtr_eqls__(Float self, Floatable other) returns Float:
+            pass

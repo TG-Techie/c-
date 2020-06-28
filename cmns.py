@@ -4,8 +4,8 @@ import sys
 sys.path.append(os.path.abspath('.'))
 
 import lexer_parser
-from itemspaces import *
-
+from itemspaces import ModuleItem
+from models import ModuleModel
 
 test_files = (
     "./sentences/assign_int_lit.c-",
@@ -25,6 +25,11 @@ test_files = (
     #'./sentences/imports.c-', # just not there yet
     "./sentences/inherit.c-",
     "./sentences/traitcast.c-",
+)
+
+test_files = (
+    "./sentences/plainclass.c-",
+    "./sentences/inherit.c-",
 )
 
 def test():
@@ -92,6 +97,7 @@ def test2():
             if not os.path.exists(folder):
                     os.makedirs(folder)
 
+            print('Parsing...')
             tree = lexer_parser.parse(text)
             print('Parsing complete')
 
@@ -100,13 +106,19 @@ def test2():
                 file.write(tree.pretty())
 
             name = path.split('/')[-1][0:-3]
-            module = ModuleItem.from_tree(path, tree, name)
+            print('Itemizing...')
+            mod_item = ModuleItem.from_tree(path, tree, name)
             print('itemization complete')
 
             with open(folder+'/item_model.txt', "w+") as file:
                 file.truncate(0)
-                file.write(module._layout())
-                print(module._layout())
+                file.write(mod_item._layout())
+
+            print(mod_item._layout())
+
+            print('Modeling...')
+            mod_mdl = ModuleModel.from_item(mod_item)
+            print('Modeling complete')
 
 if __name__ == "__main__":
     test2()

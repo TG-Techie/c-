@@ -10,38 +10,22 @@ binop_methodnames = {
     'floordiv':'__floordiv__',
     # comprarisons
     'eq':'__eqls__',
-    'ls':'__lessthan__',
-    'gr':'__grtrthan__',
-    'lesseq':'__lesseqls__',
-    'grtreq':'__grtreqls__',
+    'ls':'__less_than__',
+    'gr':'__grtr_than__',
+    'in':'__contains__',
+    'lesseq':'__less_eqls__',
+    'grtreq':'__grtr_eqls__',
     #semantic
 }
 
 # binops that ar teh "!(expr)" of other binops
-inverse_binop_methodnames = {
+inverse_binop_names = {
     # comprarisons
-    'noteq':'__eq__',
-    'notin':'__contains__',
+    'noteq':'eq',
+    'notin':'in',
     #'isnot':'__is__'
 }
 
-def _find_item_by_ident(location, outer, typeident):
-
-    # find the root module surounding the given outer item
-    # TODO: rename variables to make more clean
-    mod = outer
-    while mod.outer is not None:
-        mod = mod.outer
-    if not isinstance(mod, ModuleItem):
-        raise CMNSItemNotFound(location, f"found a non-module root, {mod}")
-
-    ident_names = [_extract_name(location.file, tree) for tree in typeident.children]
-
-    item = mod
-    for name in ident_names:
-        item = item[name]
-
-    return item
 
 class Pair():
 

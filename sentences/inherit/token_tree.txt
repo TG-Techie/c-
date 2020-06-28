@@ -8,12 +8,14 @@ start
     
           
       typeident
-        float
+        user_type_ident
+          typename	Float
       varname	x
       comma	# the horizontal offset from the origin
     
       typeident
-        float
+        user_type_ident
+          typename	Float
       varname	y
       comma	# the vertical offset from the origin
 
@@ -26,14 +28,17 @@ start
         varname	scale
         typelist
           typeident
-            selftype
+            user_type_ident
+              typename	SomeType
           varname	self
           comma
           typeident
-            float
+            user_type_ident
+              typename	Float
           varname	factor
         typeident
-          selftype
+          user_type_ident
+            typename	SomeType
         stmt_block
           
         
@@ -43,7 +48,8 @@ start
               expr
                 new_expr
                   typeident
-                    selftype
+                    user_type_ident
+                      typename	SomeType
                   paramlist
                     expr
                       attr_expr
@@ -99,7 +105,8 @@ start
     
           
       typeident
-        float
+        user_type_ident
+          typename	Float
       varname	z
       
 
@@ -112,11 +119,13 @@ start
         varname	scale
         typelist
           typeident
-            selftype
+            user_type_ident
+              typename	Self
           varname	self
           comma
           typeident
-            float
+            user_type_ident
+              typename	Float
           varname	factor
         stmt_block
           
@@ -127,7 +136,8 @@ start
               expr
                 new_expr
                   typeident
-                    selftype
+                    user_type_ident
+                      typename	Self
                   paramlist
                     expr
                       attr_expr

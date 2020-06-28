@@ -132,11 +132,14 @@ typename    : TYPENAME
 varname     : VARNAME
 
 user_type_ident : (ident ".")* typename
-builtintype: "Int" -> int | "Bool" -> bool | "Str" -> str
-           | "Float" -> float | "NoneType" -> nonetype
-           | "Regex" ->regex
-           | "SomeType" -> selftype | "Self" -> selftype
-           | "<" typeident ">" -> arrtype
+//builtintype: "Int" -> int | "Bool" -> bool | "Str" -> str
+//           | "Float" -> float | "NoneType" -> nonetype
+//           | "Regex" ->regex
+//           | "SomeType" -> selftype | "Self" -> selftype
+//           | "<" typeident ">" -> arrtype
+//           | "{" typeident ":" typeident "}" -> maptype
+
+builtintype: "<" typeident ">" -> arrtype
            | "{" typeident ":" typeident "}" -> maptype
 
 literal : number | string | bool | none | arraylitrl | maplitrl

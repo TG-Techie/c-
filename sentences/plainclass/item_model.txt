@@ -1,0 +1,6 @@
+<ModuleItem 'plainclass'>
+    <ClassItem 'Point'>
+        <FuncItem 'scale'>
+        <FuncItem 'foo'>
+
+    <FuncItem 'fiz'>

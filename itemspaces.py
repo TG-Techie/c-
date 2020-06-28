@@ -3,22 +3,11 @@ from dataclasses import dataclass
 
 from lark.tree import Tree
 from lark import Token
+from lexer_parser import extract_name, extract_lineno, CMNSCompileTimeError, Location
 
 # fight me
 NoneType = type(None)
 
-class CMNSCompileTimeError(Exception):
-
-    def __init__(self, location, message):
-        assert isinstance(lineinfo, (int, Location, Tree)), f"argument 'lineinfo' must be one of types {', '.join([repr(typ.__name__) for typ in (int, Location)])}, or 'Tree', got type '{type(lineinfo).__name__}'"
-        assert isinstance(location, Location), f"argument 'location' must be of type 'Location', got type '{type(location).__name__}'"
-
-        linemsg = f"in file '{lineinfo.file}' on line {lineinfo.lineno}"
-
-        self.location = location
-        self.message = message
-
-        super().__init__(f"{linemsg}, {message}")
 
 class CMNSItemizationError(CMNSCompileTimeError):
     pass
@@ -35,35 +24,70 @@ class CMNSModelNotImplementedError(CMNSItemizationError):
 class CMNSItemNotFound(CMNSItemizationError):
     pass
 
-@dataclass
-class Location():
+# interface objects
 
-    file    : str
-    lineno  : int = None
-    colno   : int = None
+#https://stackoverflow.com/questions/287871/how-to-print-colored-text-in-python
+class bcolors:
+    HEADER = '\033[95m'
+    OKBLUE = '\033[94m'
+    OKGREEN = '\033[92m'
+    WARNING = '\033[93m'
+    FAIL = '\033[91m'
+    ENDC = '\033[0m'
+    BOLD = '\033[1m'
+    UNDERLINE = '\033[4m'
 
-# TODO: switch to breadth first? not sure if is a good
-def _extract_lineno(tree):
-    for thing in tree.children:
-        if isinstance(thing, Token):
-            return thing.line
+class TypeIdent():
+
+    def __init__(self, path, tree, doc = 'no documentation provided'):
+        assert tree.data == 'typeident'
+        ident = tree.children[0]
+
+        if ident.data == 'user_type_ident':
+            self.names = [extract_name('', child) for child in ident.children]
+            self.builtin = False
         else:
-            try:
-                return _extract_lineno(thing)
-            except TypeError:
-                continue
-    else:
-        raise TypeError('no Token found in tree')
+            self.names = None
+            self.builtin = True
+            self.kind = ident.data
 
-def _extract_name(path, tree):
-    assert isinstance(tree, Tree), f"argument 'tree' must be of type 'Tree', got type '{type(tree).__name__}'"
+            self.innertypes = [TypeIdent(child) for child in ident.children]
 
-    if tree.data == 'typename':
-        return str(tree.children[0])
-    elif tree.data == 'varname':
-        return str(tree.children[0])
-    else:
-        raise CMNSModelNotImplementedError(Location(path, _extract_lineno(tree)), f"unknown name of kind '{tree.data}'")
+        self.location = Location(path, extract_lineno(tree))
+        self.doc = doc
+
+    def __iter__(self):
+        return iter(self.names)
+
+class TypeIdentList():
+
+    def __init__(self, items=None):
+        if items is None:
+            items = {}
+        self._items = dict(items)
+
+    def __iter__(self):
+        return iter(self._items.items())
+
+    def extend(self, tree):
+        cls = type(self)
+        return cls(tree, items=dict(self._items))
+
+    @classmethod
+    def from_tree(cls, path, tree):
+        assert tree.data == 'typelist'
+
+        trees = [child for child in tree.children if isinstance(child, Tree) and child.data in ('typeident','varname')]
+
+        items = {}
+
+        while len(trees):
+            ident = TypeIdent(path, trees.pop(0))
+            name = extract_name(path, trees.pop(0))
+
+            items[name] = ident
+
+        return cls(items)
 
 class Item():
 
@@ -98,6 +122,9 @@ class NameSpaceItem(Item):
 
         self._items = items
 
+    def __iter__(self):
+        return iter(self._items.values())
+
     def __getitem__(self, name):
         assert isinstance(name, str), f"argument 'name' must be of type 'str', got type '{type(name).__name__}'"
 
@@ -111,11 +138,13 @@ class NameSpaceItem(Item):
         else:
             self._items[name] = value
 
+    '''
     def __contains__(self, value):
         if isinstance(value, Item):
             return value in self._items.items()
         else:
             return value in self._items
+    '''
 
     def _layout(self, indent=0):
         string = '    '*indent + str(self) + '\n'
@@ -126,7 +155,7 @@ class NameSpaceItem(Item):
     def _add_items_from(self, tree):
         path = self.location.file
 
-        location = Location(path, _extract_lineno(tree))
+        location = Location(path, extract_lineno(tree))
 
         for item_tree in tree.children:
             if isinstance(item_tree, Token):
@@ -177,7 +206,7 @@ class FuncItem(Item):
         if isinstance(children[-1], Token):
             children.pop(-1)
 
-        location = Location(path, _extract_lineno(tree))
+        location = Location(path, extract_lineno(tree))
 
         if children[0].data in ('get, set'):
             raise CMNSFeatureError(location, f"getters and setters not yet supported")
@@ -185,14 +214,14 @@ class FuncItem(Item):
         else:
             prop_type = None
 
-        name = _extract_name(path, children.pop(0))
+        name = extract_name(path, children.pop(0))
 
         if children[-1].data == 'typeident':
             ret_type = children.pop(-1)
         else:
             ret_type = None
 
-        lineno = _extract_lineno(tree)
+        lineno = extract_lineno(tree)
         return cls(Location(path, lineno), name, outer, ret_type, children[0])
 
 class TraitDefItem(NameSpaceItem):
@@ -202,7 +231,7 @@ class TraitDefItem(NameSpaceItem):
         # TODO: make traits more rigorous
         kind = tree.data
         children = list(tree.children)
-        location = Location(path, _extract_lineno(tree))
+        location = Location(path, extract_lineno(tree))
 
         if len(children) == 1:
             name = children[0]
@@ -211,7 +240,7 @@ class TraitDefItem(NameSpaceItem):
         else:
             raise CMNSFeatureError(location, f"unsupported trait kind '{kind}'")
 
-        name = _extract_name(path, children[0])
+        name = extract_name(path, children[0])
 
         trt_item = cls(location, name, outer)
 
@@ -221,21 +250,21 @@ class TraitDefItem(NameSpaceItem):
 
 class ClassItem(NameSpaceItem):
 
-    def __init__(self, location, outer, name, superclass_typeident, typelist_tree): #, block_tree):
+    def __init__(self, location, outer, name, superclass_typeident, content_typeidents): #, block_tree):
 
         super().__init__(location, name, outer)
 
         assert isinstance(outer, NameSpaceItem), f"argument 'outer' must be of type 'NameSpaceItem', got type '{type(outer).__name__}'"
+        assert isinstance(superclass_typeident, (TypeIdent, NoneType)), f"argument 'superclass_typeident' must be one of types {', '.join([repr(typ.__name__) for typ in (TypeIdent,)])}, or 'NoneType', got type '{type(superclass_typeident).__name__}'"
 
         selfname = name
         self._superclass_typeident = superclass_typeident
-        self._typelist_tree = typelist_tree
-        #self._block_tree = block_tree
+        self._content_typeidents = content_typeidents
 
     @classmethod
     def from_tree(cls, path, tree, outer):
         children = tree.children
-        location = Location(path, _extract_lineno(tree))
+        location = Location(path, extract_lineno(tree))
         if len(children) == 3:
             typename, something, class_block = children
             if something.data == 'typeident':
@@ -254,11 +283,21 @@ class ClassItem(NameSpaceItem):
         #else:
         #    superclass = None
 
-        name = _extract_name(path, typename)
-        lineno = _extract_lineno(tree)
-        #content_type = TypeList.from_tree(typelist)
+        name = extract_name(path, typename)
+        lineno = extract_lineno(tree)
+        #content_type = TypeIdentList.from_tree(typelist)
 
-        cls_item = cls(Location(path, lineno), outer, name, superclass_typeident, typelist)
+        if superclass_typeident is not None:
+            superident = TypeIdent(path, superclass_typeident)
+        else:
+            superident = None
+
+        if typelist is not None:
+            contentlist = TypeIdentList.from_tree(path, typelist)
+        else:
+            contentlist = TypeIdentList({})
+
+        cls_item = cls(location, outer, name, superident, contentlist)
 
         cls_item._add_items_from(class_block)
 
@@ -290,7 +329,8 @@ class TraitImplItem(NameSpaceItem):
     def __init__(self, location, outer, trait_typeident):
 
         super().__init__(location, outer.name, outer)
-        #assert isinstance(trait, TraitDefItem), f"argument 'trait' must be of type 'TraitDefItem', got type '{type(trait).__name__}'"
+        assert isinstance(trait_typeident, TypeIdent), f"argument 'trait_typeident' must be of type 'TypeIdent', got type '{type(trait_typeident).__name__}'"
+
         self._trait_typeident = trait_typeident
 
     @classmethod
@@ -298,11 +338,11 @@ class TraitImplItem(NameSpaceItem):
 
         typeident, block = tree.children
 
-        location = Location(path, _extract_lineno(typeident))
+        location = Location(path, extract_lineno(typeident))
 
         #trt_item = _find_item_by_ident(location, outer, typeident)
 
-        trt_impl = cls(location, outer, typeident)
+        trt_impl = cls(location, outer, TypeIdent(typeident))
 
         trt_impl._add_items_from(block)
 
