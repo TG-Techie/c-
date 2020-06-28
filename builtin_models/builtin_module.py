@@ -3,15 +3,21 @@ from dataclasses import dataclass
 
 from lexer_parser import Location
 import _models
-from _models import ModuleModel, ClassModel, TraitModel, FuncModel
+from _models import *
 
 builtin_location = _bltn_loc = Location('[builtin_module]', None)
 
 builtin_module = ModuleModel(builtin_location, 'builtins', None)
 _models._builtintypes_module_model = builtin_module
 
+class BuiltinModelElement(ModelElement):
+
+    def _addmdls(self, *mdls):
+        for mdl in mdls:
+            self[mdl.name] = mdl
+
 @dataclass
-class BuiltinClassModel(ClassModel):
+class BuiltinClassModel(ClassModel, ModelElement):
 
     # shared with all builtins
     location = builtin_location
@@ -31,8 +37,9 @@ class BuiltinClassModel(ClassModel):
 
         builtin_module[name] = self
 
+
 @dataclass
-class BuiltinClassModel(ClassModel):
+class BuiltinClassModel(ClassModel, BuiltinModelElement):
 
     _all = []
 
@@ -55,12 +62,8 @@ class BuiltinClassModel(ClassModel):
 
         self._all.append(self)
 
-    def _addmdls(self, *mdls):
-        for mdl in mdls:
-            self[mdl.name] = mdl
-
 @dataclass
-class BuiltinTraitModel(TraitModel):
+class BuiltinTraitModel(TraitModel, BuiltinModelElement):
 
     _all = []
 
@@ -71,14 +74,14 @@ class BuiltinTraitModel(TraitModel):
     def __init__(self, name):
 
         self.name = name
-        self.items = {}
+        self.items = self._items = {}
 
         builtin_module[name] = self
 
         self._all.append(self)
 
 @dataclass
-class BuiltinFuncModel(FuncModel):
+class BuiltinFuncModel(FuncModel, BuiltinModelElement):
 
     _all = []
 
@@ -86,7 +89,7 @@ class BuiltinFuncModel(FuncModel):
     location = builtin_location
     module = builtin_module
 
-    BodyModel = None
+    body_model = None
 
     def __init__(self, name, ret_type=None, typelist=None):
 
@@ -96,19 +99,37 @@ class BuiltinFuncModel(FuncModel):
         self.name = name
         self.ret_type = None
         self.typelist = {}
+        self.targets = []
 
         builtin_module[name] = self
 
         self._all.append(self)
 
 
+    def _addtrgs(self, *trgs):
+        for trg in trgs:
+            trg.basefunc = self
+            self.targets.append(trg)
+
+class BuiltinFuncTarget(FuncTarget):
+
+    def __init__(
+            ret_type     : Union[ClassModel, TraitModel],
+            arg_typelist : dict, # [str, Union[ClassModel, TraitModel]]
+            basefunc     : FuncModel = None,
+        ):
+        super().__init__(basefunc, ret_type, arg_typelist)
+
+
+
+
 #base types
-sometypecls     = BuiltinClassModel('SomeType')
-intcls          = BuiltinClassModel('Int')
-floatcls        = BuiltinClassModel('Float')
-boolcls         = BuiltinClassModel('Bool')
-strcls          = BuiltinClassModel('Str')
-nonetypecls     = BuiltinClassModel('NoneType')
+sometype     = BuiltinClassModel('SomeType')
+inttype          = BuiltinClassModel('Int')
+floattype        = BuiltinClassModel('Float')
+booltype         = BuiltinClassModel('Bool')
+strtype          = BuiltinClassModel('Str')
+nonetype     = BuiltinClassModel('NoneType')
 
 intable     = BuiltinTraitModel('Intable') # __to_int__
 floatable   = BuiltinTraitModel('Floatable') # __to_float__

@@ -3,14 +3,17 @@ start
     varname	addints
     typelist
       typeident
-        int
+        user_type_ident
+          typename	Int
       varname	a
       comma
       typeident
-        int
+        user_type_ident
+          typename	Int
       varname	b
     typeident
-      int
+      user_type_ident
+        typename	Int
     stmt_block
       
     
@@ -29,14 +32,17 @@ start
     varname	addstr
     typelist
       typeident
-        str
+        user_type_ident
+          typename	Str
       varname	a
       comma
       typeident
-        str
+        user_type_ident
+          typename	Str
       varname	b
     typeident
-      str
+      user_type_ident
+        typename	Str
     stmt_block
       
     
@@ -80,7 +86,8 @@ start
     typeident
       arrtype
         typeident
-          int
+          user_type_ident
+            typename	Int
     stmt_block
       ##this returns and array of ints##
     ###

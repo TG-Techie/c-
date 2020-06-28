@@ -28,7 +28,7 @@ COMMENT : LONGCOMMENT | LINECOMMENT | BREAKCOMMENT
 NEWLINE : ( COMMENT? /\r?\n[\t \f]*/ )+
 
 typelist: (typeident varname (comma typeident varname)*)?  comma?
-        | (NEWLINE INDENT)? (typeident varname (comma typeident varname)*)?  (comma | NEWLINE)? (DEDENT|INDENT)?
+        | (NEWLINE INDENT)? (typeident varname (comma typeident varname)*)?  (comma | NEWLINE) (DEDENT|INDENT)? // maybe ? on (comma|NEWLINE)
 //arglist: (varname (comma varname)*)? comma?
 paramlist: (expr (comma expr)*)? comma?
 //comma: "," COMMENT? NEWLINE?
@@ -126,12 +126,13 @@ bitws_binop : "&" -> bwand      | "^" -> bwxor  | "|" -> bwor
 
 uniop : "not" -> not | "~" -> bwnot
 
-typeident   : builtintype | user_type_ident
+typeident   : builtintype | user_type_ident// | genericident
 ident       : varname //("." varname)*  // identifier
 typename    : TYPENAME
 varname     : VARNAME
 
 user_type_ident : (ident ".")* typename
+//genericident : "?" typename
 //builtintype: "Int" -> int | "Bool" -> bool | "Str" -> str
 //           | "Float" -> float | "NoneType" -> nonetype
 //           | "Regex" ->regex

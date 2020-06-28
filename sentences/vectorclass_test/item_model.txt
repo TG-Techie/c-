@@ -1,0 +1,14 @@
+<ModuleItem 'vectorclass_test'>
+    <ClassItem 'Point'>
+        <TraitImplItem 'Point'>
+            <FuncItem '__add__'>
+
+
+    <ClassItem 'Vector'>
+        <TraitImplItem 'Vector'>
+            <FuncItem '__add__'>
+
+
+    <ClassItem 'LocatedVector'>
+        <FuncItem 'offset'>
+

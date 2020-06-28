@@ -1,0 +1,15 @@
+
+def is_larger(
+    _GreaterThanComparable_ should_larger,
+    AnyType should_smaller,
+) returns Bool:
+    return should_larger > should_smaller
+
+def add_if_smaller(
+    SomeType first,
+    SomeOtherType second,
+) returns SomeOtherType:
+    if is_larger(first, second):
+        return second + first
+    else:
+        return first

@@ -18,10 +18,12 @@ start
     varname	the_question
     typelist
       typeident
-        str
+        user_type_ident
+          typename	Str
       varname	prompt
     typeident
-      bool
+      user_type_ident
+        typename	Bool
     stmt_block
       
     
@@ -131,7 +133,8 @@ start
     varname	main
     typelist
     typeident
-      nonetype
+      user_type_ident
+        typename	NoneType
     stmt_block
       
     

@@ -12,10 +12,12 @@ start
         varname	__display__
         typelist
           typeident
-            selftype
+            user_type_ident
+              typename	Self
           varname	self
         typeident
-          str
+          user_type_ident
+            typename	Str
         
 
 
@@ -27,12 +29,14 @@ start
     
           
       typeident
-        float
+        user_type_ident
+          typename	Float
       varname	x
       comma	
     
       typeident
-        float
+        user_type_ident
+          typename	Float
       varname	y
       comma	
 
@@ -58,7 +62,8 @@ start
                   typename	Coord
               varname	self
             typeident
-              str
+              user_type_ident
+                typename	Str
             stmt_block
               
             
@@ -72,34 +77,8 @@ start
                           expr
                             binop_expr
                               expr
-                                binop_expr
-                                  expr
-                                    call_expr
-                                      expr
-                                        binop_expr
-                                          expr
-                                            literal
-                                              string	"<Coord x:"
-                                          binop
-                                            add
-                                          expr
-                                            var_expr
-                                              ident
-                                                varname	str
-                                      paramlist
-                                        expr
-                                          attr_expr
-                                            expr
-                                              var_expr
-                                                ident
-                                                  varname	self
-                                            ident
-                                              varname	x
-                                  binop
-                                    add
-                                  expr
-                                    literal
-                                      string	" y:"
+                                literal
+                                  string	"<Coord x:"
                               binop
                                 add
                               expr
@@ -114,12 +93,38 @@ start
                                     ident
                                       varname	self
                                 ident
-                                  varname	y
+                                  varname	x
                       binop
                         add
                       expr
-                        literal
-                          string	">"
+                        binop_expr
+                          expr
+                            literal
+                              string	" y:"
+                          binop
+                            add
+                          expr
+                            binop_expr
+                              expr
+                                call_expr
+                                  expr
+                                    var_expr
+                                      ident
+                                        varname	str
+                                  paramlist
+                                    expr
+                                      attr_expr
+                                        expr
+                                          var_expr
+                                            ident
+                                              varname	self
+                                        ident
+                                          varname	y
+                              binop
+                                add
+                              expr
+                                literal
+                                  string	">"
                   
 
               

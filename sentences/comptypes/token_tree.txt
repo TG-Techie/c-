@@ -7,7 +7,8 @@ start
     typeident
       arrtype
         typeident
-          int
+          user_type_ident
+            typename	Int
     stmt_block
       
     
@@ -39,9 +40,11 @@ start
     typeident
       maptype
         typeident
-          str
+          user_type_ident
+            typename	Str
         typeident
-          int
+          user_type_ident
+            typename	Int
     stmt_block
       
     

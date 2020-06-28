@@ -1,0 +1,249 @@
+start
+  classdef
+    typename	Point
+    typelist
+      
+    
+          
+      typeident
+        user_type_ident
+          typename	Float
+      varname	x
+      comma	
+    
+      typeident
+        user_type_ident
+          typename	Float
+      varname	y
+      comma	
+
+      
+    class_block
+      
+    
+          
+      traitimpl
+        typeident
+          user_type_ident
+            typename	_Addable_
+        traitimpl_block
+          
+        
+                  
+          funcdef
+            varname	__add__
+            typelist
+              typeident
+                user_type_ident
+                  typename	Point
+              varname	self
+              comma
+              typeident
+                user_type_ident
+                  typename	Point
+              varname	other
+            typeident
+              user_type_ident
+                typename	Point
+            stmt_block
+              
+            
+                          
+              stmt
+                return_stmt
+                  expr
+                    new_expr
+                      typeident
+                        user_type_ident
+                          typename	Vector
+                      paramlist
+                        expr
+                          attr_expr
+                            expr
+                              var_expr
+                                ident
+                                  varname	self
+                            ident
+                              varname	length
+                        comma
+                        expr
+                          attr_expr
+                            expr
+                              var_expr
+                                ident
+                                  varname	other
+                            ident
+                              varname	float
+                  # except ass math
+
+
+              
+          
+      
+  classdef
+    typename	Vector
+    typelist
+      
+    
+          
+      typeident
+        user_type_ident
+          typename	Float
+      varname	length
+      comma	
+    
+      typeident
+        user_type_ident
+          typename	Float
+      varname	angle
+      comma	
+
+      
+    class_block
+      
+    
+          
+      traitimpl
+        typeident
+          user_type_ident
+            typename	_Addable_
+        traitimpl_block
+          
+        
+                  
+          funcdef
+            varname	__add__
+            typelist
+              typeident
+                user_type_ident
+                  typename	Vector
+              varname	self
+              comma
+              typeident
+                user_type_ident
+                  typename	Vector
+              varname	other
+            typeident
+              user_type_ident
+                typename	Vector
+            stmt_block
+              
+            
+                          
+              stmt
+                return_stmt
+                  expr
+                    new_expr
+                      typeident
+                        user_type_ident
+                          typename	Vector
+                      paramlist
+                        expr
+                          attr_expr
+                            expr
+                              var_expr
+                                ident
+                                  varname	self
+                            ident
+                              varname	length
+                        comma
+                        expr
+                          attr_expr
+                            expr
+                              var_expr
+                                ident
+                                  varname	other
+                            ident
+                              varname	float
+                  # except ass math
+
+
+              
+          
+      
+  classdef
+    typename	LocatedVector
+    typeident
+      user_type_ident
+        typename	Vector
+    typelist
+      
+    
+          
+      typeident
+        user_type_ident
+          typename	Point
+      varname	location
+      comma	
+
+      
+    class_block
+      
+
+    
+          
+      funcdef
+        varname	offset
+        typelist
+          typeident
+            user_type_ident
+              typename	LocatedVector
+          varname	self
+          comma
+          typeident
+            user_type_ident
+              typename	Point
+          varname	diff
+        typeident
+          user_type_ident
+            typename	LocatedVector
+        stmt_block
+          
+        
+                  
+          stmt
+            return_stmt
+              expr
+                new_expr
+                  typeident
+                    user_type_ident
+                      typename	LocatedVector
+                  paramlist
+                    expr
+                      attr_expr
+                        expr
+                          var_expr
+                            ident
+                              varname	self
+                        ident
+                          varname	length
+                    comma
+                    expr
+                      attr_expr
+                        expr
+                          var_expr
+                            ident
+                              varname	self
+                        ident
+                          varname	angle
+                    comma
+                    expr
+                      binop_expr
+                        expr
+                          attr_expr
+                            expr
+                              var_expr
+                                ident
+                                  varname	self
+                            ident
+                              varname	location
+                        binop
+                          add
+                        expr
+                          var_expr
+                            ident
+                              varname	diff
+              
+
+          
+      

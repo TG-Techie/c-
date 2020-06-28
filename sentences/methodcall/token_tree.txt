@@ -5,14 +5,17 @@ start
     varname	addints
     typelist
       typeident
-        int
+        user_type_ident
+          typename	Int
       varname	a
       comma
       typeident
-        int
+        user_type_ident
+          typename	Int
       varname	b
     typeident
-      int
+      user_type_ident
+        typename	Int
     stmt_block
       
     #x = a.__smoosh__(b, b, 5)
@@ -43,7 +46,8 @@ start
     varname	retint
     typelist
     typeident
-      int
+      user_type_ident
+        typename	Int
     stmt_block
       
     

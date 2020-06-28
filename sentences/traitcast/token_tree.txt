@@ -14,7 +14,8 @@ start
         varname	__to_vector__
         typelist
           typeident
-            selftype
+            user_type_ident
+              typename	SomeType
           varname	self
         typeident
           user_type_ident
@@ -30,12 +31,14 @@ start
     
           
       typeident
-        float
+        user_type_ident
+          typename	Float
       varname	length
       comma	
     
       typeident
-        float
+        user_type_ident
+          typename	Float
       varname	angle
       comma	
 
@@ -59,7 +62,8 @@ start
             varname	__to_vector__
             typelist
               typeident
-                selftype
+                user_type_ident
+                  typename	Self
               varname	self
             typeident
               user_type_ident

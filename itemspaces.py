@@ -59,6 +59,9 @@ class TypeIdent():
     def __iter__(self):
         return iter(self.names)
 
+    def __str__(self):
+        return f"<{type(self).__name__} '{'.'.join(self.names)}'>"
+
 class TypeIdentList():
 
     def __init__(self, items=None):
@@ -188,13 +191,13 @@ class NameSpaceItem(Item):
 
 class FuncItem(Item):
 
-    def __init__(self, location, name, outer, ret_typeident, stmt_block_tree):
+    def __init__(self, location, name, outer, ret_typeident, arg_typelist, stmt_block_tree):
 
         super().__init__(location, name, outer)
 
         self._ret_typeident = ret_typeident
         self._stmt_block_tree = stmt_block_tree
-
+        self._arg_typeidentlist = arg_typelist
     #def __str__(self):
     #    return super().__str__().replace('>', f"returns {self.ret_type}>")
 
@@ -216,13 +219,18 @@ class FuncItem(Item):
 
         name = extract_name(path, children.pop(0))
 
-        if children[-1].data == 'typeident':
-            ret_type = children.pop(-1)
+        print([child.data for child in children])
+
+        if len(children) == 3:
+            arg_typelist, ret_typeident, stmt_block = children
+        elif len(children) == 2:
+            arg_typelist, stmt_block = children
+            ret_typeident = None
         else:
-            ret_type = None
+            SHIT
 
         lineno = extract_lineno(tree)
-        return cls(Location(path, lineno), name, outer, ret_type, children[0])
+        return cls(Location(path, lineno), name, outer, ret_typeident, arg_typelist, stmt_block)
 
 class TraitDefItem(NameSpaceItem):
 
@@ -342,7 +350,7 @@ class TraitImplItem(NameSpaceItem):
 
         #trt_item = _find_item_by_ident(location, outer, typeident)
 
-        trt_impl = cls(location, outer, TypeIdent(typeident))
+        trt_impl = cls(location, outer, TypeIdent(path, typeident))
 
         trt_impl._add_items_from(block)
 

@@ -1,4 +1,4 @@
-
+from typing import *
 from itemspaces import *
 import stmt
 
@@ -7,22 +7,43 @@ class CMNSModelTimeError(CMNSCompileTimeError):
 
 _builtintypes_module_model = None # this will be set later by the builtintypes module
 
-def _find_item_by_ident(location, module, typeident):
+def find_item_by_ident(location, module, typeident, prev=None):
     assert isinstance(location, Location), f"argument 'location' must be of type 'Location', got type '{type(location).__name__}'"
     assert isinstance(module, ModuleModel), f"argument 'module' must be of type 'ModuleModel', got type '{type(module).__name__}'"
     assert isinstance(typeident, TypeIdent), f"argument 'typeident' must be of type 'TypeIdent', got type '{type(typeident).__name__}'"
 
+
+    item = module
+    for name in typeident:
+        if name in item:
+            item = item[name]
+        elif module is _builtintypes_module_model: # cannot find it
+            raise CMNSItemNotFound(location, f"unable to find {typeident} in {prev} or {_builtintypes_module_model}")
+        else: # cannot find in either given or builtins
+            return find_item_by_ident(location, _builtintypes_module_model, typeident, prev=module)
+    else:
+        return item
+
+
+    '''
     try:
         item = module
+
         for name in typeident.names:
-            #print(item)
+            print(f"searching in {item} for '{name}'")
+            print(item._items)
             item = item.__getitem__(name, location=typeident.location)
+            print(f"found {item}")
+
+        return item
     except CMNSCompileTimeError as stdscope_error:
+        THIS
         try:
-            return _find_item_by_ident(location, _builtintypes_module_model, typeident)
+            return find_item_by_ident(location, _builtintypes_module_model, typeident)
         except:
             raise stdscope_error
-    return item
+    '''
+
 
 '''
 class TypeList():
@@ -119,6 +140,8 @@ class FuncModel(ModelElement):
         self._ret_type_typeident = ret_type_typeident
         self._arg_typelist = arg_typelist
 
+        self.targets = {} # Dict[TypeList, FuncTarget]
+
     def _finish_model(self, ret_type, typelist, stmt_block):
         assert isinstance(ret_type, ClassModel), f"argument 'ret_type' must be of type 'ClassModel', got type '{type(ret_type).__name__}'"
         assert isinstance(typelist, TypeList), f"argument 'typelist' must be of type 'TypeList', got type '{type(typelist).__name__}'"
@@ -127,6 +150,8 @@ class FuncModel(ModelElement):
         self.ret_type = ret_type
         self.typelist = typelist
         self.stmt_block = stmt_block
+
+
 
     def _model(self):
         pass
@@ -152,7 +177,7 @@ class ClassModel(NameSpaceModel):
         items       : dict
     """
 
-    def __init__(self, location, name, module, superclass_ident, content_typelist):
+    def __init__(self, location, name, module, superclass_ident, content_typelist, frontend_items):
 
         super().__init__(location, name, module)
 
@@ -161,6 +186,7 @@ class ClassModel(NameSpaceModel):
 
         self._superclassident = superclass_ident
         self._content_typelist = content_typelist
+        self._frontend_items = frontend_items
 
     def _finish_model(self, superclass, contents):
         assert isinstance(superclass, (ClassModel, NoneType)), f"argument 'superclass' must be one of types {', '.join([repr(typ.__name__) for typ in (ClassModel,)])}, or 'NoneType', got type '{type(superclass).__name__}'"
@@ -169,10 +195,14 @@ class ClassModel(NameSpaceModel):
         self.superclass = superclass
         self.contents = contents
 
+        for item in self._items:
+            print(self, item)
+            item._model()
 
+    '''
     def _model(self):
         if self._superclassident is not None:
-            superclass = _find_item_by_ident(self.location, self.module, self._superclassident)
+            superclass = find_item_by_ident(self.location, self.module, self._superclassident)
             #print(f"{self} subclasses {self.superclass}")
         else:
             superclass = None
@@ -185,7 +215,7 @@ class ClassModel(NameSpaceModel):
 
         ext = {}
         for name, typeident in self._content_typelist:
-            ext[name] = _find_item_by_ident(self.location, self.module, typeident)
+            ext[name] = find_item_by_ident(self.location, self.module, typeident)
 
         contents = {**base, **ext}
 
@@ -193,6 +223,14 @@ class ClassModel(NameSpaceModel):
             pass#print(foo)
 
         self._finish_model(superclass, contents)
+        '''
 
 class ModuleModel(NameSpaceModel):
     pass
+
+@dataclass
+class FuncTarget:
+
+    basefunc     : FuncModel
+    ret_type     : Union[ClassModel, TraitModel]
+    arg_typelist : dict # [str, Union[ClassModel, TraitModel]]

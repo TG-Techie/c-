@@ -6,7 +6,7 @@ sys.path.append(os.path.abspath('.'))
 import lexer_parser
 from itemspaces import ModuleItem
 from models import ModuleModel
-
+'''
 test_files = (
     "./sentences/assign_int_lit.c-",
     "./sentences/binop_add.c-",
@@ -25,8 +25,10 @@ test_files = (
     #'./sentences/imports.c-', # just not there yet
     "./sentences/inherit.c-",
     "./sentences/traitcast.c-",
+    "./sentences/vectorclass_test.c-",
+    #"./sentences/maybe_generic.c-",
 )
-
+'''
 test_files = (
     "./sentences/plainclass.c-",
     "./sentences/inherit.c-",

@@ -10,7 +10,7 @@ def attributeof(cls):
         else:
             assert hasattr(attr, '__name__'), f"must be a named attribute to add to {cls}, got an attribute of type '{type(attr).__name__}'"
 
-            name = meth.__name__
+            name = attr.__name__
 
         if hasattr(cls, name):
             raise AttributeError(f"{cls} alreay has attribute '{name}', cannot be added to {cls}")

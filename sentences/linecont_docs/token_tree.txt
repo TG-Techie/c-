@@ -15,39 +15,39 @@ start
           expr
             binop_expr
               expr
+                var_expr
+                  ident
+                    varname	a
+              binop
+                add
+              expr
                 binop_expr
                   expr
-                    var_expr
-                      ident
-                        varname	a
-                  binop
-                    add
-                  expr
                     binop_expr
+                      expr
+                        var_expr
+                          ident
+                            varname	b
+                      binop
+                        add
                       expr
                         binop_expr
                           expr
                             var_expr
                               ident
-                                varname	b
+                                varname	c
                           binop
                             add
                           expr
                             var_expr
                               ident
-                                varname	c
-                      binop
-                        add
-                      expr
-                        var_expr
-                          ident
-                            varname	d
-              binop
-                add
-              expr
-                var_expr
-                  ident
-                    varname	e
+                                varname	d
+                  binop
+                    add
+                  expr
+                    var_expr
+                      ident
+                        varname	e
           
 
 
@@ -56,15 +56,18 @@ start
     varname	doc
     typelist
       typeident
-        int
+        user_type_ident
+          typename	Int
       varname	a
       comma
       typeident
-        int
+        user_type_ident
+          typename	Int
       varname	b
       comma
       typeident
-        int
+        user_type_ident
+          typename	Int
       varname	c
     stmt_block
       
@@ -82,23 +85,27 @@ start
     
           
       typeident
-        int
+        user_type_ident
+          typename	Int
       varname	a
       comma	# this is a docs comment regarding the input a
     
       typeident
-        int
+        user_type_ident
+          typename	Int
       varname	b
       comma	# this is a docs comment regarding the input b
     
       typeident
-        int
+        user_type_ident
+          typename	Int
       varname	c
       
 
       
     typeident
-      int
+      user_type_ident
+        typename	Int
     stmt_block
       
     
@@ -115,28 +122,33 @@ start
     
           
       typeident
-        int
+        user_type_ident
+          typename	Int
       varname	a
       comma
       typeident
-        int
+        user_type_ident
+          typename	Int
       varname	b
       comma	
     
       typeident
-        int
+        user_type_ident
+          typename	Int
       varname	c
       comma	# this is a docs comment regarding the input c
     
       typeident
-        int
+        user_type_ident
+          typename	Int
       varname	d
       comma	###
     this is a multiline doc comment
     ###
     
       typeident
-        int
+        user_type_ident
+          typename	Int
       varname	e
       
 
@@ -157,16 +169,19 @@ start
     
           
       typeident
-        int
+        user_type_ident
+          typename	Int
       varname	a
       comma
       typeident
-        int
+        user_type_ident
+          typename	Int
       varname	b
       comma	
     
       typeident
-        int
+        user_type_ident
+          typename	Int
       varname	c
       comma	# this is a docs comment regarding the input c
 

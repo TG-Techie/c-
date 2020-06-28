@@ -1,0 +1,126 @@
+start
+  
+
+  funcdef
+    varname	is_larger
+    typelist
+      
+    
+          
+      typeident
+        user_type_ident
+          typename	_GreaterThanComparable_
+      varname	should_larger
+      comma	
+    
+      typeident
+        user_type_ident
+          typename	AnyType
+      varname	should_smaller
+      comma	
+
+      
+    typeident
+      user_type_ident
+        typename	Bool
+    stmt_block
+      
+    
+          
+      stmt
+        return_stmt
+          expr
+            binop_expr
+              expr
+                var_expr
+                  ident
+                    varname	should_larger
+              binop
+                gr
+              expr
+                var_expr
+                  ident
+                    varname	should_smaller
+          
+
+
+      
+  funcdef
+    varname	add_if_smaller
+    typelist
+      
+    
+          
+      typeident
+        user_type_ident
+          typename	SomeType
+      varname	first
+      comma	
+    
+      typeident
+        user_type_ident
+          typename	SomeOtherType
+      varname	second
+      comma	
+
+      
+    typeident
+      user_type_ident
+        typename	SomeOtherType
+    stmt_block
+      
+    
+          
+      stmt
+        if_stmt
+          expr
+            call_expr
+              expr
+                var_expr
+                  ident
+                    varname	is_larger
+              paramlist
+                expr
+                  var_expr
+                    ident
+                      varname	first
+                comma
+                expr
+                  var_expr
+                    ident
+                      varname	second
+          stmt_block
+            
+        
+                    
+            stmt
+              return_stmt
+                expr
+                  binop_expr
+                    expr
+                      var_expr
+                        ident
+                          varname	second
+                    binop
+                      add
+                    expr
+                      var_expr
+                        ident
+                          varname	first
+                
+    
+                
+          stmt_block
+            
+        
+                    
+            stmt
+              return_stmt
+                expr
+                  var_expr
+                    ident
+                      varname	first
+                
+
+            
+      

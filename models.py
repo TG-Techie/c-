@@ -4,18 +4,28 @@ from tg_tools import *
 
 import builtin_models
 
+@attributeof(FuncModel)
+@classmethod
+def from_item(cls, item, mod):
+
+    fn_mdl = cls(item.location, item.name, mod, item._ret_typeident, item._arg_typeidentlist)
+
+    return fn_mdl
+
 @attributeof(ClassModel)
 @classmethod
 def from_item(cls, item, mod):
-    return cls(item.location, item.name, mod, item._superclass_typeident, item._content_typeidents)
+    cls_mdl =  cls(item.location, item.name, mod, item._superclass_typeident, item._content_typeidents, item._items)
+    return cls_mdl
 
+@attributeof(ClassModel)
 def _model(self):
     if self._superclassident is not None:
-        self.superclass = superclass = _find_item_by_ident(self.location, self.module, self._superclassident)
-        print(f"{self} subclasses {self.superclass}")
+        superclass = find_item_by_ident(self.location, self.module, self._superclassident)
+        #print(f"{self} subclasses {self.superclass}")
     else:
-        self.superclass = superclass = None
-        print(f"{self} has no superclass")
+        superclass = None
+        #print(f"{self} has no superclass")
 
 
 
@@ -26,12 +36,26 @@ def _model(self):
 
     ext = {}
     for name, typeident in self._content_typelist:
-        ext[name] = _find_item_by_ident(self.location, self.module, typeident)
+        ext[name] = find_item_by_ident(self.location, self.module, typeident)
 
-    self.contents = {**base, **ext}
-    print(self.contents)
-    for foo in self.contents.items():
-        print(foo)
+    contents = {**base, **ext}
+    #print(self)
+    #for foo in contents.items():
+    #    print('\t', *foo)
+
+    for item in self._frontend_items.values():
+        if isinstance(item, FuncItem):
+            fn_mdl = FuncModel.from_item(item, self.module)
+            self[fn_mdl.name] = fn_mdl
+        elif isinstance(item, TraitImplItem):
+            print(self._items)
+            trt_impl = TraitModel.from_item()
+        else:
+            print(item)
+            SHIT
+
+    self._finish_model(superclass, contents, items)
+
     return
 
 
@@ -60,5 +84,3 @@ def from_item(cls, src):
         mdl._model()
 
     return mod_mdl
-
-print(dir())
