@@ -1,9 +1,0 @@
-<ModuleItem 'traitcast'>
-    <TraitDefItem 'Vectorable'>
-        <FuncDecModel '__to_vector__'>
-
-    <ClassItem 'VectorCoord'>
-        <TraitImplItem 'VectorCoord'>
-            <FuncItem '__to_vector__'>
-
-

@@ -1,2 +1,2 @@
-<ModuleItem 'binop_add'>
-    <FuncItem 'main'>
+<SourceModuleItem 'binop_add'>
+    <SourceFuncItem 'main'>

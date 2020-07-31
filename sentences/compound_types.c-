@@ -6,8 +6,8 @@ def addstr(Str a, Str b) returns Str:
     baz = "baz"
     return baz
 
-def bar(SomeType foo) returns Int:##this returns and array of ints##
+def bar(Intable foo) returns <Int>: ##this returns and array of ints##
     ###
     this is a multi -line comment
     ###
-    return int(foo)
+    return <int(foo)>

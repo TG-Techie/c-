@@ -1,2 +1,2 @@
-<ModuleItem 'printtest'>
-    <FuncItem 'main'>
+<SourceModuleItem 'printtest'>
+    <SourceFuncItem 'main'>

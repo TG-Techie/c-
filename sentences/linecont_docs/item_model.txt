@@ -1,6 +1,6 @@
-<ModuleItem 'linecont_docs'>
-    <FuncItem 'foo'>
-    <FuncItem 'doc'>
-    <FuncItem 'doc0'>
-    <FuncItem 'doc1'>
-    <FuncItem 'doc2'>
+<SourceModuleItem 'linecont_docs'>
+    <SourceFuncItem 'foo'>
+    <SourceFuncItem 'doc'>
+    <SourceFuncItem 'doc0'>
+    <SourceFuncItem 'doc1'>
+    <SourceFuncItem 'doc2'>

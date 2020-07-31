@@ -1,22 +1,20 @@
 
 class XYPoint contains (
-    Float x, # the horizontal offset from the origin
-    Float y, # the vertical offset from the origin
+    x: Float, # the horizontal offset from the origin
+    y: Float, # the vertical offset from the origin
 ):
-    def scale(SomeType self, Float factor) returns SomeType:
-        return SomeType(factor * self.x, factor * self.y)
+    # these will eventually replace the contains(type name) format for classses
+    #x: Float
+    #y: Float
 
-    #def scale(XYPoint self, Float factor):
-        #self.x = factor * self.x
-        #later #self.x *= factor
-        #self.y = factor * self.y
-        #later #self.y *= factor
+    def scale(self: SelfType, factor: Float) -> SelfType:
+        return SelfType(factor * self.x, factor * self.y)
 
-class XYZPoint subclasses XYPoint with (
-    Float z
+class XYZPoint(XYPoint) with (
+    z: Float,
 ):
-    def scale(Self self, Float factor):
+    def scale(self: SelfType, factor: Float) -> Self:
         return Self(factor * self.x, factor * self.y, factor * self.z)
 
-class FooPoint subclasses XYPoint:
+class FooPoint(XYPoint):
     pass

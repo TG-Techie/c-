@@ -1,2 +1,2 @@
-<ModuleItem 'itemized'>
-    <FuncItem 'main'>
+<SourceModuleItem 'itemized'>
+    <SourceFuncItem 'main'>

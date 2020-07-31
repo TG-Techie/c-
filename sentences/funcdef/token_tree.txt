@@ -2,17 +2,19 @@ start
   funcdef
     varname	addints
     typelist
-      typeident
-        user_type_ident
-          typename	Int
-      varname	a
+      typepair
+        typeident
+          plain_type_ident
+            typename	Int
+        varname	a
       comma
-      typeident
-        user_type_ident
-          typename	Int
-      varname	b
+      typepair
+        typeident
+          plain_type_ident
+            typename	Int
+        varname	b
     typeident
-      user_type_ident
+      plain_type_ident
         typename	Int
     stmt_block
       
@@ -31,17 +33,19 @@ start
   funcdef
     varname	addstr
     typelist
-      typeident
-        user_type_ident
-          typename	Str
-      varname	a
+      typepair
+        typeident
+          plain_type_ident
+            typename	Str
+        varname	a
       comma
-      typeident
-        user_type_ident
-          typename	Str
-      varname	b
+      typepair
+        typeident
+          plain_type_ident
+            typename	Str
+        varname	b
     typeident
-      user_type_ident
+      plain_type_ident
         typename	Str
     stmt_block
       
@@ -79,15 +83,14 @@ start
   funcdef
     varname	bar
     typelist
-      typeident
-        user_type_ident
-          typename	Intable
-      varname	foo
-    typeident
-      arrtype
+      typepair
         typeident
-          user_type_ident
-            typename	Int
+          plain_type_ident
+            typename	SomeType
+        varname	foo
+    typeident
+      plain_type_ident
+        typename	Int
     stmt_block
       ##this returns and array of ints##
     ###
@@ -98,19 +101,16 @@ start
       stmt
         return_stmt
           expr
-            literal
-              arraylitrl
+            call_expr
+              expr
+                var_expr
+                  ident
+                    varname	int
+              paramlist
                 expr
-                  call_expr
-                    expr
-                      var_expr
-                        ident
-                          varname	int
-                    paramlist
-                      expr
-                        var_expr
-                          ident
-                            varname	foo
+                  var_expr
+                    ident
+                      varname	foo
           
 
       

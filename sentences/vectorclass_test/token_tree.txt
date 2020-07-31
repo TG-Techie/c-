@@ -22,62 +22,53 @@ start
       
     
           
-      traitimpl
+      funcdef
+        varname	__add__
+        typelist
+          typeident
+            user_type_ident
+              typename	Point
+          varname	self
+          comma
+          typeident
+            user_type_ident
+              typename	Point
+          varname	other
         typeident
           user_type_ident
-            typename	_Addable_
-        traitimpl_block
+            typename	Point
+        stmt_block
           
         
                   
-          funcdef
-            varname	__add__
-            typelist
-              typeident
-                user_type_ident
-                  typename	Point
-              varname	self
-              comma
-              typeident
-                user_type_ident
-                  typename	Point
-              varname	other
-            typeident
-              user_type_ident
-                typename	Point
-            stmt_block
-              
-            
-                          
-              stmt
-                return_stmt
-                  expr
-                    new_expr
-                      typeident
-                        user_type_ident
-                          typename	Vector
-                      paramlist
+          stmt
+            return_stmt
+              expr
+                new_expr
+                  typeident
+                    user_type_ident
+                      typename	Vector
+                  paramlist
+                    expr
+                      attr_expr
                         expr
-                          attr_expr
-                            expr
-                              var_expr
-                                ident
-                                  varname	self
+                          var_expr
                             ident
-                              varname	length
-                        comma
+                              varname	self
+                        ident
+                          varname	length
+                    comma
+                    expr
+                      attr_expr
                         expr
-                          attr_expr
-                            expr
-                              var_expr
-                                ident
-                                  varname	other
+                          var_expr
                             ident
-                              varname	float
-                  # except ass math
+                              varname	other
+                        ident
+                          varname	float
+              # except ass math
 
 
-              
           
       
   classdef
@@ -103,62 +94,53 @@ start
       
     
           
-      traitimpl
+      funcdef
+        varname	__add__
+        typelist
+          typeident
+            user_type_ident
+              typename	Vector
+          varname	self
+          comma
+          typeident
+            user_type_ident
+              typename	Vector
+          varname	other
         typeident
           user_type_ident
-            typename	_Addable_
-        traitimpl_block
+            typename	Vector
+        stmt_block
           
         
                   
-          funcdef
-            varname	__add__
-            typelist
-              typeident
-                user_type_ident
-                  typename	Vector
-              varname	self
-              comma
-              typeident
-                user_type_ident
-                  typename	Vector
-              varname	other
-            typeident
-              user_type_ident
-                typename	Vector
-            stmt_block
-              
-            
-                          
-              stmt
-                return_stmt
-                  expr
-                    new_expr
-                      typeident
-                        user_type_ident
-                          typename	Vector
-                      paramlist
+          stmt
+            return_stmt
+              expr
+                new_expr
+                  typeident
+                    user_type_ident
+                      typename	Vector
+                  paramlist
+                    expr
+                      attr_expr
                         expr
-                          attr_expr
-                            expr
-                              var_expr
-                                ident
-                                  varname	self
+                          var_expr
                             ident
-                              varname	length
-                        comma
+                              varname	self
+                        ident
+                          varname	length
+                    comma
+                    expr
+                      attr_expr
                         expr
-                          attr_expr
-                            expr
-                              var_expr
-                                ident
-                                  varname	other
+                          var_expr
                             ident
-                              varname	float
-                  # except ass math
+                              varname	other
+                        ident
+                          varname	float
+              # except ass math
 
 
-              
           
       
   classdef
@@ -179,7 +161,6 @@ start
       
     class_block
       
-
     
           
       funcdef

@@ -1,4 +1,4 @@
-<ModuleItem 'funcdef'>
-    <FuncItem 'addints'>
-    <FuncItem 'addstr'>
-    <FuncItem 'bar'>
+<SourceModuleItem 'funcdef'>
+    <SourceFuncItem 'addints'>
+    <SourceFuncItem 'addstr'>
+    <SourceFuncItem 'bar'>

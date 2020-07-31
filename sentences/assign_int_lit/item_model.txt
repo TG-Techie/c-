@@ -1,2 +1,2 @@
-<ModuleItem 'assign_int_lit'>
-    <FuncItem 'main'>
+<SourceModuleItem 'assign_int_lit'>
+    <SourceFuncItem 'main'>

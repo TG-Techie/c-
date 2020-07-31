@@ -15,19 +15,13 @@ start
           expr
             binop_expr
               expr
-                var_expr
-                  ident
-                    varname	a
-              binop
-                add
-              expr
                 binop_expr
                   expr
                     binop_expr
                       expr
                         var_expr
                           ident
-                            varname	b
+                            varname	a
                       binop
                         add
                       expr
@@ -35,19 +29,25 @@ start
                           expr
                             var_expr
                               ident
-                                varname	c
+                                varname	b
                           binop
                             add
                           expr
                             var_expr
                               ident
-                                varname	d
+                                varname	c
                   binop
                     add
                   expr
                     var_expr
                       ident
-                        varname	e
+                        varname	d
+              binop
+                add
+              expr
+                var_expr
+                  ident
+                    varname	e
           
 
 
@@ -55,20 +55,23 @@ start
   funcdef
     varname	doc
     typelist
-      typeident
-        user_type_ident
-          typename	Int
-      varname	a
+      typepair
+        typeident
+          plain_type_ident
+            typename	Int
+        varname	a
       comma
-      typeident
-        user_type_ident
-          typename	Int
-      varname	b
+      typepair
+        typeident
+          plain_type_ident
+            typename	Int
+        varname	b
       comma
-      typeident
-        user_type_ident
-          typename	Int
-      varname	c
+      typepair
+        typeident
+          plain_type_ident
+            typename	Int
+        varname	c
     stmt_block
       
     
@@ -84,27 +87,30 @@ start
       
     
           
-      typeident
-        user_type_ident
-          typename	Int
-      varname	a
+      typepair
+        typeident
+          plain_type_ident
+            typename	Int
+        varname	a
       comma	# this is a docs comment regarding the input a
     
-      typeident
-        user_type_ident
-          typename	Int
-      varname	b
+      typepair
+        typeident
+          plain_type_ident
+            typename	Int
+        varname	b
       comma	# this is a docs comment regarding the input b
     
-      typeident
-        user_type_ident
-          typename	Int
-      varname	c
+      typepair
+        typeident
+          plain_type_ident
+            typename	Int
+        varname	c
       
 
       
     typeident
-      user_type_ident
+      plain_type_ident
         typename	Int
     stmt_block
       
@@ -121,35 +127,40 @@ start
       
     
           
-      typeident
-        user_type_ident
-          typename	Int
-      varname	a
+      typepair
+        typeident
+          plain_type_ident
+            typename	Int
+        varname	a
       comma
-      typeident
-        user_type_ident
-          typename	Int
-      varname	b
+      typepair
+        typeident
+          plain_type_ident
+            typename	Int
+        varname	b
       comma	
     
-      typeident
-        user_type_ident
-          typename	Int
-      varname	c
+      typepair
+        typeident
+          plain_type_ident
+            typename	Int
+        varname	c
       comma	# this is a docs comment regarding the input c
     
-      typeident
-        user_type_ident
-          typename	Int
-      varname	d
+      typepair
+        typeident
+          plain_type_ident
+            typename	Int
+        varname	d
       comma	###
     this is a multiline doc comment
     ###
     
-      typeident
-        user_type_ident
-          typename	Int
-      varname	e
+      typepair
+        typeident
+          plain_type_ident
+            typename	Int
+        varname	e
       
 
       
@@ -168,21 +179,24 @@ start
       
     
           
-      typeident
-        user_type_ident
-          typename	Int
-      varname	a
+      typepair
+        typeident
+          plain_type_ident
+            typename	Int
+        varname	a
       comma
-      typeident
-        user_type_ident
-          typename	Int
-      varname	b
+      typepair
+        typeident
+          plain_type_ident
+            typename	Int
+        varname	b
       comma	
     
-      typeident
-        user_type_ident
-          typename	Int
-      varname	c
+      typepair
+        typeident
+          plain_type_ident
+            typename	Int
+        varname	c
       comma	# this is a docs comment regarding the input c
 
       

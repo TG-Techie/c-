@@ -1,2 +1,2 @@
-<ModuleItem 'whileloop'>
-    <FuncItem 'main'>
+<SourceModuleItem 'whileloop'>
+    <SourceFuncItem 'main'>

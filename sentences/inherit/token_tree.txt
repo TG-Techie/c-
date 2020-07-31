@@ -7,38 +7,46 @@ start
       
     
           
-      typeident
-        user_type_ident
-          typename	Float
-      varname	x
+      typepair
+        varname	x
+        typeident
+          plain_type_ident
+            typename	Float
       comma	# the horizontal offset from the origin
     
-      typeident
-        user_type_ident
-          typename	Float
-      varname	y
+      typepair
+        varname	y
+        typeident
+          plain_type_ident
+            typename	Float
       comma	# the vertical offset from the origin
 
       
     class_block
       
+    # these will eventually replace the contains(type name) format for classses
+    #x: Float
+    #y: Float
+
     
           
       funcdef
         varname	scale
         typelist
-          typeident
-            user_type_ident
-              typename	SomeType
-          varname	self
+          typepair
+            varname	self
+            typeident
+              plain_type_ident
+                typename	SelfType
           comma
-          typeident
-            user_type_ident
-              typename	Float
-          varname	factor
+          typepair
+            varname	factor
+            typeident
+              plain_type_ident
+                typename	Float
         typeident
-          user_type_ident
-            typename	SomeType
+          plain_type_ident
+            typename	SelfType
         stmt_block
           
         
@@ -48,8 +56,8 @@ start
               expr
                 new_expr
                   typeident
-                    user_type_ident
-                      typename	SomeType
+                    plain_type_ident
+                      typename	SelfType
                   paramlist
                     expr
                       attr_expr
@@ -86,29 +94,24 @@ start
                           varname	y
               
 
-    #def scale(XYPoint self, Float factor):
-        #self.x = factor * self.x
-        #later #self.x *= factor
-        #self.y = factor * self.y
-        #later #self.y *= factor
-
 
           
       
   classdef
     typename	XYZPoint
     typeident
-      user_type_ident
+      plain_type_ident
         typename	XYPoint
     typelist
       
     
           
-      typeident
-        user_type_ident
-          typename	Float
-      varname	z
-      
+      typepair
+        varname	z
+        typeident
+          plain_type_ident
+            typename	Float
+      comma	
 
       
     class_block
@@ -118,15 +121,20 @@ start
       funcdef
         varname	scale
         typelist
-          typeident
-            user_type_ident
-              typename	Self
-          varname	self
+          typepair
+            varname	self
+            typeident
+              plain_type_ident
+                typename	SelfType
           comma
-          typeident
-            user_type_ident
-              typename	Float
-          varname	factor
+          typepair
+            varname	factor
+            typeident
+              plain_type_ident
+                typename	Float
+        typeident
+          plain_type_ident
+            typename	Self
         stmt_block
           
         
@@ -136,7 +144,7 @@ start
               expr
                 new_expr
                   typeident
-                    user_type_ident
+                    plain_type_ident
                       typename	Self
                   paramlist
                     expr
@@ -197,7 +205,7 @@ start
   classdef
     typename	FooPoint
     typeident
-      user_type_ident
+      plain_type_ident
         typename	XYPoint
     class_block
       

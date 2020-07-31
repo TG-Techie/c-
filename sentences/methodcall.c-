@@ -1,6 +1,6 @@
 
 def addints(Int a, Int b) returns Int:
-    #x = a.__smoosh__(b, b, 5)
+    #x = a.smoosh(b, b, 5)
     return a.__add__(b)
 
 def retint() returns Int:

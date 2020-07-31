@@ -5,10 +5,11 @@ start
     varname	foo
     typelist
     typeident
-      arrtype
-        typeident
-          user_type_ident
-            typename	Int
+      builtin_compound_type_ident
+        vectype
+          typeident
+            plain_type_ident
+              typename	Int
     stmt_block
       
     
@@ -38,13 +39,14 @@ start
     varname	bar
     typelist
     typeident
-      maptype
-        typeident
-          user_type_ident
-            typename	Str
-        typeident
-          user_type_ident
-            typename	Int
+      builtin_compound_type_ident
+        maptype
+          typeident
+            plain_type_ident
+              typename	Str
+          typeident
+            plain_type_ident
+              typename	Int
     stmt_block
       
     

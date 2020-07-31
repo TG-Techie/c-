@@ -2,21 +2,18 @@ class Point contains (
     Float x,
     Float y,
 ):
-    trait _Addable_:
-        def __add__(Point self, Point other) returns Point:
-            return Vector(self.length, other.float) # except ass math
+    def __add__(Point self, Point other) returns Point:
+        return Vector(self.length, other.float) # except ass math
 
 class Vector contains(
     Float length,
     Float angle,
 ):
-    trait _Addable_:
-        def __add__(Vector self, Vector other) returns Vector:
-            return Vector(self.length, other.float) # except ass math
+    def __add__(Vector self, Vector other) returns Vector:
+        return Vector(self.length, other.float) # except ass math
 
 class LocatedVector subclasses Vector with (
     Point location,
 ):
-
     def offset(LocatedVector self, Point diff) returns LocatedVector:
         return LocatedVector( self.length, self.angle, self.location + diff)

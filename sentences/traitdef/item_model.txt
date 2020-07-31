@@ -1,9 +1,0 @@
-<ModuleItem 'traitdef'>
-    <TraitDefItem 'Printable'>
-        <FuncDecModel '__display__'>
-
-    <ClassItem 'Coord'>
-        <TraitImplItem 'Coord'>
-            <FuncItem '__display__'>
-
-

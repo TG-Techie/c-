@@ -17,12 +17,13 @@ start
   funcdef
     varname	the_question
     typelist
-      typeident
-        user_type_ident
-          typename	Str
-      varname	prompt
+      typepair
+        typeident
+          plain_type_ident
+            typename	Str
+        varname	prompt
     typeident
-      user_type_ident
+      plain_type_ident
         typename	Bool
     stmt_block
       
@@ -133,7 +134,7 @@ start
     varname	main
     typelist
     typeident
-      user_type_ident
+      plain_type_ident
         typename	NoneType
     stmt_block
       

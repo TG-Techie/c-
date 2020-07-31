@@ -1,8 +1,10 @@
+class EmptyClass contains nothing:
+    pass
 
 class Point contains (
     Float x, # horizontal coordinate
     Float y, # vetical coordinate
-        ):
+):
     def scale(Self self, Float factor) returns Point:
         return Point(self.x * factor, self.y * factor)
 

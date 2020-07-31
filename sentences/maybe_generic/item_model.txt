@@ -1,3 +1,0 @@
-<ModuleItem 'maybe_generic'>
-    <FuncItem 'is_larger'>
-    <FuncItem 'add_if_smaller'>

@@ -1,2 +1,2 @@
-<ModuleItem 'nestedif'>
-    <FuncItem 'main'>
+<SourceModuleItem 'nestedif'>
+    <SourceFuncItem 'main'>

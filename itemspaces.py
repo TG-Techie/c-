@@ -1,66 +1,26 @@
 import os
 from dataclasses import dataclass
 
-from lark.tree import Tree
-from lark import Token
-from lexer_parser import extract_name, extract_lineno, CMNSCompileTimeError, Location
+from lexer_parser import *
+from sharedbases import *
+
+from cmns_builtin_items import cmns_builtin_module
 
 # fight me
 NoneType = type(None)
 
-
-class CMNSItemizationError(CMNSCompileTimeError):
-    pass
-
-class CMNSRedefinitionError(CMNSItemizationError):
-    pass
-
-class CMNSFeatureError(CMNSItemizationError):
-    pass
-
-class CMNSModelNotImplementedError(CMNSItemizationError):
-    pass
-
-class CMNSItemNotFound(CMNSItemizationError):
-    pass
-
-# interface objects
-
+'''
 #https://stackoverflow.com/questions/287871/how-to-print-colored-text-in-python
-class bcolors:
-    HEADER = '\033[95m'
-    OKBLUE = '\033[94m'
+class _clicolors:
+    HEADER  = '\033[95m'
+    OKBLUE  = '\033[94m'
     OKGREEN = '\033[92m'
     WARNING = '\033[93m'
-    FAIL = '\033[91m'
-    ENDC = '\033[0m'
-    BOLD = '\033[1m'
+    FAIL    = '\033[91m'
+    ENDC    = '\033[0m'
+    BOLD    = '\033[1m'
     UNDERLINE = '\033[4m'
-
-class TypeIdent():
-
-    def __init__(self, path, tree, doc = 'no documentation provided'):
-        assert tree.data == 'typeident'
-        ident = tree.children[0]
-
-        if ident.data == 'user_type_ident':
-            self.names = [extract_name('', child) for child in ident.children]
-            self.builtin = False
-        else:
-            self.names = None
-            self.builtin = True
-            self.kind = ident.data
-
-            self.innertypes = [TypeIdent(child) for child in ident.children]
-
-        self.location = Location(path, extract_lineno(tree))
-        self.doc = doc
-
-    def __iter__(self):
-        return iter(self.names)
-
-    def __str__(self):
-        return f"<{type(self).__name__} '{'.'.join(self.names)}'>"
+'''
 
 class TypeIdentList():
 
@@ -92,117 +52,52 @@ class TypeIdentList():
 
         return cls(items)
 
-class Item():
+def _add_items_into_from(dest, tree):
+    path = dest.location.file
 
-    def __init__(self, location, name, outer):
-        assert isinstance(location, Location), f"argument 'location' must be of type 'Location', got type '{type(location).__name__}' from value {location}"
-        assert isinstance(name, str), f"argument 'name' must be of type 'str', got type '{type(name).__name__}' from {name} "
-        assert isinstance(outer, (NameSpaceItem, NoneType)), f"argument 'outer' must be one of types {', '.join([repr(typ.__name__) for typ in (NameSpaceItem,)])}, or 'NoneType', got type '{type(tree).__name__}'"
+    location = Location(path, extract_lineno(tree))
 
-        self.location = location
-        self.name = name
-        self.outer = outer
+    for item_tree in tree.children:
+        if isinstance(item_tree, Token):
+            continue
 
-    def __str__(self):
-        return f"<{type(self).__name__} '{self.name}'>"
+        kind = item_tree.data
 
-    def __repr__(self):
-        return str(self)
-
-    def _layout(self, indent=0):
-        return '    '*indent + str(self)
-
-class NameSpaceItem(Item):
-
-    def __init__(self, *args, items=None):
-
-        super().__init__(*args)
-
-        if items is None:
-            items = {}
+        if kind == 'classdef':
+            cls_item = SourceClassItem.from_tree(path, item_tree, dest, dest.root)
+            dest[cls_item.name] = cls_item
+        elif kind == 'funcdef':
+            fn_item = SourceFuncItem.from_tree(path, item_tree, dest, dest.root)
+            dest[fn_item.name] = fn_item
+        elif kind == 'pass_stmt':
+            pass
         else:
-            assert isinstance(items, dict), f"argument 'items' must be of type 'dict', got type '{type(items).__name__}'"
+            raise CMNSFeatureError(location, f"unsupported feature: '{kind}'")
 
-        self._items = items
+class SourceFuncItem(FuncItem):
 
-    def __iter__(self):
-        return iter(self._items.values())
+    def __init__(self, location, name, outer, root, ret_typeident, arg_typelist, stmt_block_tree):
 
-    def __getitem__(self, name):
-        assert isinstance(name, str), f"argument 'name' must be of type 'str', got type '{type(name).__name__}'"
+        super().__init__(location, name, outer, root)
 
-        return self._items[name]
-
-    def __setitem__(self, name, value):
-        assert isinstance(value, Item), f"argument 'value' must be of type 'Item', got type '{type(value).__name__}'"
-
-        if name in self._items:
-            raise CMNSRedefinitionError(value.lineno, f"cannot redefine {self[name]} as '{value}'")
-        else:
-            self._items[name] = value
-
-    '''
-    def __contains__(self, value):
-        if isinstance(value, Item):
-            return value in self._items.items()
-        else:
-            return value in self._items
-    '''
-
-    def _layout(self, indent=0):
-        string = '    '*indent + str(self) + '\n'
-        for item in self._items.values():
-            string += item._layout(indent=indent+1) + '\n'
-        return string
-
-    def _add_items_from(self, tree):
-        path = self.location.file
-
-        location = Location(path, extract_lineno(tree))
-
-        for item_tree in tree.children:
-            if isinstance(item_tree, Token):
-                continue
-
-            kind = item_tree.data
-
-            if kind == 'classdef':
-                cls_item = ClassItem.from_tree(path, item_tree, self)
-                self[cls_item.name] = cls_item
-            elif kind == 'funcdef':
-                fn_item = FuncItem.from_tree(path, item_tree, self)
-                self[fn_item.name] = fn_item
-            elif kind == 'funcdec':
-                fndec_item = FuncDecModel.from_tree(path, item_tree, self)
-                self[fndec_item.name] = fndec_item
-            elif kind in ('traitdef'):
-                trt_item = TraitDefItem.from_tree(path, item_tree, self)
-                self[trt_item.name] = trt_item
-            elif kind in ('traitdec'):
-                trtdec_item = TraitDecItem.from_tree(path, item_tree, self)
-                self[trtdec_item.name] = trtdec_item
-            elif kind == 'traitimpl':
-                trt_impl = TraitImplItem.from_tree(path, item_tree, self)
-                self[trt_impl.name] = trt_impl
-            elif kind == 'pass_stmt':
-                pass
-            else:
-                raise CMNSFeatureError(location, f"unsupported feature: '{kind}'")
-
-class FuncItem(Item):
-
-    def __init__(self, location, name, outer, ret_typeident, arg_typelist, stmt_block_tree):
-
-        super().__init__(location, name, outer)
-
+        # intermediate values to be stored for later during tree construction
         self._ret_typeident = ret_typeident
         self._stmt_block_tree = stmt_block_tree
         self._arg_typeidentlist = arg_typelist
-    #def __str__(self):
-    #    return super().__str__().replace('>', f"returns {self.ret_type}>")
+
+    def model(self):
+        #print(self, self.outer)
+        ret_typeident = self._ret_typeident
+        if ret_typeident is None:
+            ret_typeident = 'SomeType'
+
+        print(self, self.root)
+        self.ret_type = ret_type = self.root[ret_typeident]
+
+        #print(self, ret_type, self.root)
 
     @classmethod
-    def from_tree(cls, path, tree, outer):
+    def from_tree(cls, path, tree, outer, root):
         kind = tree.data
         children = list(tree.children)
 
@@ -219,10 +114,12 @@ class FuncItem(Item):
 
         name = extract_name(path, children.pop(0))
 
-        print([child.data for child in children])
+        #print([child.data for child in children])
 
         if len(children) == 3:
-            arg_typelist, ret_typeident, stmt_block = children
+            arg_typelist, ret_typeident_tree, stmt_block = children
+            ret_typeident = TypeIdent(path, ret_typeident_tree)
+            TypeIdent
         elif len(children) == 2:
             arg_typelist, stmt_block = children
             ret_typeident = None
@@ -230,47 +127,21 @@ class FuncItem(Item):
             SHIT
 
         lineno = extract_lineno(tree)
-        return cls(Location(path, lineno), name, outer, ret_typeident, arg_typelist, stmt_block)
+        return cls(Location(path, lineno), name, outer, root, ret_typeident, arg_typelist, stmt_block)
 
-class TraitDefItem(NameSpaceItem):
+class SourceClassItem(ClassItem):
 
-    @classmethod
-    def from_tree(cls, path, tree, outer):
-        # TODO: make traits more rigorous
-        kind = tree.data
-        children = list(tree.children)
-        location = Location(path, extract_lineno(tree))
+    def __init__(self, location, outer, root, name, superclass_typeident, content_typeidents): #, block_tree):
 
-        if len(children) == 1:
-            name = children[0]
-        elif len(children) == 2:
-            name, block = children
-        else:
-            raise CMNSFeatureError(location, f"unsupported trait kind '{kind}'")
+        super().__init__(location, name, outer, root)
 
-        name = extract_name(path, children[0])
-
-        trt_item = cls(location, name, outer)
-
-        trt_item._add_items_from(block)
-
-        return trt_item
-
-class ClassItem(NameSpaceItem):
-
-    def __init__(self, location, outer, name, superclass_typeident, content_typeidents): #, block_tree):
-
-        super().__init__(location, name, outer)
-
-        assert isinstance(outer, NameSpaceItem), f"argument 'outer' must be of type 'NameSpaceItem', got type '{type(outer).__name__}'"
         assert isinstance(superclass_typeident, (TypeIdent, NoneType)), f"argument 'superclass_typeident' must be one of types {', '.join([repr(typ.__name__) for typ in (TypeIdent,)])}, or 'NoneType', got type '{type(superclass_typeident).__name__}'"
 
-        selfname = name
         self._superclass_typeident = superclass_typeident
         self._content_typeidents = content_typeidents
 
     @classmethod
-    def from_tree(cls, path, tree, outer):
+    def from_tree(cls, path, tree, outer, root):
         children = tree.children
         location = Location(path, extract_lineno(tree))
         if len(children) == 3:
@@ -286,11 +157,6 @@ class ClassItem(NameSpaceItem):
         else:
             raise CMNSFeatureError(location, "unsupported class feature found, currently only supporting plain classes and subclasses")
 
-        #if base_typename is not None:
-        #    superclass = _find_item_by_ident(location, outer, base_typename)
-        #else:
-        #    superclass = None
-
         name = extract_name(path, typename)
         lineno = extract_lineno(tree)
         #content_type = TypeIdentList.from_tree(typelist)
@@ -305,59 +171,31 @@ class ClassItem(NameSpaceItem):
         else:
             contentlist = TypeIdentList({})
 
-        cls_item = cls(location, outer, name, superident, contentlist)
+        cls_item = cls(location, outer, root, name, superident, contentlist)
 
-        cls_item._add_items_from(class_block)
+        _add_items_into_from(cls_item, class_block)
 
         return cls_item
 
-class ModuleItem(NameSpaceItem):
 
-    def __init__(self, name, location, outer=None):
-        # if None then is the root module
-        super().__init__(location, name, outer)
+class SourceModuleItem(ModuleItem):
+
+    def __init__(self, name, location, outer=None, root=None):
+        if root is None:
+            root = cmns_builtin_module.builtin_module
+        super().__init__(name, location, outer, root)
+
 
     @classmethod
     def from_tree(cls, path, tree, name, outer=None):
-
         location = Location(path, '')
+
         mod = cls(name, location, outer=outer)
         location.lineno = f"'{mod} @ '{path}''"
-        # is root if none
-        mod._add_items_from(tree)
 
-        #if is a root module
-        #if mod.outer is None:
-        #    mod._model()
-
+        _add_items_into_from(mod, tree)
         return mod
 
-class TraitImplItem(NameSpaceItem):
-
-    def __init__(self, location, outer, trait_typeident):
-
-        super().__init__(location, outer.name, outer)
-        assert isinstance(trait_typeident, TypeIdent), f"argument 'trait_typeident' must be of type 'TypeIdent', got type '{type(trait_typeident).__name__}'"
-
-        self._trait_typeident = trait_typeident
-
-    @classmethod
-    def from_tree(cls, path, tree, outer):
-
-        typeident, block = tree.children
-
-        location = Location(path, extract_lineno(typeident))
-
-        #trt_item = _find_item_by_ident(location, outer, typeident)
-
-        trt_impl = cls(location, outer, TypeIdent(path, typeident))
-
-        trt_impl._add_items_from(block)
-
-        return trt_impl
-
-class TraitDecItem(FuncItem):
-    pass
-
-class FuncDecModel(FuncItem):
-    pass
+    def model(self):
+        for item in self:
+            item.model()

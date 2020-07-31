@@ -4,21 +4,23 @@ start
   funcdef
     varname	addints
     typelist
-      typeident
-        user_type_ident
-          typename	Int
-      varname	a
+      typepair
+        typeident
+          plain_type_ident
+            typename	Int
+        varname	a
       comma
-      typeident
-        user_type_ident
-          typename	Int
-      varname	b
+      typepair
+        typeident
+          plain_type_ident
+            typename	Int
+        varname	b
     typeident
-      user_type_ident
+      plain_type_ident
         typename	Int
     stmt_block
       
-    #x = a.__smoosh__(b, b, 5)
+    #x = a.smoosh(b, b, 5)
     
           
       stmt
@@ -46,7 +48,7 @@ start
     varname	retint
     typelist
     typeident
-      user_type_ident
+      plain_type_ident
         typename	Int
     stmt_block
       
